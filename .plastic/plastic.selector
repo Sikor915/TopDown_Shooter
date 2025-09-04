@@ -1,0 +1,4 @@
+repository "Gun_for_Hire/Gun_for_Hire@7971581020048@cloud"
+  path "/"
+    br "/main"
+    co "/main"
