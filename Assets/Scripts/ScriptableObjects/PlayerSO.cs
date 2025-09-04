@@ -43,10 +43,8 @@ public class PlayerSO : ScriptableObject
 
     public void OnHit(int damage)
     {
-        Debug.Log("PlayerSO OnHit called. canBeHit: " + canBeHit);
         if (canBeHit)
         {
-            Debug.Log("PlayerSO DeductHealth called");
             DeductHealth(damage);
             onHitEvent?.Invoke();
             canBeHit = false;
@@ -56,7 +54,6 @@ public class PlayerSO : ScriptableObject
     public void DeductHealth(int damage)
     {
         CurrentHealth -= damage;
-        Debug.Log("Player hit for " + damage + " damage. Current health: " + currentHealth);
         onHealthChangedEvent?.Invoke(currentHealth, maxHealth);
     }
 

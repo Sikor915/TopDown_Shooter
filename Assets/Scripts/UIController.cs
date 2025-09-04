@@ -10,19 +10,19 @@ public class UIController : Singleton<UIController>
     [SerializeField] PlayerSO playerSO;
 
     PlayerController playerController;
-    Weapon weaponBase;
+    [SerializeField] Weapon weaponBase;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         playerController = playerGO.GetComponent<PlayerController>();
         weaponBase = playerGO.GetComponentInChildren<Weapon>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-
+        UpdateHealthText(playerSO.CurrentHealth, playerSO.MaxHealth);
+        UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
+        SetScore(0);
     }
 
     void OnEnable()
@@ -41,7 +41,7 @@ public class UIController : Singleton<UIController>
     public void UpdateHealthText(float currentHealth, float maxHealth)
     {
         Debug.Log("Updating health text");
-        healthText.text = currentHealth.ToString("F1") + "/" + maxHealth.ToString("F1");
+        healthText.text = currentHealth.ToString("F0") + "/" + maxHealth.ToString("F0");
     }
 
     public void SetScore(int score)

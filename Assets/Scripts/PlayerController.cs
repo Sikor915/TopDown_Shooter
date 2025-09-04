@@ -19,14 +19,11 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     Vector3 mousePos;
 
-    bool isShooting = false;
     bool isRolling = false;
     bool isSliding = false;
     readonly float rollCooldown = 1.0f;
     readonly float slideCooldown = 1.5f;
     readonly float iFrameDuration = 1.0f;
-
-    Weapon weapon;
 
     Coroutine iFrameCoroutine;
     Coroutine rollCooldownCoroutine;
@@ -36,7 +33,6 @@ public class PlayerController : MonoBehaviour, IPlayer
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        weapon = GetComponentInChildren<Weapon>();
     }
 
     // Update is called once per frame
@@ -45,10 +41,6 @@ public class PlayerController : MonoBehaviour, IPlayer
         if (playerSO.CurrentHealth <= 0)
         {
             gameObject.SetActive(false);
-        }
-        if (Input.GetMouseButton(0))
-        {
-            OnAttack();
         }
     }
 
@@ -66,20 +58,6 @@ public class PlayerController : MonoBehaviour, IPlayer
     public void OnMove(InputAction.CallbackContext context)
     {
         m_UnitGoal = context.ReadValue<Vector2>();
-    }
-
-    public void OnAttack()
-    {
-        weapon.PrimaryAction();
-        weapon.HandleShoot();
-    }
-
-    public void OnReload(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            weapon.TryReload();
-        }
     }
 
     public void OnRoll(InputAction.CallbackContext context)

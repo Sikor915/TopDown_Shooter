@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b8d7665daf67f1478d01138d2d8b95d, type: 3}
-  m_Name: PistolSO
+  m_Name: SMGSO
   m_EditorClassIdentifier: 
-  weaponName: Pistol
-  damage: 10
-  fireRate: 5
-  ammoReserve: 33
-  reloadTime: 0.5
-  magazineSize: 7
+  weaponName: SMG
+  damage: 2
+  fireRate: 30
+  ammoReserve: 810
+  reloadTime: 2
+  magazineSize: 30

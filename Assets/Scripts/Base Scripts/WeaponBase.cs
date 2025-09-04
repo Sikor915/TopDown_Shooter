@@ -10,7 +10,7 @@ public abstract class Weapon : MonoBehaviour
 
     [Header("References")]
     public GunSO gunStats;
-    public PlayerController pc;
+    [HideInInspector] public PlayerController pc;
     public GameObject projectilePrefab;
 
     int currentAmmo;
@@ -31,11 +31,17 @@ public abstract class Weapon : MonoBehaviour
         get { return isReloading; }
     }
 
-    void Start()
+    protected void Awake()
     {
         onShootEvent ??= new UnityEvent();
+        onReloadEvent ??= new UnityEvent();
         currentAmmo = gunStats.magazineSize;
         pc = transform.root.GetComponent<PlayerController>();
+    }
+
+    public virtual void Update()
+    {
+        // This can be overridden in derived classes if needed
     }
 
     public void TryReload()
@@ -50,6 +56,7 @@ public abstract class Weapon : MonoBehaviour
 
         // Shoot
         nextAttackTime = Time.time + 1f / gunStats.fireRate;
+        HandleShoot();
         onShootEvent.Invoke();
         return true;
     }
@@ -57,6 +64,7 @@ public abstract class Weapon : MonoBehaviour
     IEnumerator ReloadCoroutine()
     {
         isReloading = true;
+        transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
         int ammoNeeded = gunStats.magazineSize - currentAmmo;
 
@@ -72,6 +80,7 @@ public abstract class Weapon : MonoBehaviour
         }
         onReloadEvent.Invoke();
         Debug.Log("Reloaded. Current ammo: " + currentAmmo + ", Ammo reserve: " + gunStats.ammoReserve);
+        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
         isReloading = false;
     }
 

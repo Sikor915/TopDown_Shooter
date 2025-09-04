@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class EnemyController : MonoBehaviour, IEnemy {
+public class EnemyController : MonoBehaviour, IEnemy
+{
 
     [SerializeField] int maxHealth;
     [SerializeField] int damage;
@@ -16,7 +17,8 @@ public class EnemyController : MonoBehaviour, IEnemy {
     bool isColliding = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() {
+    void Start()
+    {
         health = maxHealth;
         rb2d = GetComponent<Rigidbody2D>();
     }
@@ -30,44 +32,44 @@ public class EnemyController : MonoBehaviour, IEnemy {
         }
         if (isColliding)
         {
-            Debug.Log("Colliding with player");
             if (playerSO.CanBeHit)
             {
                 playerSO.OnHit(damage);
             }
-            else
-            {
-                Debug.Log("Player is invulnerable");
-            }
         }
     }
 
-    public bool DeductHealth(int damage) {
-        try {
+    public bool DeductHealth(int damage)
+    {
+        try
+        {
             health -= damage;
             return true;
-        } catch (Exception) {
+        }
+        catch (Exception)
+        {
             return false;
         }
     }
-    private void OnCollisionEnter2D(UnityEngine.Collision2D collision) {
+    private void OnCollisionEnter2D(UnityEngine.Collision2D collision)
+    {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit a player");
             playerSO.OnHit(damage);
             isColliding = true;
         }
     }
 
     void OnCollisionExit2D(Collision2D col)
-{
-      if (col.gameObject.CompareTag("Player"))
-      {
-             isColliding = false;
-      }
-}
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            isColliding = false;
+        }
+    }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         OnEnemyKilled?.Invoke(enemyScore);
     }
 }
