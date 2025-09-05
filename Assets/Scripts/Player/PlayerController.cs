@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
@@ -7,11 +8,7 @@ using Vector2 = UnityEngine.Vector2;
 public class PlayerController : MonoBehaviour, IPlayer
 {
     [SerializeField] PlayerSO playerSO;
-    [SerializeField] float maxSpeed = 10.0f;
-    [SerializeField] float acceleration = 50.0f;
-    [SerializeField] float maxAccelForce = 150.0f;
-    [SerializeField] float rollSpeed = 30.0f;
-    [SerializeField] float slideSpeed = 70.0f;
+    [SerializeField] PlayerInventorySO playerInventorySO;
 
     Rigidbody2D rb2d;
     Vector2 m_GoalVel;
@@ -21,18 +18,30 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     bool isRolling = false;
     bool isSliding = false;
-    readonly float rollCooldown = 1.0f;
-    readonly float slideCooldown = 1.5f;
-    readonly float iFrameDuration = 1.0f;
 
     Coroutine iFrameCoroutine;
     Coroutine rollCooldownCoroutine;
     Coroutine slideCooldownCoroutine;
 
+    void Awake()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        foreach (Transform child in transform)
+        {
+            if (child.TryGetComponent<Weapon>(out var weaponC))
+            {
+                playerInventorySO.AddWeapon(child.gameObject);
+                weaponC.pc = this;
+                child.gameObject.SetActive(false);
+            }
+        }
+        playerInventorySO.EquipWeapon(0); 
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
@@ -41,6 +50,14 @@ public class PlayerController : MonoBehaviour, IPlayer
         if (playerSO.CurrentHealth <= 0)
         {
             gameObject.SetActive(false);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        {
+            playerInventorySO.EquipNextWeapon();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        {
+            playerInventorySO.EquipPreviousWeapon();
         }
     }
 
@@ -67,14 +84,10 @@ public class PlayerController : MonoBehaviour, IPlayer
             return;
         }
         playerSO.CanBeHit = false;
-        if (iFrameCoroutine != null)
-        {
-            StopCoroutine(iFrameCoroutine);
-        }
-        iFrameCoroutine = StartCoroutine(IFrames());
+        StartIFrames();
 
-        Vector2 targetVel = new(m_UnitGoal.x * rollSpeed, m_UnitGoal.y * rollSpeed);
-        float t = maxAccelForce * Time.fixedDeltaTime;
+        Vector2 targetVel = new(m_UnitGoal.x * playerSO.rollSpeed, m_UnitGoal.y * playerSO.rollSpeed);
+        float t = playerSO.maxAccelForce * Time.fixedDeltaTime;
         rb2d.linearVelocity = Vector2.Lerp(rb2d.linearVelocity, targetVel, t);
 
         isRolling = true;
@@ -93,14 +106,10 @@ public class PlayerController : MonoBehaviour, IPlayer
             return;
         }
         playerSO.CanBeHit = false;
-        if (iFrameCoroutine != null)
-        {
-            StopCoroutine(iFrameCoroutine);
-        }
-        iFrameCoroutine = StartCoroutine(IFrames());
+        StartIFrames();
 
-        Vector2 targetVel = new(m_UnitGoal.x * slideSpeed, m_UnitGoal.y * slideSpeed);
-        float t = maxAccelForce * Time.fixedDeltaTime;
+        Vector2 targetVel = new(m_UnitGoal.x * playerSO.slideSpeed, m_UnitGoal.y * playerSO.slideSpeed);
+        float t = playerSO.maxAccelForce * Time.fixedDeltaTime;
         rb2d.linearVelocity = Vector2.Lerp(rb2d.linearVelocity, targetVel, t);
 
         isSliding = true;
@@ -126,13 +135,13 @@ public class PlayerController : MonoBehaviour, IPlayer
         //Vector2 unitVel = m_GoalVel.normalized;
         //float velDot = Vector2.Dot(m_UnitGoal, unitVel);
 
-        Vector2 goalVel = m_UnitGoal * maxSpeed;
+        Vector2 goalVel = m_UnitGoal * playerSO.maxSpeed;
         m_GoalVel = Vector2.MoveTowards(m_GoalVel,
         goalVel,
-        acceleration * Time.fixedDeltaTime);
+        playerSO.acceleration * Time.fixedDeltaTime);
 
         Vector2 neededAccel = (m_GoalVel - rb2d.linearVelocity) / Time.fixedDeltaTime;
-        neededAccel = Vector2.ClampMagnitude(neededAccel, maxAccelForce);
+        neededAccel = Vector2.ClampMagnitude(neededAccel, playerSO.maxAccelForce);
         rb2d.AddForce(neededAccel, ForceMode2D.Force);
     }
 
@@ -147,19 +156,19 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     IEnumerator IFrames()
     {
-        yield return new WaitForSeconds(iFrameDuration);
+        yield return new WaitForSeconds(playerSO.iFrameDuration);
         playerSO.CanBeHit = true;
     }
 
     IEnumerator RollCooldown()
     {
-        yield return new WaitForSeconds(rollCooldown);
+        yield return new WaitForSeconds(playerSO.rollCooldown);
         isRolling = false;
     }
 
     IEnumerator SlideCooldown()
     {
-        yield return new WaitForSeconds(slideCooldown);
+        yield return new WaitForSeconds(playerSO.slideCooldown);
         isSliding = false;
     }
 

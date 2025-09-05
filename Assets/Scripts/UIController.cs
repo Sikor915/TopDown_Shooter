@@ -8,6 +8,7 @@ public class UIController : Singleton<UIController>
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject playerGO;
     [SerializeField] PlayerSO playerSO;
+    [SerializeField] PlayerInventorySO playerInventorySO;
 
     PlayerController playerController;
     [SerializeField] Weapon weaponBase;
@@ -15,7 +16,7 @@ public class UIController : Singleton<UIController>
     void Awake()
     {
         playerController = playerGO.GetComponent<PlayerController>();
-        weaponBase = playerGO.GetComponentInChildren<Weapon>();
+        weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
     }
 
     void Start()
@@ -30,6 +31,7 @@ public class UIController : Singleton<UIController>
         playerSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
         weaponBase.onReloadEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+        playerInventorySO.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
     }
 
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
@@ -47,5 +49,15 @@ public class UIController : Singleton<UIController>
     public void SetScore(int score)
     {
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    void UpdateCurrentWeaponEvents()
+    {
+        weaponBase.onShootEvent.RemoveAllListeners();
+        weaponBase.onReloadEvent.RemoveAllListeners();
+        weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
+        weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+        weaponBase.onReloadEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+        UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
     }
 }

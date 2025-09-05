@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ShotgunSO
   m_EditorClassIdentifier: 
   weaponName: SMG
-  damage: 2
+  damage: 10
   fireRate: 2
-  ammoReserve: 28
+  ammoReserve: 9870
+  spread: 20
+  projectilesPerAttack: 7
   reloadTime: 0.5
   magazineSize: 7

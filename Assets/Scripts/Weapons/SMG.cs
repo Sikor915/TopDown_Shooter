@@ -25,7 +25,19 @@ public class SMG : Weapon
             Vector2 direction = target - myPos;
             direction.Normalize();
             Quaternion rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f);
-            Instantiate(projectilePrefab, myPos, rotation, transform);
+            GameObject boolet;
+            float spreadAngle;
+            Vector2 spreadDirection;
+            for (int i = 0; i < gunStats.projectilesPerAttack; i++)
+            {
+                boolet = Instantiate(projectilePrefab, myPos, rotation);
+                spreadAngle = Random.Range(-gunStats.spread / 2, gunStats.spread / 2);
+                spreadDirection = Quaternion.Euler(0, 0, spreadAngle) * direction;
+                if (boolet.TryGetComponent<BooletController>(out var booletC))
+                {
+                    booletC.Rb2d.AddForce(spreadDirection * booletC.BulletSpeed);
+                }
+            }
         }
     }
 
@@ -42,5 +54,10 @@ public class SMG : Weapon
     public override void HandleShoot()
     {
         CurrentAmmo--;
+    }
+
+    public override void ResetGraphics()
+    {
+        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
     }
 }

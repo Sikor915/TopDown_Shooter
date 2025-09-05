@@ -49,6 +49,13 @@ public abstract class Weapon : MonoBehaviour
         // This can be overridden in derived classes if needed
     }
 
+    void OnDisable()
+    {
+        isReloading = false;
+        StopAllCoroutines();
+        ResetGraphics();
+    }
+
     virtual public void TryReload()
     {
         if (isReloading || gunStats.ammoReserve <= 0 || currentAmmo == gunStats.magazineSize) return;
@@ -93,4 +100,5 @@ public abstract class Weapon : MonoBehaviour
     public abstract void SecondaryAction();
     public abstract void TertiaryAction();
     public abstract void HandleShoot();
+    public abstract void ResetGraphics();
 }

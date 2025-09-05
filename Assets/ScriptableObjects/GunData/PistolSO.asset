@@ -15,6 +15,8 @@ MonoBehaviour:
   weaponName: Pistol
   damage: 10
   fireRate: 5
-  ammoReserve: 33
+  ammoReserve: 58
+  spread: 2
+  projectilesPerAttack: 1
   reloadTime: 0.5
   magazineSize: 7

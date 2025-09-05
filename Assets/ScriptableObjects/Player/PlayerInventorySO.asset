@@ -9,14 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b8d7665daf67f1478d01138d2d8b95d, type: 3}
-  m_Name: CarbineSO
+  m_Script: {fileID: 11500000, guid: 5602309bfd5b5104ba0da81c28ec2591, type: 3}
+  m_Name: PlayerInventorySO
   m_EditorClassIdentifier: 
-  weaponName: SMG
-  damage: 20
-  fireRate: 10
-  ammoReserve: 145
-  spread: 5
-  projectilesPerAttack: 1
-  reloadTime: 3.5
-  magazineSize: 21
+  onWeaponChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  currentWeapon: {fileID: 0}
+  weapons: []

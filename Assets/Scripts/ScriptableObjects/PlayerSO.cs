@@ -4,9 +4,20 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "PlayerSO", menuName = "Scriptable Objects/PlayerSO")]
 public class PlayerSO : ScriptableObject
 {
+    [Header("Events")]
     public UnityEvent<float, float> onHealthChangedEvent;
     public UnityEvent onHitEvent;
+    [Header("Movement Stats")]
+    public float maxSpeed = 25.0f;
+    public float acceleration = 200.0f;
+    public float maxAccelForce = 150.0f;
 
+    [Header("Evasive Movement Stats")]
+    public float rollSpeed;
+    public float slideSpeed;
+    public float rollCooldown;
+    public float slideCooldown;
+    public float iFrameDuration;
 
     float maxHealth = 100;
     public float MaxHealth

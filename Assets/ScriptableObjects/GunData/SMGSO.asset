@@ -16,5 +16,7 @@ MonoBehaviour:
   damage: 2
   fireRate: 30
   ammoReserve: 810
+  spread: 10
+  projectilesPerAttack: 1
   reloadTime: 2
   magazineSize: 30
