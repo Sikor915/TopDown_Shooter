@@ -1,5 +1,5 @@
 using UnityEngine;
 
 public interface IEnemy {
-    public bool DeductHealth(int damage);
+    public bool DeductHealth(float damage);
 }

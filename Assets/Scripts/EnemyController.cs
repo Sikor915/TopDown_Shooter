@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour, IEnemy
 {
 
-    [SerializeField] int maxHealth;
+    [SerializeField] float maxHealth;
     [SerializeField] int damage;
     [SerializeField] int enemyScore;
     [SerializeField] PlayerSO playerSO;
@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour, IEnemy
     public static event Action<int> OnEnemyKilled;
 
     Rigidbody2D rb2d;
-    int health;
+    float health;
     bool isColliding = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         }
     }
 
-    public bool DeductHealth(int damage)
+    public bool DeductHealth(float damage)
     {
         try
         {

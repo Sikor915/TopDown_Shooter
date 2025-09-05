@@ -25,7 +25,7 @@ public class Pistol : Weapon
             Vector2 direction = target - myPos;
             direction.Normalize();
             Quaternion rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f);
-            Instantiate(projectilePrefab, myPos, rotation);
+            Instantiate(projectilePrefab, myPos, rotation, transform);
         }
     }
 
