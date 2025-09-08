@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b8d7665daf67f1478d01138d2d8b95d, type: 3}
-  m_Name: ShotgunSO
+  m_Name: KatanaSO
   m_EditorClassIdentifier: 
-  weaponName: SMG
-  damage: 10
+  weaponName: Katana
+  damage: 30
   fireRate: 2
-  ammoReserve: 9835
-  spread: 20
-  projectilesPerAttack: 7
-  reloadTime: 0.5
-  magazineSize: 5
+  ammoReserve: 1
+  spread: 0
+  projectilesPerAttack: 1
+  reloadTime: 0
+  magazineSize: 1

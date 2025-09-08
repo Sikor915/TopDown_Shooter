@@ -12,6 +12,7 @@ public abstract class Weapon : MonoBehaviour
     public GunSO gunStats;
     [HideInInspector] public PlayerController pc;
     public GameObject projectilePrefab;
+    [SerializeField] protected Animator anim;
 
     int currentAmmo;
     public int CurrentAmmo
