@@ -58,6 +58,6 @@ public class SMG : Weapon
 
     public override void ResetGraphics()
     {
-        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
+        //transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
     }
 }

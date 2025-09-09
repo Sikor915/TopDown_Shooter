@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: KatanaSO
   m_EditorClassIdentifier: 
   weaponName: Katana
-  damage: 30
+  damage: 999999
   fireRate: 2
   ammoReserve: 1
   spread: 0

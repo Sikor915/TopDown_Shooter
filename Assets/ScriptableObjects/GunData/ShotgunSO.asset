@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8d7665daf67f1478d01138d2d8b95d, type: 3}
   m_Name: ShotgunSO
   m_EditorClassIdentifier: 
-  weaponName: SMG
+  weaponName: Shotgun
   damage: 10
   fireRate: 2
   ammoReserve: 9835

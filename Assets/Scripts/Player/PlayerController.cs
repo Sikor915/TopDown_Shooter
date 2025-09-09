@@ -16,8 +16,11 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     Vector3 mousePos;
 
+    GameObject nearestWeapon;
+
     bool isRolling = false;
     bool isSliding = false;
+    bool canPickUp = false;
 
     Coroutine iFrameCoroutine;
     Coroutine rollCooldownCoroutine;
@@ -72,6 +75,28 @@ public class PlayerController : MonoBehaviour, IPlayer
         MoveCharacter();
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+        Debug.Log("Interact pressed");
+        if (canPickUp)
+        {
+            Debug.Log("Picking up weapon: " + nearestWeapon.name);
+            playerInventorySO.PickUpWeapon(nearestWeapon, transform);
+            return;
+        }
+    }
+
+    public void OnDrop(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+        if (playerInventorySO.currentWeapon != null)
+        {
+            Vector3 dropPosition = transform.position + transform.up * 1.0f; // Drop in front of the player
+            playerInventorySO.DropWeapon(playerInventorySO.currentWeapon, dropPosition);
+        }
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         m_UnitGoal = context.ReadValue<Vector2>();
@@ -119,6 +144,26 @@ public class PlayerController : MonoBehaviour, IPlayer
         }
         slideCooldownCoroutine = StartCoroutine(SlideCooldown());
 
+    }
+
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Weapon"))
+        {
+            Debug.Log("Found weapon: " + coll.gameObject.name);
+            nearestWeapon = coll.gameObject;
+            canPickUp = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Weapon"))
+        {
+            Debug.Log("Lost weapon: " + coll.gameObject.name);
+            nearestWeapon = null;
+            canPickUp = false;
+        }
     }
 
     void RotateToCursor()

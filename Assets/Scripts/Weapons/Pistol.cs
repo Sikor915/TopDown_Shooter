@@ -58,6 +58,6 @@ public class Pistol : Weapon
 
     public override void ResetGraphics()
     {
-        transform.GetComponent<SpriteRenderer>().color = Color.white;
+        //transform.GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

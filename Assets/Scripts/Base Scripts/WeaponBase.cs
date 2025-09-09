@@ -97,6 +97,22 @@ public abstract class Weapon : MonoBehaviour
         isReloading = false;
     }
 
+    public void DropWeaponPrepare()
+    {
+        isReloading = false;
+        StopAllCoroutines();
+        transform.SetParent(null);
+        gameObject.SetActive(true);
+        gameObject.GetComponent<Weapon>().enabled = false;
+    }
+
+    public void PickUpWeaponPrepare(Transform parent)
+    {
+        transform.SetParent(parent);
+        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        gameObject.GetComponent<Weapon>().enabled = true;
+    }
+
     public abstract void PrimaryAction();
     public abstract void SecondaryAction();
     public abstract void TertiaryAction();
