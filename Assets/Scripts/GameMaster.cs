@@ -10,7 +10,7 @@ public class GameMaster : MonoBehaviour {
     void Start()
     {
         UIController.Instance.SetScore(score);
-        UIController.Instance.UpdateHealthText(playerSO.CurrentHealth, playerSO.MaxHealth);
+        UIController.Instance.UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
     }
 
     // Update is called once per frame

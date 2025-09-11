@@ -3,20 +3,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BooletController : MonoBehaviour {
-    [SerializeField][DefaultValue(2.0f)] float maxLifespan;
+    [DefaultValue(2.0f)] public float maxLifespan;
     [SerializeField] float damage;
     public float Damage
     {
         get { return damage; }
         set { damage = value; }
     }
-    [SerializeField] float bulletSpeed;
-    public float BulletSpeed
-    {
-        get { return bulletSpeed; }
-        set { bulletSpeed = value; }
-    }
-
     Rigidbody2D rb2d;
     public Rigidbody2D Rb2d
     {
@@ -34,7 +27,7 @@ public class BooletController : MonoBehaviour {
 
     }
 
-    private void OnTriggerEnter2D(UnityEngine.Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Enemy")) {
             enemy = collision.gameObject.GetComponent<IEnemy>();
             Debug.Log("Hit enemy for " + Damage + " damage.");

@@ -6,13 +6,16 @@ public abstract class Weapon : MonoBehaviour
 {
     [Header("Events")]
     public UnityEvent onShootEvent;
-    public UnityEvent onReloadEvent;
+    public UnityEvent<int, int, int> onReloadEvent;
 
     [Header("References")]
     public GunSO gunStats;
-    [HideInInspector] public PlayerController pc;
     public GameObject projectilePrefab;
+    public CreatureSO ownerCreatureSO;
     [SerializeField] protected Animator anim;
+
+    [Header("Weapon Info")]
+    public bool usesAmmo = true;
 
     int currentAmmo;
     public int CurrentAmmo
@@ -36,9 +39,8 @@ public abstract class Weapon : MonoBehaviour
     protected void Awake()
     {
         onShootEvent ??= new UnityEvent();
-        onReloadEvent ??= new UnityEvent();
+        onReloadEvent ??= new UnityEvent<int, int, int>();
         currentAmmo = gunStats.magazineSize;
-        pc = transform.root.GetComponent<PlayerController>();
         if (projectilePrefab.TryGetComponent<BooletController>(out var booletC))
         {
             booletC.Damage = gunStats.damage;
@@ -55,6 +57,11 @@ public abstract class Weapon : MonoBehaviour
         isReloading = false;
         StopAllCoroutines();
         ResetGraphics();
+    }
+
+    void OnEnable()
+    {
+        CalculateUpgradableStats();
     }
 
     virtual public void TryReload()
@@ -77,6 +84,7 @@ public abstract class Weapon : MonoBehaviour
     protected virtual IEnumerator ReloadCoroutine()
     {
         isReloading = true;
+        Color color = transform.GetComponent<SpriteRenderer>().color;
         transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
         int ammoNeeded = gunStats.magazineSize - currentAmmo;
@@ -91,9 +99,9 @@ public abstract class Weapon : MonoBehaviour
             currentAmmo += gunStats.ammoReserve;
             gunStats.ammoReserve = 0;
         }
-        onReloadEvent.Invoke();
+        onReloadEvent.Invoke(currentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
         Debug.Log("Reloaded. Current ammo: " + currentAmmo + ", Ammo reserve: " + gunStats.ammoReserve);
-        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
+        transform.GetComponent<SpriteRenderer>().color = color; // Revert color after reloading
         isReloading = false;
     }
 
@@ -104,6 +112,7 @@ public abstract class Weapon : MonoBehaviour
         transform.SetParent(null);
         gameObject.SetActive(true);
         gameObject.GetComponent<Weapon>().enabled = false;
+        ownerCreatureSO = null;
     }
 
     public void PickUpWeaponPrepare(Transform parent)
@@ -111,6 +120,26 @@ public abstract class Weapon : MonoBehaviour
         transform.SetParent(parent);
         transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         gameObject.GetComponent<Weapon>().enabled = true;
+    }
+
+    protected virtual float CalculateDamage()
+    {
+        float totalFlatDamage = gunStats.damage + (ownerCreatureSO.bonusDamage / gunStats.projectilesPerAttack);
+        float totalDamage = totalFlatDamage * (1 + ownerCreatureSO.percentBonusDamage);
+        bool isCrit = Random.value < ownerCreatureSO.percentCritChance;
+        if (isCrit)
+        {
+            totalDamage *= (1 + ownerCreatureSO.percentCritDamage);
+        }
+        return totalDamage;
+    }
+
+    protected virtual void CalculateUpgradableStats()
+    {
+        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.percentBonusFireRate);
+        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.percentBonusReloadSpeed);
+        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.percentBonusProjectileSpeed);
+        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.percentBonusProjectileLifespan);
     }
 
     public abstract void PrimaryAction();

@@ -28,6 +28,7 @@ public class Carbine : Weapon
             GameObject boolet;
             float spreadAngle;
             Vector2 spreadDirection;
+            float perProjectileDamage = CalculateDamage();
             for (int i = 0; i < gunStats.projectilesPerAttack; i++)
             {
                 boolet = Instantiate(projectilePrefab, myPos, rotation);
@@ -35,8 +36,11 @@ public class Carbine : Weapon
                 spreadDirection = Quaternion.Euler(0, 0, spreadAngle) * direction;
                 if (boolet.TryGetComponent<BooletController>(out var booletC))
                 {
-                    booletC.Rb2d.AddForce(spreadDirection * booletC.BulletSpeed);
+                    booletC.Damage = perProjectileDamage;
+                    booletC.Rb2d.AddForce(gunStats.projectileSpeed * spreadDirection);
+                    booletC.maxLifespan = gunStats.projectileLifespan;
                 }
+                Debug.Log("Fired boolet with damage: " + perProjectileDamage + " and speed: " + gunStats.projectileSpeed);
             }
         }
     }

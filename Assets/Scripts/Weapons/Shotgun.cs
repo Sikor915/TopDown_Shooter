@@ -37,6 +37,7 @@ public class Shotgun : Weapon
             Quaternion rotation;
             float spreadAngle;
             Vector2 spreadDirection;
+            float perProjectileDamage = CalculateDamage();
             for (int i = 0; i < gunStats.projectilesPerAttack; i++)
             {
                 rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f);
@@ -45,7 +46,9 @@ public class Shotgun : Weapon
                 spreadDirection = Quaternion.Euler(0, 0, spreadAngle) * direction;
                 if (boolet.TryGetComponent<BooletController>(out var booletC))
                 {
-                    booletC.Rb2d.AddForce(spreadDirection * booletC.BulletSpeed);
+                    booletC.Damage = perProjectileDamage;
+                    booletC.Rb2d.AddForce(gunStats.projectileSpeed * spreadDirection);
+                    booletC.maxLifespan = gunStats.projectileLifespan;
                 }
             }
         }
@@ -82,7 +85,7 @@ public class Shotgun : Weapon
             CurrentAmmo += gunStats.ammoReserve;
             gunStats.ammoReserve = 0;
         }
-        onReloadEvent.Invoke();
+        onReloadEvent.Invoke(CurrentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
         transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
         IsReloading = false;
         TryReload(); // Automatically reload the next shell if available

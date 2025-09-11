@@ -6,6 +6,7 @@ public class Katana : Weapon
     [SerializeField] GameObject slashEffect;
     new void Awake()
     {
+        usesAmmo = false;
         base.Awake();
         coll2d = transform.GetComponent<Collider2D>();
         coll2d.enabled = false; // Disable collider initially
@@ -65,8 +66,9 @@ public class Katana : Weapon
         if (collision.gameObject.CompareTag("Enemy"))
         {
             IEnemy enemy = collision.gameObject.GetComponent<IEnemy>();
-            Debug.Log("Hit enemy for " + gunStats.damage + " damage.");
-            enemy.DeductHealth(gunStats.damage);
+            float damage = CalculateDamage();
+            Debug.Log("Hit enemy for " + damage + " damage.");
+            enemy.DeductHealth(damage);
         }
     }
 

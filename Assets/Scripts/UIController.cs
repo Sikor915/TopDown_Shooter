@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UIController : Singleton<UIController>
 {
@@ -21,21 +22,27 @@ public class UIController : Singleton<UIController>
 
     void Start()
     {
-        UpdateHealthText(playerSO.CurrentHealth, playerSO.MaxHealth);
+        UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         SetScore(0);
     }
 
     void OnEnable()
     {
-        playerSO.onHealthChangedEvent.AddListener(UpdateHealthText);
+        playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
-        weaponBase.onReloadEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+        weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         playerInventorySO.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
     }
 
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
     {
+        if (!weaponBase.usesAmmo)
+        {
+            ammoText.text = null;
+            ammoReserveText.text = null;
+            return;
+        }
         ammoReserveText.text = ammoReserve.ToString();
         ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
     }
@@ -51,13 +58,19 @@ public class UIController : Singleton<UIController>
         scoreText.text = "Score: " + score.ToString();
     }
 
+    public void PlayerDead()
+    {
+        healthText.text = null;
+        ammoText.text = null;
+    }
+
     void UpdateCurrentWeaponEvents()
     {
         weaponBase.onShootEvent.RemoveAllListeners();
         weaponBase.onReloadEvent.RemoveAllListeners();
         weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
-        weaponBase.onReloadEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+        weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
     }
 }

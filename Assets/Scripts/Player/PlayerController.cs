@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour, IPlayer
             if (child.TryGetComponent<Weapon>(out var weaponC))
             {
                 playerInventorySO.AddWeapon(child.gameObject);
-                weaponC.pc = this;
                 child.gameObject.SetActive(false);
+                weaponC.ownerCreatureSO = playerSO.creatureSO;
             }
         }
         playerInventorySO.EquipWeapon(0); 
@@ -50,9 +50,10 @@ public class PlayerController : MonoBehaviour, IPlayer
     // Update is called once per frame
     void Update()
     {
-        if (playerSO.CurrentHealth <= 0)
+        if (playerSO.creatureSO.CurrentHealth <= 0)
         {
             gameObject.SetActive(false);
+            UIController.Instance.PlayerDead();
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour, IPlayer
         {
             Debug.Log("Picking up weapon: " + nearestWeapon.name);
             playerInventorySO.PickUpWeapon(nearestWeapon, transform);
+            nearestWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
             return;
         }
     }
