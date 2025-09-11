@@ -13,10 +13,20 @@ MonoBehaviour:
   m_Name: KatanaSO
   m_EditorClassIdentifier: 
   weaponName: Katana
-  damage: 999999
-  fireRate: 2
+  damage: 60
+  fireRate: 1.5
   ammoReserve: 1
   spread: 0
+  projectileSpeed: 0
+  projectileLifespan: 0
   projectilesPerAttack: 1
   reloadTime: 0
   magazineSize: 1
+  baseDamage: 60
+  baseFireRate: 1.5
+  baseMagazineSize: 1
+  baseReloadTime: 0
+  baseSpread: 0
+  baseProjectileSpeed: 0
+  baseProjectileLifespan: 0
+  baseProjectilesPerAttack: 1

@@ -15,3 +15,24 @@ MonoBehaviour:
   onHealthChangedEvent:
     m_PersistentCalls:
       m_Calls: []
+  onStatsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  maxHealth: 100
+  currentHealth: 100
+  bonusDamage: 10
+  percentBonusDamage: 0
+  percentCritChance: 0.2
+  percentCritDamage: 1
+  percentBonusReloadSpeed: 0.2
+  percentBonusFireRate: 0
+  percentBonusProjectileSpeed: 0
+  percentBonusProjectileLifespan: 0
+  baseBonusDamage: 0
+  basePercentBonusDamage: 0
+  basePercentCritChance: 0.2
+  basePercentCritDamage: 1
+  basePercentBonusReloadSpeed: 0
+  basePercentBonusFireRate: 0
+  basePercentBonusProjectileSpeed: 0
+  basePercentBonusProjectileLifespan: 0

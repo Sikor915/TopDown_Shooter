@@ -13,10 +13,20 @@ MonoBehaviour:
   m_Name: SMGSO
   m_EditorClassIdentifier: 
   weaponName: SMG
-  damage: 2
+  damage: 6
   fireRate: 30
-  ammoReserve: 810
+  ammoReserve: 9999
   spread: 10
+  projectileSpeed: 40
+  projectileLifespan: 2
   projectilesPerAttack: 1
-  reloadTime: 2
+  reloadTime: 1.2
   magazineSize: 30
+  baseDamage: 6
+  baseFireRate: 30
+  baseMagazineSize: 30
+  baseReloadTime: 1.5
+  baseSpread: 10
+  baseProjectileSpeed: 40
+  baseProjectileLifespan: 2
+  baseProjectilesPerAttack: 1
