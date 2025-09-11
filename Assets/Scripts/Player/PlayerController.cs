@@ -84,7 +84,8 @@ public class PlayerController : MonoBehaviour, IPlayer
         {
             Debug.Log("Picking up weapon: " + nearestWeapon.name);
             playerInventorySO.PickUpWeapon(nearestWeapon, transform);
-            nearestWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
+            playerInventorySO.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
+            playerInventorySO.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
             return;
         }
     }

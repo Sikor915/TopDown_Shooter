@@ -122,6 +122,14 @@ public abstract class Weapon : MonoBehaviour
         gameObject.GetComponent<Weapon>().enabled = true;
     }
 
+    public virtual void CalculateUpgradableStats()
+    {
+        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.percentBonusFireRate);
+        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.percentBonusReloadSpeed);
+        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.percentBonusProjectileSpeed);
+        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.percentBonusProjectileLifespan);
+    }
+    
     protected virtual float CalculateDamage()
     {
         float totalFlatDamage = gunStats.damage + (ownerCreatureSO.bonusDamage / gunStats.projectilesPerAttack);
@@ -132,14 +140,6 @@ public abstract class Weapon : MonoBehaviour
             totalDamage *= (1 + ownerCreatureSO.percentCritDamage);
         }
         return totalDamage;
-    }
-
-    protected virtual void CalculateUpgradableStats()
-    {
-        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.percentBonusFireRate);
-        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.percentBonusReloadSpeed);
-        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.percentBonusProjectileSpeed);
-        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.percentBonusProjectileLifespan);
     }
 
     public abstract void PrimaryAction();
