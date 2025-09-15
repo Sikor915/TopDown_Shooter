@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController : MonoBehaviour, IPlayer
+public class PlayerController : Singleton<PlayerController>, IPlayer
 {
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventorySO playerInventorySO;

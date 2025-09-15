@@ -11,12 +11,10 @@ public class UIController : Singleton<UIController>
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventorySO playerInventorySO;
 
-    PlayerController playerController;
     [SerializeField] Weapon weaponBase;
 
     void Awake()
     {
-        playerController = playerGO.GetComponent<PlayerController>();
         weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
     }
 

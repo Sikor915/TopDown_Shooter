@@ -1,10 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GameMaster : MonoBehaviour {
+public class GameMaster : Singleton<GameMaster> {
 
     [SerializeField] PlayerSO playerSO;
 
+    const string statsPath = "Assets/ScriptableObjects/Stats";
+
     int score = 0;
+    int Score
+    {
+        get { return score; }
+        set { score = value; UIController.Instance.SetScore(score); }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,7 +35,18 @@ public class GameMaster : MonoBehaviour {
         EnemyController.OnEnemyKilled -= AddScoreToCounter;
     }
 
-    private void AddScoreToCounter(int value) {
+    void OnApplicationQuit()
+    {
+        List<CreatureSO> creatures = HelperFunctions.GetScriptableObjectsOfType<CreatureSO>(statsPath);
+
+        foreach (CreatureSO creature in creatures)
+        {
+            creature.Reset();
+        }
+    }
+
+    void AddScoreToCounter(int value)
+    {
         score += value;
         UIController.Instance.SetScore(score);
     }

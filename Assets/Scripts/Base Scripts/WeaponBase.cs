@@ -57,10 +57,12 @@ public abstract class Weapon : MonoBehaviour
         isReloading = false;
         StopAllCoroutines();
         ResetGraphics();
+        ownerCreatureSO.onStatsChangedEvent.RemoveListener(CalculateUpgradableStats);
     }
 
     void OnEnable()
     {
+        ownerCreatureSO.onStatsChangedEvent.AddListener(CalculateUpgradableStats);
         CalculateUpgradableStats();
     }
 
@@ -124,20 +126,20 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void CalculateUpgradableStats()
     {
-        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.percentBonusFireRate);
-        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.percentBonusReloadSpeed);
-        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.percentBonusProjectileSpeed);
-        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.percentBonusProjectileLifespan);
+        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusFireRate));
+        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusReloadSpeed));
+        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileSpeed));
+        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileLifespan));
     }
     
     protected virtual float CalculateDamage()
     {
-        float totalFlatDamage = gunStats.damage + (ownerCreatureSO.bonusDamage / gunStats.projectilesPerAttack);
-        float totalDamage = totalFlatDamage * (1 + ownerCreatureSO.percentBonusDamage);
-        bool isCrit = Random.value < ownerCreatureSO.percentCritChance;
+        float totalFlatDamage = gunStats.damage + (ownerCreatureSO.GetStat(StatInfo.Stat.BonusDamage) / gunStats.projectilesPerAttack);
+        float totalDamage = totalFlatDamage * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusDamage));
+        bool isCrit = Random.value < ownerCreatureSO.GetStat(StatInfo.Stat.PercentCritChance);
         if (isCrit)
         {
-            totalDamage *= (1 + ownerCreatureSO.percentCritDamage);
+            totalDamage *= (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentCritDamage));
         }
         return totalDamage;
     }
