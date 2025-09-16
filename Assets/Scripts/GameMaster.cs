@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameMaster : Singleton<GameMaster> {
+public class GameMaster : Singleton<GameMaster>
+{
 
     [SerializeField] PlayerSO playerSO;
 
     const string statsPath = "Assets/ScriptableObjects/Stats";
+    const string upgradesPath = "Assets/ScriptableObjects/Upgrades";
 
     int score = 0;
-    int Score
+    public int Score
     {
         get { return score; }
         set { score = value; UIController.Instance.SetScore(score); }
@@ -24,14 +26,16 @@ public class GameMaster : Singleton<GameMaster> {
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void OnEnable() {
+    void OnEnable()
+    {
         EnemyController.OnEnemyKilled += AddScoreToCounter;
     }
 
-    void OnDisable() {
+    void OnDisable()
+    {
         EnemyController.OnEnemyKilled -= AddScoreToCounter;
     }
 
@@ -47,7 +51,27 @@ public class GameMaster : Singleton<GameMaster> {
 
     void AddScoreToCounter(int value)
     {
-        score += value;
-        UIController.Instance.SetScore(score);
+        Score += value;
+        if (Score % 5 == 0 && Score != 0)
+        {
+            RandomizeUpgradesToShow();
+        }
+    }
+
+    void RandomizeUpgradesToShow()
+    {
+        List<StatUpgradeSO> allUpgrades = HelperFunctions.GetScriptableObjectsOfType<StatUpgradeSO>(upgradesPath);
+        List<StatUpgradeSO> upgradesRandomized = new();
+        int upgradesToShow = 3;
+        while (upgradesRandomized.Count < upgradesToShow)
+        {
+            int randomIndex = Random.Range(0, allUpgrades.Count);
+            StatUpgradeSO randomUpgrade = allUpgrades[randomIndex];
+            if (!upgradesRandomized.Contains(randomUpgrade))
+            {
+                upgradesRandomized.Add(randomUpgrade);
+            }
+        }
+        UpgradeUIManager.Instance.CreateUpgradeCards(upgradesRandomized);
     }
 }
