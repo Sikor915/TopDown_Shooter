@@ -74,7 +74,10 @@ public class EnemySpawner : MonoBehaviour {
 
                 break;
         }
-
+        if (spawnX > spriteBounds.max.x) spawnX = spriteBounds.max.x - 0.1f;
+        if (spawnX < spriteBounds.min.x) spawnX = spriteBounds.min.x + 0.1f;
+        if (spawnY > spriteBounds.max.y) spawnY = spriteBounds.max.y - 0.1f;
+        if (spawnY < spriteBounds.min.y) spawnY = spriteBounds.min.y + 0.1f;
         Vector2 spawnPosition = new(spawnX, spawnY);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 

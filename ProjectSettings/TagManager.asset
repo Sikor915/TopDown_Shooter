@@ -7,6 +7,10 @@ TagManager:
   - Boolet
   - Enemy
   - Weapon
+  - Door
+  - Wall
+  - Obstacle
+  - Spawnpoints
   layers:
   - Default
   - TransparentFX

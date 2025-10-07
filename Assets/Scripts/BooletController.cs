@@ -27,14 +27,20 @@ public class BooletController : MonoBehaviour {
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.gameObject.CompareTag("Enemy")) {
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
             enemy = collision.gameObject.GetComponent<IEnemy>();
             Debug.Log("Hit enemy for " + Damage + " damage.");
             if (enemy.DeductHealth(Damage))
             {
                 Destroy(this.gameObject);
             }
+        }
+        else if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Door"))
+        {
+            Destroy(this.gameObject);
         }
     }
 }
