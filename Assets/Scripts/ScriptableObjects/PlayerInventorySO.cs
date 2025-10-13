@@ -51,7 +51,7 @@ public class PlayerInventorySO : ScriptableObject
         }
         else
         {
-            Debug.Log("Weapon already in inventory.");
+            Debug.LogWarning("Weapon already in inventory.");
         }
     }
 

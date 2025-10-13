@@ -11,6 +11,8 @@ TagManager:
   - Wall
   - Obstacle
   - Spawnpoints
+  - Floor
+  - ConnectionPoint
   layers:
   - Default
   - TransparentFX

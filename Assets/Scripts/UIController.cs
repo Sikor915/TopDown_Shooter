@@ -20,6 +20,10 @@ public class UIController : Singleton<UIController>
 
     void Start()
     {
+        if (weaponBase == null)
+        {
+            weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
+        }
         UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         SetScore(0);
