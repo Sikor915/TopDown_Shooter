@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-/*TODO: 
-- Add check for open room connections
-- Somehow work out how to do doors
-*/
 public class RoomBase : MonoBehaviour
 {
     [SerializeField] int height, width;
@@ -95,7 +91,7 @@ public class RoomBase : MonoBehaviour
         int i = 0;
         ConnectionPoint[] connectionPoints = GetComponentsInChildren<ConnectionPoint>();
 
-        Debug.Log("Found " + connectionPoints.Length + " connection points in room " + gameObject.name);
+        Debug.Log("FIND_DOORS: Found " + connectionPoints.Length + " connection points in room " + gameObject.name);
         while (doorCells.Count > 0)
         {
             List<Vector3> currentDoorTiles = new()
@@ -123,17 +119,17 @@ public class RoomBase : MonoBehaviour
 
             middlePos /= currentDoorTiles.Count;
             Vector3 localMiddlePos = transform.InverseTransformPoint(middlePos);
-            Debug.Log("Local middle pos: " + localMiddlePos);
-            Debug.Log("World middle pos: " + middlePos);
+            Debug.Log("FIND_DOORS: Local middle position of door is " + localMiddlePos);
+            Debug.Log("FIND_DOORS: Room dimensions are width " + width + " and height " + height);
 
-            ConnectionPoint.SideEnum side = HelperFunctions.DetermineSide(localMiddlePos);
+            ConnectionPoint.SideEnum side = HelperFunctions.DetermineSide(localMiddlePos, width, height);
 
-            Debug.Log("Determined side: " + side);
+            Debug.Log("FIND_DOORS: Determined side: " + side);
 
             ConnectionPoint connectionPoint = Array.Find(connectionPoints, cp => cp.Side == side && !cp.IsTaken);
 
             doorPositions.Add(new Door(currentDoorTiles, middlePos, currentDoorTiles.Count, connectionPoint));
-            Debug.Log("Found door at " + middlePos + " with size " + currentDoorTiles.Count + " in room " + gameObject.name);
+            Debug.Log("FIND_DOORS: Found door at " + middlePos + " with size " + currentDoorTiles.Count + " in room " + gameObject.name);
         }
 
     }
@@ -151,12 +147,9 @@ public class RoomBase : MonoBehaviour
                 if (!tilemap.HasTile(cellPos))
                     continue;
 
-                // Optionally get the center of the tile
                 Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
                 obstaclePositions.Add(worldPos);
-                Debug.Log("Found obstacle at " + worldPos);
             }
-            Debug.Log("Found " + obstaclePositions.Count + " obstacles in room " + gameObject.name);
         }
     }
     void FindSpawnPoints()
@@ -173,12 +166,9 @@ public class RoomBase : MonoBehaviour
                 if (!tilemap.HasTile(cellPos))
                     continue;
 
-                // Optionally get the center of the tile
                 Vector3 worldPos = tilemap.GetCellCenterWorld(cellPos);
                 spawnPositions.Add(worldPos);
-                Debug.Log("Found spawn point at " + worldPos);
             }
-            Debug.Log("Found " + spawnPositions.Count + " spawn points in room " + gameObject.name);
         }
     }
 }
@@ -241,11 +231,5 @@ public class Door
                 return false;
         }
         return true;
-    }
-
-    public void ConnectDoors()
-    {
-        isConnected = true;
-        ConnectionPoint.IsTaken = true;
     }
 }

@@ -22,13 +22,5 @@ public class ConnectionPoint : MonoBehaviour
     void Start()
     {
         positionFromRoot = transform.localPosition;
-        Debug.Log("Connection point at " + positionFromRoot + " on side " + side);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    
+    } 
 }

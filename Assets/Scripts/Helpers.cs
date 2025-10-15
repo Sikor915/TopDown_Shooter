@@ -22,25 +22,16 @@ public class HelperFunctions
         return null;
 #endif
     }
-    public static ConnectionPoint.SideEnum DetermineSide(Vector3 localPosition)
+    public static ConnectionPoint.SideEnum DetermineSide(Vector3 localPosition, int roomWidth, int roomHeight, float tolerance = 0.5f)
     {
-        float absX = Mathf.Abs(localPosition.x);
-        float absY = Mathf.Abs(localPosition.y);
-        if (absX < 1.0f)
-        {
-            return ConnectionPoint.SideEnum.West;
-        }
-        else if (absY < 1.0f)
-        {
-            return ConnectionPoint.SideEnum.South;
-        }
-        else if (absX >= absY)
-        {
+        if (localPosition.x >= roomWidth / 2 - tolerance && localPosition.x <= roomWidth / 2 + tolerance)
             return ConnectionPoint.SideEnum.East;
-        }
-        else
-        {
+        if (localPosition.x >= -roomWidth / 2 - tolerance && localPosition.x <= -roomWidth / 2 + tolerance)
+            return ConnectionPoint.SideEnum.West;
+        if (localPosition.y >= roomHeight / 2 - tolerance && localPosition.y <= roomHeight / 2 + tolerance)
             return ConnectionPoint.SideEnum.North;
-        }
+        if (localPosition.y >= -roomHeight / 2 - tolerance && localPosition.y <= -roomHeight / 2 + tolerance)
+            return ConnectionPoint.SideEnum.South;
+        return ConnectionPoint.SideEnum.None;
     }
 }
