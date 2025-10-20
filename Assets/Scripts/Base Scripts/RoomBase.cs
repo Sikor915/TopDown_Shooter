@@ -5,6 +5,20 @@ using UnityEngine.Tilemaps;
 
 public class RoomBase : MonoBehaviour
 {
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
+
+
+
+// ROOM CODE VERSION 0.1 BELOW
+    /*
     [SerializeField] int height, width;
     public int Height { get => height; }
     public int Width { get => width; }
@@ -171,9 +185,11 @@ public class RoomBase : MonoBehaviour
             }
         }
     }
+
+    */
 }
 
-[Serializable]
+/*[Serializable]
 public class Door
 {
     readonly List<Vector3> doorTiles;
@@ -232,4 +248,4 @@ public class Door
         }
         return true;
     }
-}
+}*/
