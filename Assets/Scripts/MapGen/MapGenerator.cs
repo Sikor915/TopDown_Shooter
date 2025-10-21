@@ -4,18 +4,23 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-
+    [Header("Preperations for Dungeon Generation")]
     [SerializeField] Tilemap floorTilemap;
     [SerializeField] Tilemap wallTilemap;
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase wallTile;
     [SerializeField] string mapSeed = "Default";
-
+    
+    [Header("BSP Generation Settings")]
     [SerializeField] int minRoomSize = 10;
     [SerializeField] int maxRoomSize = 20;
+    [SerializeField] int maxBSPDepth = 4;
     [SerializeField] RectInt mapSpace = new RectInt(-50, -50, 100, 100);
+    
+    
     BSPNode bspRoot;
     List<RectInt> rooms;
+    List<Vector2Int> corridors;
 
     void Start()
     {
@@ -26,20 +31,51 @@ public class MapGenerator : MonoBehaviour
     {
         Random.InitState(mapSeed.GetHashCode());
         bspRoot = null;
+        EnemySpawner.Instance.ClearEnemies();
         BSPGenerator bspGenerator = new BSPGenerator();
-        bspRoot = bspGenerator.GenerateBSP(mapSpace, minRoomSize);
-        rooms = GenerateRooms(bspRoot);
-        DrawDungeon(rooms);
+        bspRoot = bspGenerator.GenerateBSP(mapSpace, minRoomSize, maxBSPDepth);
+        (rooms, corridors) = GenerateRooms(bspRoot);
+        DrawDungeon();
+        PrepareSpawnpoints();
     }
 
-    List<RectInt> GenerateRooms(BSPNode node)
+    (List<RectInt>, List<Vector2Int>) GenerateRooms(BSPNode node)
     {
         List<RectInt> roomsNew = new List<RectInt>();
         TraverseAndCreateRooms(node, roomsNew);
-        return roomsNew;
+        List<Vector2Int> corridors = GenerateCorridors(roomsNew);
+        return (roomsNew, corridors);
     }
 
-    // TODO: Implement corridor generation
+    List<Vector2Int> GenerateCorridors(List<RectInt> rooms)
+    {
+        List<Vector2Int> corridors = new List<Vector2Int>();
+        for (int i = 0; i < rooms.Count - 1; i++)
+        {
+            Vector2Int roomACenter = new Vector2Int(rooms[i].x + rooms[i].width / 2, rooms[i].y + rooms[i].height / 2);
+            Vector2Int roomBCenter = new Vector2Int(rooms[i + 1].x + rooms[i + 1].width / 2, rooms[i + 1].y + rooms[i + 1].height / 2);
+
+            for (int x = Mathf.Min(roomACenter.x, roomBCenter.x); x <= Mathf.Max(roomACenter.x, roomBCenter.x); x++)
+            {
+                corridors.Add(new Vector2Int(x, roomACenter.y));
+                corridors.Add(new Vector2Int(x, roomACenter.y + 1));
+                corridors.Add(new Vector2Int(x, roomACenter.y + 2));
+                corridors.Add(new Vector2Int(x, roomACenter.y - 1));
+                corridors.Add(new Vector2Int(x, roomACenter.y - 2));
+            }
+            for (int y = Mathf.Min(roomACenter.y, roomBCenter.y); y <= Mathf.Max(roomACenter.y, roomBCenter.y); y++)
+            {
+                corridors.Add(new Vector2Int(roomBCenter.x, y));
+                corridors.Add(new Vector2Int(roomBCenter.x + 1, y));
+                corridors.Add(new Vector2Int(roomBCenter.x + 2, y));
+                corridors.Add(new Vector2Int(roomBCenter.x - 1, y));
+                corridors.Add(new Vector2Int(roomBCenter.x - 2, y));
+            }
+        }        
+        return corridors;
+    }
+
+    // TODO: Refactor corridors to maybe check if you can reach every room from any other room and place corridors accordingly
     // TODO: Add random spawnpoints in the rooms
     void TraverseAndCreateRooms(BSPNode node, List<RectInt> rooms)
     {
@@ -63,7 +99,8 @@ public class MapGenerator : MonoBehaviour
     }
 
     // TODO: Add start and end rooms somewhere so that they connect to the rest of the dungeon
-    void DrawDungeon(List<RectInt> rooms, List<Vector2Int> corridors = null)
+    // TODO: Remove unnecessary walls if there is floor tiles on each side.
+    void DrawDungeon()
     {
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
@@ -99,26 +136,36 @@ public class MapGenerator : MonoBehaviour
                 }
                 if (floorTilemap.GetTile(new Vector3Int(x + 1, y, 0)) == null)
                 {
-                    Debug.Log("DRAW_DUNGEON: Placing wall tile at " + (x + 1) + ", " + y);
                     wallTilemap.SetTile(new Vector3Int(x + 1, y, 0), wallTile);
                 }
                 if (floorTilemap.GetTile(new Vector3Int(x - 1, y, 0)) == null)
                 {
-                    Debug.Log("DRAW_DUNGEON: Placing wall tile at " + (x - 1) + ", " + y);
                     wallTilemap.SetTile(new Vector3Int(x - 1, y, 0), wallTile);
                 }
                 if (floorTilemap.GetTile(new Vector3Int(x, y + 1, 0)) == null)
                 {
-                    Debug.Log("DRAW_DUNGEON: Placing wall tile at " + x + ", " + (y + 1));
                     wallTilemap.SetTile(new Vector3Int(x, y + 1, 0), wallTile);
                 }
                 if (floorTilemap.GetTile(new Vector3Int(x, y - 1, 0)) == null)
                 {
-                    Debug.Log("DRAW_DUNGEON: Placing wall tile at " + x + ", " + (y - 1));
                     wallTilemap.SetTile(new Vector3Int(x, y - 1, 0), wallTile);
                 }
             }
         }
+    }
+
+    void PrepareSpawnpoints()
+    {
+        foreach (var room in rooms)
+        {
+            int randomAmountOfSpawns = Random.Range(1, 4);
+            for (int i = 0; i < randomAmountOfSpawns; i++)
+            {
+                Vector2Int spawnPoint = new(Random.Range(room.xMin, room.xMax), Random.Range(room.yMin, room.yMax));
+                EnemySpawner.Instance.AddSpawnPoint(spawnPoint);
+            }
+        }
+        EnemySpawner.Instance.SpawnEnemies();
     }
 
     // MAP GENERATION CODE VERSION 0.1 BELOW

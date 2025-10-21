@@ -28,7 +28,9 @@ public class EnemyController : MonoBehaviour, IEnemy
     {
         if (health <= 0)
         {
+            EnemySpawner.Instance.RemoveEnemy(gameObject);
             Destroy(gameObject);
+            Debug.Log(EnemySpawner.Instance.Enemies.Count);
         }
         if (isColliding)
         {

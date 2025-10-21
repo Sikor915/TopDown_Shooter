@@ -1,19 +1,54 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : Singleton<EnemySpawner>
+{
     // In seconds
     [SerializeField] float interval = 2f;
     [SerializeField] SpriteRenderer background;
+    [SerializeField] List<Vector2Int> spawnPoints;
+    [SerializeField] GameObject enemyPrefab;
 
-    public GameObject enemyPrefab;
+    List<GameObject> enemies = new List<GameObject>();
+    public List<GameObject> Enemies { get { return enemies; } }
 
     float timer = 0f;
     readonly float camSizeBuffer = 2.0f;
 
+
+    public void AddSpawnPoint(Vector2Int point)
+    {
+        spawnPoints.Add(point);
+    }
+
+    public void SpawnEnemies()
+    {
+        foreach (var spawnPoint in spawnPoints)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, new Vector2(spawnPoint.x + 0.5f, spawnPoint.y + 0.5f), Quaternion.identity);
+            enemies.Add(enemy);
+        }
+        Debug.Log("Spawned Enemies: " + enemies.Count);
+    }
+
+    public void ClearEnemies()
+    {
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+        enemies.Clear();
+    }
+
+    public void RemoveEnemy(GameObject enemy)
+    {
+        enemies.Remove(enemy);
+    }
+
     // Update is called once per frame
-    void Update() {
+    /*void Update() {
         timer += Time.deltaTime;
 
         if (timer >= interval) {
@@ -22,7 +57,7 @@ public class EnemySpawner : MonoBehaviour {
         }
     }
 
-    private void SpawnEnemy() {
+    void SpawnEnemy() {
 
         Bounds spriteBounds = background.bounds;
 
@@ -81,5 +116,5 @@ public class EnemySpawner : MonoBehaviour {
         Vector2 spawnPosition = new(spawnX, spawnY);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
-    }
+    }*/
 }

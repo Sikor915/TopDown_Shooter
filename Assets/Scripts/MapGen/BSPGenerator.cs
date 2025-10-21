@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class BSPGenerator
 {
-    public BSPNode GenerateBSP(RectInt space, int minRoomSize = 10)
+    public BSPNode GenerateBSP(RectInt space, int minRoomSize, int maxDepth)
     {
         BSPNode root = new BSPNode(space);
-        SplitNode(root, minRoomSize);
+        SplitNode(root, minRoomSize, maxDepth);
         return root;
     }
 
-    private void SplitNode(BSPNode node, int minRoomSize = 10)
+    private void SplitNode(BSPNode node, int minRoomSize, int maxDepth)
     {
-        if (node.rect.width < minRoomSize || node.rect.height < minRoomSize)
+        if (node.rect.width < minRoomSize || node.rect.height < minRoomSize || maxDepth - 1 <= 0)
         {
             return;
         }
@@ -30,7 +30,7 @@ public class BSPGenerator
             node.right = new BSPNode(new RectInt(node.rect.x, node.rect.y + splitPoint, node.rect.width, node.rect.height - splitPoint));
         }
 
-        SplitNode(node.left);
-        SplitNode(node.right);
+        SplitNode(node.left, minRoomSize, maxDepth - 1);
+        SplitNode(node.right, minRoomSize, maxDepth - 1);
     }
 }
