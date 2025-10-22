@@ -19,7 +19,7 @@ public class MapGenerator : MonoBehaviour
     
     
     BSPNode bspRoot;
-    List<RectInt> rooms;
+    List<Room> rooms;
     List<Vector2Int> corridors;
 
     void Start()
@@ -37,23 +37,24 @@ public class MapGenerator : MonoBehaviour
         (rooms, corridors) = GenerateRooms(bspRoot);
         DrawDungeon();
         PrepareSpawnpoints();
+        PreparePatrolPoints();
     }
 
-    (List<RectInt>, List<Vector2Int>) GenerateRooms(BSPNode node)
+    (List<Room>, List<Vector2Int>) GenerateRooms(BSPNode node)
     {
-        List<RectInt> roomsNew = new List<RectInt>();
+        List<Room> roomsNew = new List<Room>();
         TraverseAndCreateRooms(node, roomsNew);
         List<Vector2Int> corridors = GenerateCorridors(roomsNew);
         return (roomsNew, corridors);
     }
 
-    List<Vector2Int> GenerateCorridors(List<RectInt> rooms)
+    List<Vector2Int> GenerateCorridors(List<Room> rooms)
     {
         List<Vector2Int> corridors = new List<Vector2Int>();
         for (int i = 0; i < rooms.Count - 1; i++)
         {
-            Vector2Int roomACenter = new Vector2Int(rooms[i].x + rooms[i].width / 2, rooms[i].y + rooms[i].height / 2);
-            Vector2Int roomBCenter = new Vector2Int(rooms[i + 1].x + rooms[i + 1].width / 2, rooms[i + 1].y + rooms[i + 1].height / 2);
+            Vector2Int roomACenter = new Vector2Int(rooms[i].Rect.x + rooms[i].Rect.width / 2, rooms[i].Rect.y + rooms[i].Rect.height / 2);
+            Vector2Int roomBCenter = new Vector2Int(rooms[i + 1].Rect.x + rooms[i + 1].Rect.width / 2, rooms[i + 1].Rect.y + rooms[i + 1].Rect.height / 2);
 
             for (int x = Mathf.Min(roomACenter.x, roomBCenter.x); x <= Mathf.Max(roomACenter.x, roomBCenter.x); x++)
             {
@@ -77,7 +78,7 @@ public class MapGenerator : MonoBehaviour
 
     // TODO: Refactor corridors to maybe check if you can reach every room from any other room and place corridors accordingly
     // TODO: Add random spawnpoints in the rooms
-    void TraverseAndCreateRooms(BSPNode node, List<RectInt> rooms)
+    void TraverseAndCreateRooms(BSPNode node, List<Room> rooms)
     {
         if (node == null) return;
 
@@ -88,7 +89,7 @@ public class MapGenerator : MonoBehaviour
             int roomX = Random.Range(node.rect.x, node.rect.x + node.rect.width - roomWidth);
             int roomY = Random.Range(node.rect.y, node.rect.y + node.rect.height - roomHeight);
 
-            RectInt room = new RectInt(roomX, roomY, roomWidth, roomHeight);
+            Room room = new Room(new RectInt(roomX, roomY, roomWidth, roomHeight));
             rooms.Add(room);
         }
         else
@@ -107,9 +108,9 @@ public class MapGenerator : MonoBehaviour
 
         foreach (var room in rooms)
         {
-            for (int x = room.xMin; x < room.xMax; x++)
+            for (int x = room.Rect.xMin; x < room.Rect.xMax; x++)
             {
-                for (int y = room.yMin; y < room.yMax; y++)
+                for (int y = room.Rect.yMin; y < room.Rect.yMax; y++)
                 {
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
                 }
@@ -162,176 +163,24 @@ public class MapGenerator : MonoBehaviour
             int randomAmountOfSpawns = Random.Range(1, 4);
             for (int i = 0; i < randomAmountOfSpawns; i++)
             {
-                Vector2Int spawnPoint = new(Random.Range(room.xMin, room.xMax), Random.Range(room.yMin, room.yMax));
+                Vector2Int spawnPoint = new(Random.Range(room.Rect.xMin, room.Rect.xMax), Random.Range(room.Rect.yMin, room.Rect.yMax));
                 EnemySpawner.Instance.AddSpawnPoint(spawnPoint);
             }
         }
         EnemySpawner.Instance.SpawnEnemies();
     }
 
-    // MAP GENERATION CODE VERSION 0.1 BELOW
-
-    /*[SerializeField] List<RoomBase> roomPrefabs;
-    [SerializeField] Vector3Int startPosition;
-    [SerializeField] float rotationOfStartingRoom = 0f;
-    [SerializeField] int MapWidth, MapHeight;
-    [Header("Generation DEBUG Settings")]
-    [SerializeField] int roomsToSpawn = 10;
-    RoomBase startingRoom;
-    List<RoomBase> spawnedRooms;
-    readonly Vector3 roomSpawnPosition = new(-50, 20, 0);
-    void Awake()
+    void PreparePatrolPoints()
     {
-        roomPrefabs = Resources.LoadAll<RoomBase>("Rooms").ToList();
-        if (roomPrefabs == null || roomPrefabs.Count == 0)
+        foreach (var room in rooms)
         {
-            Debug.LogError("No room prefabs found in Resources/Rooms!");
-        }
-        startingRoom = roomPrefabs.Find(room => room.gameObject.name == "Corridor");
-        spawnedRooms = new List<RoomBase>();
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        CommenceGeneration();
-    }
-
-    public void CommenceGeneration()
-    {
-        ResetMap();
-        RoomBase instantiatedRoom = Instantiate(startingRoom, startPosition, Quaternion.Euler(0, 0, rotationOfStartingRoom));
-        spawnedRooms.Add(instantiatedRoom);
-        int spawnTries = 0;
-        while (spawnedRooms.Count < roomsToSpawn && spawnTries < roomsToSpawn * 2)
-        {
-            GenerateRoom();
-            spawnTries++;
-        }
-    }
-
-    void ResetMap()
-    {
-        foreach (var room in spawnedRooms)
-        {
-            Destroy(room.gameObject);
-        }
-        spawnedRooms.Clear();
-    }
-
-    void GenerateRoom()
-    {
-        RoomBase randomExistingRoom;
-        List<Door> nextRoomValidDoors;
-        RoomBase nextRoom;
-        Door startingDoor;
-        int counter = 0;
-        do
-        {
-            int randomIndex;
-            nextRoom = null;
-            nextRoomValidDoors = null;
-
-            randomExistingRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
-            List<Door> existingRoomDoors = randomExistingRoom.DoorPositions.Where(door => !door.IsConnected).ToList();
-            startingDoor = existingRoomDoors[Random.Range(0, existingRoomDoors.Count)];
-
-            while (true)
+            int randomAmountOfPatrols = Random.Range(2, 5);
+            for (int i = 0; i < randomAmountOfPatrols; i++)
             {
-                randomIndex = Random.Range(0, roomPrefabs.Count);
-                nextRoom = Instantiate(roomPrefabs[randomIndex], roomSpawnPosition, Quaternion.identity, randomExistingRoom.transform);
-                nextRoomValidDoors = nextRoom.GetDoorsWithSize(startingDoor.Size).Where(door => !door.IsConnected).ToList();
-                if (nextRoomValidDoors.Count == 0)
-                {
-                    Destroy(nextRoom.gameObject);
-                    continue;
-                }
-                break;
-            }
-        } while (!AttachRoom(randomExistingRoom, startingDoor, nextRoom, nextRoomValidDoors) && counter++ < 10);
-    }
-
-    bool AttachRoom(RoomBase existingRoom, Door existingRoomDoor, RoomBase newRoom, List<Door> newRoomValidDoors)
-    {
-        Door matchingDoor = null;
-        foreach (var door in newRoomValidDoors)
-        {
-            if (AreOpposite(existingRoomDoor.ConnectionPoint.Side, door.ConnectionPoint.Side))
-            {
-                matchingDoor = door;
-                break;
+                Vector2Int patrolPoint = new(Random.Range(room.Rect.xMin, room.Rect.xMax), Random.Range(room.Rect.yMin, room.Rect.yMax));
+                room.AddPatrolPoint(patrolPoint);
             }
         }
-        if (matchingDoor == null)
-        {
-            Debug.LogWarning("ATTACH_ROOM: No matching door");
-            Destroy(newRoom.gameObject);
-            return false;
-        }
-        Debug.Log("ATTACH_ROOM: Existing room door at " + existingRoomDoor.MiddlePosition + " on side " + existingRoomDoor.ConnectionPoint.Side);
-        Debug.Log("ATTACH_ROOM: Matching door found at " + matchingDoor.MiddlePosition + " on side " + matchingDoor.ConnectionPoint.Side);
-
-        Vector3 newRoomPosition = newRoom.transform.position;
-
-        Vector3 offset = matchingDoor.ConnectionPoint.transform.position - newRoomPosition;
-
-        newRoom.transform.position = existingRoomDoor.ConnectionPoint.transform.position - offset;
-
-        // Check for overlap with existing rooms
-        foreach (var room in spawnedRooms)
-        {
-            if (AreCollidersOverlapping(room.GetComponent<BoxCollider2D>(), newRoom.GetComponent<BoxCollider2D>()))
-            {
-                Debug.LogWarning("ATTACH_ROOM: Overlap detected with room " + room.name);
-                Destroy(newRoom.gameObject);
-                return false;
-            }
-        }
-
-        existingRoomDoor.IsConnected = true;
-        matchingDoor.IsConnected = true;
-        spawnedRooms.Add(newRoom);
-        return true;
     }
 
-    bool AreOpposite(ConnectionPoint.SideEnum a, ConnectionPoint.SideEnum b)
-    {
-        return (a == ConnectionPoint.SideEnum.North && b == ConnectionPoint.SideEnum.South)
-            || (a == ConnectionPoint.SideEnum.South && b == ConnectionPoint.SideEnum.North)
-            || (a == ConnectionPoint.SideEnum.East && b == ConnectionPoint.SideEnum.West)
-            || (a == ConnectionPoint.SideEnum.West && b == ConnectionPoint.SideEnum.East);
-    }
-    //TODO: Somehow fix this bullshit with intersecting bounds. 
-    //Currently it doesn't detect overlaps even tho it should per the documentation
-    bool AreCollidersOverlapping(BoxCollider2D a, BoxCollider2D b)
-    {
-        if (a == null || b == null) return false;
-
-        Bounds boundsA = a.bounds;
-        Bounds boundsB = b.bounds;
-
-        Debug.Log(boundsA + ", " + boundsA.size);
-        Debug.Log(boundsB + ", " + boundsB.size);
-
-        if (!boundsA.Intersects(boundsB))
-        {
-            Debug.Log("AreCollidersOverlapping: No overlap detected in bounding box check");
-            return false;
-        }
-
-        // Detailed physics overlap test
-        ContactFilter2D filter = new ContactFilter2D().NoFilter();
-        Collider2D[] results = new Collider2D[1];
-        int count = a.Overlap(filter, results);
-
-        foreach (var hit in results)
-        {
-            if (hit == b)
-            {
-                Debug.LogWarning("AreCollidersOverlapping: Overlap detected");
-                return true;
-            }
-        }
-        Debug.Log("AreCollidersOverlapping: No overlap detected after detailed check");
-        return false;
-    }*/
 }

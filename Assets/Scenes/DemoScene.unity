@@ -1723,7 +1723,7 @@ MonoBehaviour:
   amountToPoolProjectiles: 20
   pooledEnemies: []
   enemyToPool: {fileID: 518193928712820487, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}
-  amountToPoolEnemies: 40
+  amountToPoolEnemies: 1
 --- !u!1 &1298199896
 GameObject:
   m_ObjectHideFlags: 0
