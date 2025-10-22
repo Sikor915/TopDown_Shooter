@@ -21,7 +21,7 @@ MonoBehaviour:
   maxHealth: 100
   damage: 10
   enemyScore: 1
-  moveSpeed: 15
+  moveSpeed: 5
   statInfo:
   - statType: 0
     statValue: 0

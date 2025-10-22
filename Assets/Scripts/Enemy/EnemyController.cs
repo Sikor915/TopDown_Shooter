@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BasicEnemyAI))]
 public class EnemyController : MonoBehaviour, IEnemy
 {
     [SerializeField] BasicEnemySO enemySO;
@@ -31,6 +33,11 @@ public class EnemyController : MonoBehaviour, IEnemy
                 float totalDamage = CalculateDamage();
                 playerSO.OnHit(totalDamage);
             }
+        }
+
+        if (rb2d.linearVelocity.magnitude < 0.3f)
+        {
+            GetComponent<BasicEnemyAI>().patrolState.OnStuck();
         }
     }
 
@@ -62,6 +69,7 @@ public class EnemyController : MonoBehaviour, IEnemy
             return false;
         }
     }
+    
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))

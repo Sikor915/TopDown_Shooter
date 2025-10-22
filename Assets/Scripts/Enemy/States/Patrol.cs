@@ -41,4 +41,10 @@ public class Patrol : AiState
     {
         Debug.Log("Patrol State: Hurt");
     }
+
+    public override void OnStuck()
+    {
+        Debug.Log("Patrol State: Stuck, choosing new patrol point");
+        pointToGo = controller.GetRandomPatrolPoint();
+    }
 }

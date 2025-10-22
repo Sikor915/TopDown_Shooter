@@ -43,6 +43,11 @@ public abstract class AiState
 
     protected virtual void OnHurt()
     {
+
+    }
+    
+    public virtual void OnStuck()
+    {
         
     }
 }
