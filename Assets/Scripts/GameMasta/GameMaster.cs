@@ -6,7 +6,7 @@ public class GameMaster : Singleton<GameMaster>
 
     [SerializeField] PlayerSO playerSO;
 
-    const string statsPath = "Assets/ScriptableObjects/Stats";
+    const string statsPath = "Assets/ScriptableObjects/Player";
     const string upgradesPath = "Assets/ScriptableObjects/Upgrades";
 
     int score = 0;

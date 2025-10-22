@@ -30,6 +30,12 @@ public class BasicEnemySO : ScriptableObject
         get { return enemyScore; }
         set { enemyScore = value; }
     }
+    [SerializeField] float moveSpeed;
+    public float MoveSpeed
+    {
+        get { return moveSpeed; }
+        set { moveSpeed = value; }
+    }
 
     public List<StatInfo> statInfo = new();
     public List<StatUpgradeSO> appliedUpgrades = new();

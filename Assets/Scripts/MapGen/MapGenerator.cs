@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : Singleton<MapGenerator>
 {
     [Header("Preperations for Dungeon Generation")]
     [SerializeField] Tilemap floorTilemap;
@@ -36,8 +36,20 @@ public class MapGenerator : MonoBehaviour
         bspRoot = bspGenerator.GenerateBSP(mapSpace, minRoomSize, maxBSPDepth);
         (rooms, corridors) = GenerateRooms(bspRoot);
         DrawDungeon();
-        PrepareSpawnpoints();
         PreparePatrolPoints();
+        PrepareSpawnpoints();
+    }
+
+    public Room GetCurrentRoom(Vector2Int position)
+    {
+        foreach (var room in rooms)
+        {
+            if (room.Rect.Contains(position))
+            {
+                return room;
+            }
+        }
+        return null;
     }
 
     (List<Room>, List<Vector2Int>) GenerateRooms(BSPNode node)
@@ -77,7 +89,6 @@ public class MapGenerator : MonoBehaviour
     }
 
     // TODO: Refactor corridors to maybe check if you can reach every room from any other room and place corridors accordingly
-    // TODO: Add random spawnpoints in the rooms
     void TraverseAndCreateRooms(BSPNode node, List<Room> rooms)
     {
         if (node == null) return;
@@ -100,7 +111,7 @@ public class MapGenerator : MonoBehaviour
     }
 
     // TODO: Add start and end rooms somewhere so that they connect to the rest of the dungeon
-    // TODO: Remove unnecessary walls if there is floor tiles on each side.
+    // TODO: Remove unnecessary walls if there are floor tiles on each side.
     void DrawDungeon()
     {
         floorTilemap.ClearAllTiles();
@@ -163,7 +174,7 @@ public class MapGenerator : MonoBehaviour
             int randomAmountOfSpawns = Random.Range(1, 4);
             for (int i = 0; i < randomAmountOfSpawns; i++)
             {
-                Vector2Int spawnPoint = new(Random.Range(room.Rect.xMin, room.Rect.xMax), Random.Range(room.Rect.yMin, room.Rect.yMax));
+                Vector2Int spawnPoint = new(Random.Range(room.Rect.xMin + 1, room.Rect.xMax - 1), Random.Range(room.Rect.yMin + 1, room.Rect.yMax - 1));
                 EnemySpawner.Instance.AddSpawnPoint(spawnPoint);
             }
         }
@@ -174,12 +185,19 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (var room in rooms)
         {
-            int randomAmountOfPatrols = Random.Range(2, 5);
+            var randomAmountOfPatrols = (room.Rect.width * room.Rect.height) switch
+            {
+                int size when size < 200 => 6,
+                int size when size < 500 => 8,
+                int size when size < 700 => 10,
+                _ => 12,
+            };
             for (int i = 0; i < randomAmountOfPatrols; i++)
             {
-                Vector2Int patrolPoint = new(Random.Range(room.Rect.xMin, room.Rect.xMax), Random.Range(room.Rect.yMin, room.Rect.yMax));
+                Vector2Int patrolPoint = new(Random.Range(room.Rect.xMin + 1, room.Rect.xMax - 1), Random.Range(room.Rect.yMin + 1, room.Rect.yMax - 1));
                 room.AddPatrolPoint(patrolPoint);
             }
+            Debug.Log("Room at " + room.Rect + " has " + room.PatrolPoints.Count + " patrol points.");
         }
     }
 

@@ -68,6 +68,7 @@ public class ObjectPooling : Singleton<ObjectPooling>
     public void ReturnEnemyToPool(EnemyController enemy)
     {
         enemy.Reset();
+        enemy.GetComponent<BasicEnemyAI>().DeactivateEnemy();
         enemy.gameObject.SetActive(false);
     }
 }

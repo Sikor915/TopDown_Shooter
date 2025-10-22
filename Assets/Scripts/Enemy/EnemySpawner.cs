@@ -32,6 +32,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
                 enemy.transform.position = new Vector3(spawnPoint.x, spawnPoint.y, 0);
                 enemy.SetActive(true);
                 enemies.Add(enemy);
+                enemy.GetComponent<BasicEnemyAI>().ActivateEnemy();
             }
         }
         Debug.Log("Spawned Enemies: " + enemies.Count);

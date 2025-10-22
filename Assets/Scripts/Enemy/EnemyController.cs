@@ -10,12 +10,14 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public static event Action<int> OnEnemyKilled;
 
+    Rigidbody2D rb2d;
     float health;
     bool isColliding = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        rb2d = GetComponent<Rigidbody2D>();
         health = enemySO.MaxHealth;
     }
 
@@ -30,6 +32,11 @@ public class EnemyController : MonoBehaviour, IEnemy
                 playerSO.OnHit(totalDamage);
             }
         }
+    }
+
+    public void MoveTowards(Vector3 targetPosition)
+    {
+        rb2d.linearVelocity = (targetPosition - transform.position).normalized * enemySO.MoveSpeed;
     }
 
     public void Reset()
@@ -55,7 +62,7 @@ public class EnemyController : MonoBehaviour, IEnemy
             return false;
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {

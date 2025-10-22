@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2013346939594427098}
   - component: {fileID: 2248820476914691997}
   - component: {fileID: 518193928712820487}
+  - component: {fileID: 2046022603029181157}
   - component: {fileID: 4711465516003496026}
   - component: {fileID: 2639451954032743725}
   m_Layer: 0
@@ -104,6 +105,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySO: {fileID: 11400000, guid: b57c30698b639a34280e8aefcbdf3214, type: 2}
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
+--- !u!114 &2046022603029181157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7490617015663804829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17789ce179fd583458efd9985926d5ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &4711465516003496026
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,4 +189,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
