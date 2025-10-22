@@ -156,6 +156,7 @@ public class MapGenerator : MonoBehaviour
 
     void PrepareSpawnpoints()
     {
+        EnemySpawner.Instance.ClearSpawnPoints();
         foreach (var room in rooms)
         {
             int randomAmountOfSpawns = Random.Range(1, 4);

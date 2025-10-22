@@ -102,9 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efec8bff9775db49816ed340d107ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  damage: 10
-  enemyScore: 1
+  enemySO: {fileID: 11400000, guid: b57c30698b639a34280e8aefcbdf3214, type: 2}
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
 --- !u!61 &4711465516003496026
 BoxCollider2D:

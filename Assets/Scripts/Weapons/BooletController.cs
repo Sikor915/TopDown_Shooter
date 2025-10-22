@@ -19,15 +19,14 @@ public class BooletController : MonoBehaviour {
 
     void Awake() {
         rb2d = GetComponent<Rigidbody2D>();
-        Destroy(this.gameObject, maxLifespan);
     }
 
-    // Update is called once per frame
-    void Update() {
-
+    public void Activate()
+    {
+        Invoke(nameof(Deactivate), maxLifespan);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -35,12 +34,17 @@ public class BooletController : MonoBehaviour {
             Debug.Log("Hit enemy for " + Damage + " damage.");
             if (enemy.DeductHealth(Damage))
             {
-                Destroy(this.gameObject);
+                ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
             }
         }
         else if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Door"))
         {
-            Destroy(this.gameObject);
+            ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
         }
+    }
+
+    void Deactivate()
+    {
+        ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
     }
 }

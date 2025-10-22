@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using System.Collections;
 
 public class UIController : Singleton<UIController>
 {
@@ -20,11 +21,7 @@ public class UIController : Singleton<UIController>
 
     void Start()
     {
-        if (weaponBase == null)
-        {
-            weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
-        }
-        UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
+        StartCoroutine(TryGetWeaponBase());
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         SetScore(0);
     }
@@ -74,5 +71,18 @@ public class UIController : Singleton<UIController>
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
         weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
+    }
+
+    IEnumerator TryGetWeaponBase()
+    {
+        while (weaponBase == null)
+        {
+            Debug.Log("Trying to get weapon base");
+            weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
+            yield return null;
+        }
+        UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
+        UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
+        
     }
 }

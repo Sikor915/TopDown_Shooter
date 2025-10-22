@@ -1631,6 +1631,7 @@ GameObject:
   - component: {fileID: 1248442584}
   - component: {fileID: 1248442585}
   - component: {fileID: 1248442586}
+  - component: {fileID: 1248442587}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -1678,8 +1679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89be1b90b508a06499a0d26debf6737d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interval: 5
-  background: {fileID: 1931524505}
   spawnPoints: []
   enemyPrefab: {fileID: 7490617015663804829, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}
 --- !u!114 &1248442586
@@ -1707,6 +1706,24 @@ MonoBehaviour:
     y: -100
     width: 200
     height: 200
+--- !u!114 &1248442587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248442582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3d65d8761a62c4092f96dd4669ec9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledProjectiles: []
+  projectileToPool: {fileID: 6778555485188572605, guid: 4a0b915c0d00a5542a0e546cea4c8224, type: 3}
+  amountToPoolProjectiles: 20
+  pooledEnemies: []
+  enemyToPool: {fileID: 518193928712820487, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}
+  amountToPoolEnemies: 40
 --- !u!1 &1298199896
 GameObject:
   m_ObjectHideFlags: 0
@@ -2264,7 +2281,7 @@ Transform:
   m_GameObject: {fileID: 1687945923}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

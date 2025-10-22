@@ -33,7 +33,7 @@ public class PlayerSO : ScriptableObject
         canBeHit = true;
     }
 
-    public void OnHit(int damage)
+    public void OnHit(float damage)
     {
         if (canBeHit)
         {

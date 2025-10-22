@@ -4,46 +4,44 @@ using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "CreatureSO", menuName = "Scriptable Objects/CreatureSO")]
-public class CreatureSO : ScriptableObject
+[CreateAssetMenu(fileName = "BasicEnemySO", menuName = "Scriptable Objects/BasicEnemySO")]
+public class BasicEnemySO : ScriptableObject
 {
     [Header("Events")]
-    public UnityEvent<float, float> onHealthChangedEvent;
+    public UnityEvent onHealthChangedEvent;
     public UnityEvent onStatsChangedEvent;
 
-    [Header("Stats/HP")]
+    [Header("Stats")]
     [SerializeField] float maxHealth = 100;
     public float MaxHealth
     {
         get { return maxHealth; }
-        set { maxHealth = value; onHealthChangedEvent?.Invoke(currentHealth, maxHealth); }
+        set { maxHealth = value; onHealthChangedEvent?.Invoke(); }
     }
-    [SerializeField] float currentHealth;
-    public float CurrentHealth
+    [SerializeField] float damage;
+    public float Damage
     {
-        get { return currentHealth; }
-        set { currentHealth = value; onHealthChangedEvent?.Invoke(currentHealth, maxHealth); }
+        get { return damage; }
+        set { damage = value; }
+    }
+    [SerializeField] int enemyScore;
+    public int EnemyScore
+    {
+        get { return enemyScore; }
+        set { enemyScore = value; }
     }
 
-    public List<StatInfo> instanceStats = new();
     public List<StatInfo> statInfo = new();
     public List<StatUpgradeSO> appliedUpgrades = new();
-    void OnEnable()
-    {
-        onHealthChangedEvent ??= new UnityEvent<float, float>();
-        currentHealth = maxHealth;
-    }
 
     public void Reset()
     {
-        currentHealth = maxHealth;
         ResetUpgrades();
     }
 
-    public void DeductHealth(float damage)
+    public void DeductHealth(int damage)
     {
-        CurrentHealth -= damage;
-        onHealthChangedEvent?.Invoke(currentHealth, maxHealth);
+        onHealthChangedEvent?.Invoke();
     }
 
     public void ApplyStatUpgrade(StatUpgradeSO upgrades)
@@ -54,11 +52,7 @@ public class CreatureSO : ScriptableObject
 
     public float GetStat(StatInfo.Stat stat)
     {
-        if (instanceStats.Find(s => s.statType == stat) is StatInfo instanceStat)
-        {
-            return GetUpgradedStat(stat, instanceStat.statValue);
-        }
-        else if (statInfo.Find(s => s.statType == stat) is StatInfo baseStat)
+        if (statInfo.Find(s => s.statType == stat) is StatInfo baseStat)
         {
             return GetUpgradedStat(stat, baseStat.statValue);
         }

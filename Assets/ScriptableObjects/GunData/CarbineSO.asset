@@ -15,12 +15,12 @@ MonoBehaviour:
   weaponName: Carbine
   damage: 20
   fireRate: 10
-  ammoReserve: 9878
+  ammoReserve: 9791
   spread: 5
   projectileSpeed: 50
   projectileLifespan: 2
   projectilesPerAttack: 1
-  reloadTime: 2
+  reloadTime: 2.5
   magazineSize: 21
   baseDamage: 20
   baseFireRate: 10
