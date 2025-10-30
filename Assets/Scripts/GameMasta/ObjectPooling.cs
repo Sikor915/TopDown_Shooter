@@ -16,7 +16,7 @@ public class ObjectPooling : Singleton<ObjectPooling>
     public EnemyController enemyToPool;
     public int amountToPoolEnemies;
 
-    void Start()
+    void Awake()
     {
         pooledProjectiles = new List<GameObject>();
         GameObject tmp;

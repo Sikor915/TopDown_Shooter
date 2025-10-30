@@ -9,6 +9,7 @@ public class BasicEnemyAI : MonoBehaviour
     public Attack attackState = new();
 
     AiState currentState;
+    public AiState CurrentState { get { return currentState; } }
 
     EnemyController enemyController;
     public EnemyController EnemyController { get { return enemyController; } }

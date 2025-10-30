@@ -19,6 +19,14 @@ public class Patrol : AiState
     
     protected override void OnUpdate()
     {
+        if (controller.EnemyController.IsPlayerNearby())
+        {
+            if (controller.EnemyController.ShootRaycastsInFront(controller.transform.right))
+            {
+                controller.ChangeState(controller.followState);
+                return;
+            }
+        }
         if (pointToGo != null)
         {
             Vector3 targetPosition = new Vector3(pointToGo.x, pointToGo.y, 0);
