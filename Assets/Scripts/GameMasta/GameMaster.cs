@@ -5,6 +5,9 @@ public class GameMaster : Singleton<GameMaster>
 {
 
     [SerializeField] PlayerSO playerSO;
+    [SerializeField] PlayerController playerController;
+
+    public PlayerController PlayerController => playerController;
 
     const string statsPath = "Assets/ScriptableObjects/Player";
     const string upgradesPath = "Assets/ScriptableObjects/Upgrades";
@@ -21,12 +24,6 @@ public class GameMaster : Singleton<GameMaster>
     {
         UIController.Instance.SetScore(score);
         UIController.Instance.UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void OnEnable()

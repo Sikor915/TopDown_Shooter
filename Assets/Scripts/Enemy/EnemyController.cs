@@ -11,9 +11,11 @@ public class EnemyController : MonoBehaviour, IEnemy
     [SerializeField] BasicEnemySO enemySO;
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerController playerController;
+    [Header("Enemy Senses")]
     [SerializeField] float fieldOfViewAngle = 60f;
     [SerializeField] float viewDistance = 10f;
     [SerializeField] float hearDistance = 5f;
+    [SerializeField] float attackDistance = 10f;
     [SerializeField] float nearCheckDistance = 20f;
 
 
@@ -46,13 +48,20 @@ public class EnemyController : MonoBehaviour, IEnemy
 
         if (rb2d.linearVelocity.magnitude < 0.3f)
         {
-            GetComponent<BasicEnemyAI>().patrolState.OnStuck();
+            GetComponent<BasicEnemyAI>().CurrentState.OnStuck();
         }
     }
 
     public void MoveTowards(Vector3 targetPosition)
     {
         rb2d.linearVelocity = (targetPosition - transform.position).normalized * enemySO.MoveSpeed;
+        float angle = Mathf.Atan2(rb2d.linearVelocity.y, rb2d.linearVelocity.x) * Mathf.Rad2Deg;
+        rb2d.rotation = angle;
+    }
+
+    public void PatrolTowards(Vector3 targetPosition)
+    {
+        rb2d.linearVelocity = (targetPosition - transform.position).normalized * enemySO.PatrolSpeed;
         float angle = Mathf.Atan2(rb2d.linearVelocity.y, rb2d.linearVelocity.x) * Mathf.Rad2Deg;
         rb2d.rotation = angle;
     }
@@ -87,8 +96,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         Vector3 origin = transform.position;
         Vector3 leftBoundary = Quaternion.Euler(0, 0, -fieldOfViewAngle / 2) * direction;
         Vector3 rightBoundary = Quaternion.Euler(0, 0, fieldOfViewAngle / 2) * direction;
-        //RaycastHit2D hitInfo;
-        LayerMask playerLayer = LayerMask.GetMask("Player");
+        LayerMask mask = LayerMask.GetMask("Player", "Wall", "Objects");
 
         int numberOfRays = 10;
         for (int i = 0; i < numberOfRays; i++)
@@ -96,18 +104,40 @@ public class EnemyController : MonoBehaviour, IEnemy
             float t = (float)i / (numberOfRays - 1);
             Vector3 rayDirection = Vector3.Slerp(leftBoundary, rightBoundary, t).normalized;
 
-            RaycastHit2D hit = Physics2D.Raycast(origin, rayDirection, viewDistance, playerLayer);
+            RaycastHit2D hit = Physics2D.Raycast(origin, rayDirection, viewDistance, mask);
             Debug.DrawRay(origin, rayDirection * viewDistance, Color.red);
 
-            if (hit.collider != null && hit.collider.CompareTag("Player"))
+            if (hit.collider != null)
             {
-                //hitInfo = hit;
-                return true;
+                int hitLayer = hit.collider.gameObject.layer;
+                if (hitLayer == LayerMask.NameToLayer("Player"))
+                    return true;
             }
         }
 
-        //hitInfo = default;
         return false;
+    }
+    
+    public bool CanHitPlayer()
+    {
+        Vector3 directionToPlayer = playerController.transform.position - transform.position;
+        float distanceToPlayer = directionToPlayer.magnitude;
+
+        if (distanceToPlayer > viewDistance)
+            return false;
+
+        float angleToPlayer = Vector3.Angle(transform.right, directionToPlayer);
+        if (angleToPlayer > fieldOfViewAngle / 2)
+            return false;
+
+        LayerMask mask = LayerMask.GetMask("Wall", "Objects");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, attackDistance, mask);
+        Debug.DrawRay(transform.position, directionToPlayer.normalized * attackDistance, Color.blue);
+
+        if (hit.collider != null)
+            return false;
+
+        return true;
     }
 
     public bool IsPlayerNearby()

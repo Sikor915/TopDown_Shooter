@@ -816,7 +816,7 @@ GameObject:
   - component: {fileID: 927074186}
   - component: {fileID: 927074185}
   - component: {fileID: 927074184}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap_Wall_Gen
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1221,6 +1221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
+  playerController: {fileID: 6579670053370055099}
 --- !u!114 &1248442585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2311,7 +2312,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0000009536743, y: -0.0074031353}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2321,7 +2322,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.64, y: 4.49}
+  m_Size: {x: 2.0112743, y: 1.9876852}
   m_EdgeRadius: 0
 --- !u!61 &1426033333779612377
 BoxCollider2D:

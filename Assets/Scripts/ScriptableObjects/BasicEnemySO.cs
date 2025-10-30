@@ -37,6 +37,13 @@ public class BasicEnemySO : ScriptableObject
         set { moveSpeed = value; }
     }
 
+    [SerializeField] float patrolSpeed;
+    public float PatrolSpeed
+    {
+        get { return patrolSpeed; }
+        set { patrolSpeed = value; }
+    }
+
     public List<StatInfo> statInfo = new();
     public List<StatUpgradeSO> appliedUpgrades = new();
 

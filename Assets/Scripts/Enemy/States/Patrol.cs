@@ -30,7 +30,7 @@ public class Patrol : AiState
         if (pointToGo != null)
         {
             Vector3 targetPosition = new Vector3(pointToGo.x, pointToGo.y, 0);
-            controller.EnemyController.MoveTowards(targetPosition);
+            controller.EnemyController.PatrolTowards(targetPosition);
 
             if (Vector3.Distance(controller.transform.position, targetPosition) < 0.1f)
             {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,7 +7,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
     [SerializeField] List<Vector2Int> spawnPoints;
     [SerializeField] GameObject enemyPrefab;
 
-    List<GameObject> enemies = new List<GameObject>();
+    readonly List<GameObject> enemies = new();
     public List<GameObject> Enemies { get { return enemies; } }
 
 

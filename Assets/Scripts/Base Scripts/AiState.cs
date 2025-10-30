@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 public abstract class AiState
 {
 
