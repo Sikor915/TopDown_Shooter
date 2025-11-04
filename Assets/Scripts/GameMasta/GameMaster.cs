@@ -23,7 +23,7 @@ public class GameMaster : Singleton<GameMaster>
     void Start()
     {
         UIController.Instance.SetScore(score);
-        UIController.Instance.UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
+        UIController.Instance.UpdateHealthText(playerController.CurrentHealth, playerSO.creatureSO.MaxHealth);
     }
 
     void OnEnable()

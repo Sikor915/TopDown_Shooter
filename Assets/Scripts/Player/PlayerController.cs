@@ -10,6 +10,9 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventorySO playerInventorySO;
 
+    float currentHealth;
+    public float CurrentHealth => currentHealth;
+
     Rigidbody2D rb2d;
     Vector2 m_GoalVel;
     Vector2 m_UnitGoal;
@@ -44,13 +47,14 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        currentHealth = playerSO.creatureSO.MaxHealth;
+        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerSO.creatureSO.CurrentHealth <= 0)
+        if (currentHealth <= 0)
         {
             gameObject.SetActive(false);
             UIController.Instance.PlayerDead();
@@ -68,9 +72,10 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     void OnEnable()
     {
         playerSO.onHitEvent.AddListener(StartIFrames);
+        playerSO.tookDamageEvent.AddListener(TakeDamage);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         RotateToCursor();
         MoveCharacter();
@@ -167,6 +172,12 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
             nearestWeapon = null;
             canPickUp = false;
         }
+    }
+
+    void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
     }
 
     void RotateToCursor()

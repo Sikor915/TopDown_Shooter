@@ -9,6 +9,7 @@ public class PlayerSO : ScriptableObject
 
     [Header("Events")]
     public UnityEvent onHitEvent;
+    public UnityEvent<float> tookDamageEvent;
     [Header("Movement Stats")]
     public float maxSpeed = 25.0f;
     public float acceleration = 200.0f;
@@ -30,6 +31,7 @@ public class PlayerSO : ScriptableObject
     void OnEnable()
     {
         onHitEvent ??= new UnityEvent();
+        tookDamageEvent ??= new UnityEvent<float>();
         canBeHit = true;
     }
 
@@ -37,8 +39,8 @@ public class PlayerSO : ScriptableObject
     {
         if (canBeHit)
         {
-            creatureSO.DeductHealth(damage);
             onHitEvent?.Invoke();
+            tookDamageEvent?.Invoke(damage);
             canBeHit = false;
         }
     }

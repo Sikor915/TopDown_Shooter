@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,13 +14,7 @@ public class CreatureSO : ScriptableObject
     public float MaxHealth
     {
         get { return maxHealth; }
-        set { maxHealth = value; onHealthChangedEvent?.Invoke(currentHealth, maxHealth); }
-    }
-    [SerializeField] float currentHealth;
-    public float CurrentHealth
-    {
-        get { return currentHealth; }
-        set { currentHealth = value; onHealthChangedEvent?.Invoke(currentHealth, maxHealth); }
+        private set { maxHealth = value; }
     }
 
     public List<StatInfo> instanceStats = new();
@@ -31,19 +23,11 @@ public class CreatureSO : ScriptableObject
     void OnEnable()
     {
         onHealthChangedEvent ??= new UnityEvent<float, float>();
-        currentHealth = maxHealth;
     }
 
     public void Reset()
     {
-        currentHealth = maxHealth;
         ResetUpgrades();
-    }
-
-    public void DeductHealth(float damage)
-    {
-        CurrentHealth -= damage;
-        onHealthChangedEvent?.Invoke(currentHealth, maxHealth);
     }
 
     public void ApplyStatUpgrade(StatUpgradeSO upgrades)

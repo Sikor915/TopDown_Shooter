@@ -81,7 +81,7 @@ public class UIController : Singleton<UIController>
             weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
             yield return null;
         }
-        UpdateHealthText(playerSO.creatureSO.CurrentHealth, playerSO.creatureSO.MaxHealth);
+        UpdateHealthText(GameMaster.Instance.PlayerController.CurrentHealth, playerSO.creatureSO.MaxHealth);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         
     }
