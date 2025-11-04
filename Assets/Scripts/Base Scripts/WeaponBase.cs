@@ -9,13 +9,28 @@ public abstract class Weapon : MonoBehaviour
     public UnityEvent<int, int, int> onReloadEvent;
 
     [Header("References")]
-    public GunSO gunStats;
+    [SerializeField] GunSO gunBaseStats;
     public GameObject projectilePrefab;
     public CreatureSO ownerCreatureSO;
     [SerializeField] protected Animator anim;
 
     [Header("Weapon Info")]
     public bool usesAmmo = true;
+
+    public struct WeaponStats
+    {
+        public string weaponName;
+        public float damage;
+        public float fireRate;
+        public int ammoReserve;
+        public int spread;
+        public float projectileSpeed;
+        public float projectileLifespan;
+        public int projectilesPerAttack;
+        public float reloadTime;
+        public int magazineSize;
+    }
+    public WeaponStats gunStats;
 
     int currentAmmo;
     public int CurrentAmmo
@@ -38,6 +53,7 @@ public abstract class Weapon : MonoBehaviour
 
     protected void Awake()
     {
+        CopyFromSO();
         onShootEvent ??= new UnityEvent();
         onReloadEvent ??= new UnityEvent<int, int, int>();
         currentAmmo = gunStats.magazineSize;
@@ -64,6 +80,19 @@ public abstract class Weapon : MonoBehaviour
     {
         ownerCreatureSO.onStatsChangedEvent.AddListener(CalculateUpgradableStats);
         CalculateUpgradableStats();
+    }
+
+    void CopyFromSO()
+    {
+        gunStats.damage = gunBaseStats.baseDamage;
+        gunStats.fireRate = gunBaseStats.baseFireRate;
+        gunStats.ammoReserve = gunBaseStats.ammoReserve;
+        gunStats.spread = gunBaseStats.baseSpread;
+        gunStats.projectileSpeed = gunBaseStats.baseProjectileSpeed;
+        gunStats.projectileLifespan = gunBaseStats.baseProjectileLifespan;
+        gunStats.projectilesPerAttack = gunBaseStats.baseProjectilesPerAttack;
+        gunStats.reloadTime = gunBaseStats.baseReloadTime;
+        gunStats.magazineSize = gunBaseStats.baseMagazineSize;
     }
 
     virtual public void TryReload()
@@ -126,12 +155,12 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void CalculateUpgradableStats()
     {
-        gunStats.fireRate = gunStats.baseFireRate * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusFireRate));
-        gunStats.reloadTime = gunStats.baseReloadTime * (1 - ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusReloadSpeed));
-        gunStats.projectileSpeed = gunStats.baseProjectileSpeed * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileSpeed));
-        gunStats.projectileLifespan = gunStats.baseProjectileLifespan * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileLifespan));
+        gunStats.fireRate = gunBaseStats.baseFireRate * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusFireRate));
+        gunStats.reloadTime = gunBaseStats.baseReloadTime * (1 - ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusReloadSpeed));
+        gunStats.projectileSpeed = gunBaseStats.baseProjectileSpeed * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileSpeed));
+        gunStats.projectileLifespan = gunBaseStats.baseProjectileLifespan * (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentBonusProjectileLifespan));
     }
-    
+
     protected virtual float CalculateDamage()
     {
         float totalFlatDamage = gunStats.damage + (ownerCreatureSO.GetStat(StatInfo.Stat.BonusDamage) / gunStats.projectilesPerAttack);

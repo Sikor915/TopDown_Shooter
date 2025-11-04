@@ -106,7 +106,7 @@ MonoBehaviour:
   onReloadEvent:
     m_PersistentCalls:
       m_Calls: []
-  gunStats: {fileID: 11400000, guid: a8bdd59fc6ad91a43ab5a457646d10d8, type: 2}
+  gunBaseStats: {fileID: 11400000, guid: a8bdd59fc6ad91a43ab5a457646d10d8, type: 2}
   projectilePrefab: {fileID: 6778555485188572605, guid: 4a0b915c0d00a5542a0e546cea4c8224, type: 3}
   ownerCreatureSO: {fileID: 0}
   anim: {fileID: 0}
