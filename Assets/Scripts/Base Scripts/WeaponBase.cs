@@ -16,6 +16,7 @@ public abstract class Weapon : MonoBehaviour
 
     [Header("Weapon Info")]
     public bool usesAmmo = true;
+    public bool isUsedByPlayer = false;
 
     public struct WeaponStats
     {
@@ -118,17 +119,26 @@ public abstract class Weapon : MonoBehaviour
         Color color = transform.GetComponent<SpriteRenderer>().color;
         transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
-        int ammoNeeded = gunStats.magazineSize - currentAmmo;
 
-        if (gunStats.ammoReserve >= ammoNeeded)
+        if (!isUsedByPlayer)
         {
-            currentAmmo += ammoNeeded;
-            gunStats.ammoReserve -= ammoNeeded;
+            currentAmmo = gunStats.magazineSize;
+            gunStats.ammoReserve = gunStats.magazineSize;
         }
         else
         {
-            currentAmmo += gunStats.ammoReserve;
-            gunStats.ammoReserve = 0;
+            int ammoNeeded = gunStats.magazineSize - currentAmmo;
+
+            if (gunStats.ammoReserve >= ammoNeeded)
+            {
+                currentAmmo += ammoNeeded;
+                gunStats.ammoReserve -= ammoNeeded;
+            }
+            else
+            {
+                currentAmmo += gunStats.ammoReserve;
+                gunStats.ammoReserve = 0;
+            }
         }
         onReloadEvent.Invoke(currentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
         Debug.Log("Reloaded. Current ammo: " + currentAmmo + ", Ammo reserve: " + gunStats.ammoReserve);
@@ -176,6 +186,7 @@ public abstract class Weapon : MonoBehaviour
     public abstract void PrimaryAction();
     public abstract void SecondaryAction();
     public abstract void TertiaryAction();
+    public abstract void BotUse();
     public abstract void HandleShoot();
     public abstract void ResetGraphics();
 }

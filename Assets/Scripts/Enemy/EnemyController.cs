@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public void MoveTowards(Vector3 targetPosition, bool willAttack = false)
     {
-        float speed = willAttack ? enemySO.MoveSpeed/5 : enemySO.MoveSpeed;
+        float speed = willAttack ? enemySO.MoveSpeed / 5 : enemySO.MoveSpeed;
         rb2d.linearVelocity = (targetPosition - transform.position).normalized * speed;
         float angle = Mathf.Atan2(rb2d.linearVelocity.y, rb2d.linearVelocity.x) * Mathf.Rad2Deg;
         rb2d.rotation = angle;
@@ -129,7 +129,7 @@ public class EnemyController : MonoBehaviour, IEnemy
 
         return false;
     }
-    
+
     public bool CanHitPlayer()
     {
         Vector3 directionToPlayer = playerController.transform.position - transform.position;
@@ -150,6 +150,21 @@ public class EnemyController : MonoBehaviour, IEnemy
             return false;
 
         return true;
+    }
+
+    public void AttackPlayer()
+    {
+        if (enemyWeaponGO == null)
+        {
+            return;
+        }
+        if (enemyWeaponGO.GetComponent<Weapon>().CurrentAmmo <= 0 && enemyWeaponGO.GetComponent<Weapon>().usesAmmo)
+        {
+            enemyWeaponGO.GetComponent<Weapon>().TryReload();
+            return;
+        }
+        Debug.Log("Enemy Attacking");
+        enemyWeaponGO.GetComponent<Weapon>().PrimaryAction();
     }
 
     public bool IsPlayerNearby()

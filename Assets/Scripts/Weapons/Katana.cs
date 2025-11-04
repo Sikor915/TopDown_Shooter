@@ -16,13 +16,20 @@ public class Katana : Weapon
     {
         base.Update();
 
-        if (Input.GetMouseButton(0))
+        if (isUsedByPlayer)
         {
-            PrimaryAction();
+            if (Input.GetMouseButton(0))
+            {
+                PrimaryAction();
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SecondaryAction();
+            }
         }
-        if (Input.GetMouseButton(1))
+        else
         {
-            SecondaryAction();
+            // AI usage can be handled differently if needed
         }
     }
 
@@ -45,6 +52,11 @@ public class Katana : Weapon
         // Implement any tertiary action for the pistol here
     }
 
+    public override void BotUse()
+    {
+        PrimaryAction();
+    }
+
     public override void HandleShoot()
     {
         // Implement slash
@@ -52,7 +64,7 @@ public class Katana : Weapon
         coll2d.enabled = true; // Enable collider to detect hits
         slashEffect.GetComponent<TrailRenderer>().enabled = true;
         anim.SetTrigger("MeleeAttack");
-        Invoke(nameof(DisableCollider), 0.4f); // Disable collider after short duration
+        StartCoroutine(DisableColliderAfterDelay(0.3f)); // Disable collider after short delay
     }
 
     public override void ResetGraphics()
@@ -76,5 +88,11 @@ public class Katana : Weapon
     {
         coll2d.enabled = false;
         slashEffect.GetComponent<TrailRenderer>().enabled = false;
+    }
+
+    System.Collections.IEnumerator DisableColliderAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        DisableCollider();
     }
 }

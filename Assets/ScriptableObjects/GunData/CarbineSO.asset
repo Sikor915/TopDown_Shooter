@@ -13,20 +13,12 @@ MonoBehaviour:
   m_Name: CarbineSO
   m_EditorClassIdentifier: 
   weaponName: Carbine
-  damage: 20
-  fireRate: 10
-  ammoReserve: 9791
-  spread: 5
-  projectileSpeed: 50
-  projectileLifespan: 2
-  projectilesPerAttack: 1
-  reloadTime: 2.5
-  magazineSize: 21
   baseDamage: 20
   baseFireRate: 10
-  baseMagazineSize: 21
-  baseReloadTime: 2.5
+  ammoReserve: 210
   baseSpread: 5
   baseProjectileSpeed: 50
   baseProjectileLifespan: 2
   baseProjectilesPerAttack: 1
+  baseReloadTime: 2.5
+  baseMagazineSize: 21

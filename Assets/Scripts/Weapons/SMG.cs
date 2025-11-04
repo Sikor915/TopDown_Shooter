@@ -6,13 +6,20 @@ public class SMG : Weapon
     {
         base.Update();
 
-        if (Input.GetMouseButton(0))
+        if (isUsedByPlayer)
         {
-            PrimaryAction();
+            if (Input.GetMouseButton(0))
+            {
+                PrimaryAction();
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SecondaryAction();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        else
         {
-            SecondaryAction();
+            // AI usage can be handled differently if needed
         }
     }
 
@@ -20,8 +27,10 @@ public class SMG : Weapon
     {
         if (TryShoot())
         {
-            Vector2 target = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-            Vector2 myPos = new(transform.position.x, transform.position.y + 1);
+            Vector2 target = isUsedByPlayer ?
+                (Vector2)Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y)) :
+                GameMaster.Instance.PlayerController.transform.position;
+            Vector2 myPos = transform.GetChild(0).position;
             Vector2 direction = target - myPos;
             direction.Normalize();
 
@@ -61,6 +70,11 @@ public class SMG : Weapon
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+    }
+
+    public override void BotUse()
+    {
+        PrimaryAction();
     }
 
     public override void HandleShoot()

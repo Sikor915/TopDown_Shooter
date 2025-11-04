@@ -106,7 +106,7 @@ MonoBehaviour:
   enemySO: {fileID: 11400000, guid: b57c30698b639a34280e8aefcbdf3214, type: 2}
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
   playerController: {fileID: 3567645495938636935, guid: 02c335f656923a449b4a9d6da2f3e782, type: 3}
-  enemyWeapon: {fileID: 8861727086354862884, guid: 19ba6bf106705454daa924e42efba854, type: 3}
+  enemyWeapon: {fileID: 6279900454228547428, guid: 08da3e39cd711d3479e5611489fb088e, type: 3}
   fieldOfViewAngle: 60
   viewDistance: 15
   hearDistance: 5

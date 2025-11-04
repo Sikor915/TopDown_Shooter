@@ -19,10 +19,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   maxHealth: 100
-  damage: 10
-  enemyScore: 1
-  moveSpeed: 7
-  patrolSpeed: 3
+  instanceStats: []
   statInfo:
   - statType: 0
     statValue: 0
@@ -41,3 +38,8 @@ MonoBehaviour:
   - statType: 7
     statValue: 0
   appliedUpgrades: []
+  damage: 10
+  attackRange: 10
+  enemyScore: 1
+  moveSpeed: 7
+  patrolSpeed: 3

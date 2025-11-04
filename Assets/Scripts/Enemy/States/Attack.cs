@@ -18,10 +18,10 @@ public class Attack : AiState
                 controller.ChangeState(controller.followState);
                 return;
             }
-            controller.EnemyController.MoveTowards(player.transform.position, true);
-            
+            Vector3 shootingPosition = player.transform.position;
+            controller.EnemyController.MoveTowards(shootingPosition, true);
+            controller.EnemyController.AttackPlayer();
         }
-        Debug.Log("Updating Attack State");
     }
 
     protected override void OnExit()

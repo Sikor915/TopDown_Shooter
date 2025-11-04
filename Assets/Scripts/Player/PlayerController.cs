@@ -8,6 +8,7 @@ using Vector2 = UnityEngine.Vector2;
 public class PlayerController : Singleton<PlayerController>, IPlayer
 {
     [SerializeField] PlayerSO playerSO;
+    public PlayerSO PlayerSO => playerSO;
     [SerializeField] PlayerInventorySO playerInventorySO;
 
     float currentHealth;

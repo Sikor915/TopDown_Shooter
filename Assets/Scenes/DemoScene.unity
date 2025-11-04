@@ -1274,7 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledProjectiles: []
-  projectileToPool: {fileID: 6778555485188572605, guid: 4a0b915c0d00a5542a0e546cea4c8224, type: 3}
+  projectileToPool: {fileID: 5587952641114793675, guid: 503fc02a189ad8848babf43e4ede6b3b, type: 3}
   amountToPoolProjectiles: 20
   pooledEnemies: []
   enemyToPool: {fileID: 518193928712820487, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}

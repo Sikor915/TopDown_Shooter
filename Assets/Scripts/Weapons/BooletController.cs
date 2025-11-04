@@ -23,7 +23,7 @@ public class BooletController : MonoBehaviour {
 
     public void Activate()
     {
-        Invoke(nameof(Deactivate), maxLifespan);
+        StartCoroutine(DeactivateAfterTime());
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -34,11 +34,21 @@ public class BooletController : MonoBehaviour {
             Debug.Log("Hit enemy for " + Damage + " damage.");
             if (enemy.DeductHealth(Damage))
             {
+                StopAllCoroutines();
                 ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
             }
         }
+        else if (collision.gameObject.CompareTag("Player"))
+        {
+            var player = collision.gameObject.GetComponent<PlayerController>().PlayerSO;
+            Debug.Log("Hit player for " + Damage + " damage.");
+            player.OnHit(Damage);
+            StopAllCoroutines();
+            ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
+        }
         else if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Door"))
         {
+            StopAllCoroutines();
             ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
         }
     }
@@ -46,5 +56,11 @@ public class BooletController : MonoBehaviour {
     void Deactivate()
     {
         ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
+    }
+
+    System.Collections.IEnumerator DeactivateAfterTime()
+    {
+        yield return new WaitForSeconds(maxLifespan);
+        Deactivate();
     }
 }

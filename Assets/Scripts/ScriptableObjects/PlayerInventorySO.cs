@@ -53,6 +53,7 @@ public class PlayerInventorySO : ScriptableObject
         {
             Debug.LogWarning("Weapon already in inventory.");
         }
+        newWeapon.GetComponent<Weapon>().isUsedByPlayer = true;
     }
 
     public void RemoveWeapon(GameObject weaponToRemove)
@@ -65,6 +66,7 @@ public class PlayerInventorySO : ScriptableObject
                 currentWeapon = null;
             }
             weapons.Remove(weaponToRemove);
+            weaponToRemove.GetComponent<Weapon>().isUsedByPlayer = false;
             Debug.Log("Removed weapon: " + weaponToRemove.GetComponent<Weapon>().gunStats.weaponName);
         }
         else
