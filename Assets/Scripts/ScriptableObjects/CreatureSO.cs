@@ -49,13 +49,13 @@ public class CreatureSO : ScriptableObject
         return -Mathf.Infinity;
     }
 
-    void ResetUpgrades()
+    protected void ResetUpgrades()
     {
         appliedUpgrades.Clear();
         onStatsChangedEvent?.Invoke();
     }
 
-    float GetUpgradedStat(StatInfo.Stat stat, float value)
+    protected float GetUpgradedStat(StatInfo.Stat stat, float value)
     {
         foreach (StatUpgradeSO upgrades in appliedUpgrades)
         {

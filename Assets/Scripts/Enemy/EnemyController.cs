@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,19 +6,23 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(BasicEnemyAI))]
 public class EnemyController : MonoBehaviour, IEnemy
 {
+    [Header("References")]
     [SerializeField] BasicEnemySO enemySO;
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerController playerController;
+    [SerializeField] Weapon enemyWeapon;
+
     [Header("Enemy Senses")]
-    [SerializeField] float fieldOfViewAngle = 60f;
-    [SerializeField] float viewDistance = 10f;
-    [SerializeField] float hearDistance = 5f;
-    [SerializeField] float attackDistance = 10f;
-    [SerializeField] float nearCheckDistance = 20f;
+    [SerializeField] float fieldOfViewAngle;
+    [SerializeField] float viewDistance;
+    [SerializeField] float hearDistance;
+    [SerializeField] float nearCheckDistance;
 
 
     public float HearDistance { get { return hearDistance; } }
     public static event Action<int> OnEnemyKilled;
+
+    GameObject enemyWeaponGO;
 
     Rigidbody2D rb2d;
     float health;
@@ -29,7 +31,7 @@ public class EnemyController : MonoBehaviour, IEnemy
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerController = FindFirstObjectByType<PlayerController>();
+        playerController = GameMaster.Instance.PlayerController;
         rb2d = GetComponent<Rigidbody2D>();
         health = enemySO.MaxHealth;
     }
@@ -52,9 +54,21 @@ public class EnemyController : MonoBehaviour, IEnemy
         }
     }
 
-    public void MoveTowards(Vector3 targetPosition)
+    public void ActivateEnemy()
     {
-        rb2d.linearVelocity = (targetPosition - transform.position).normalized * enemySO.MoveSpeed;
+        Reset();
+        gameObject.SetActive(true);
+        enemyWeapon.ownerCreatureSO = enemySO;
+        enemyWeaponGO = Instantiate(enemyWeapon.gameObject, transform);
+        enemyWeaponGO.SetActive(true);
+        enemyWeaponGO.transform.localScale = new(0.5f, 0.5f, 1f);
+        enemyWeaponGO.transform.localPosition = Vector3.zero + new Vector3(0.5f, 0f, 0f);
+    }
+
+    public void MoveTowards(Vector3 targetPosition, bool willAttack = false)
+    {
+        float speed = willAttack ? enemySO.MoveSpeed/5 : enemySO.MoveSpeed;
+        rb2d.linearVelocity = (targetPosition - transform.position).normalized * speed;
         float angle = Mathf.Atan2(rb2d.linearVelocity.y, rb2d.linearVelocity.x) * Mathf.Rad2Deg;
         rb2d.rotation = angle;
     }
@@ -77,7 +91,6 @@ public class EnemyController : MonoBehaviour, IEnemy
         try
         {
             health -= damage;
-            enemySO.DeductHealth((int)damage);
             if (health <= 0)
             {
                 Died();
@@ -92,7 +105,6 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     public bool ShootRaycastsInFront(Vector3 direction)
     {
-        Debug.Log("Shooting raycasts in front");
         Vector3 origin = transform.position;
         Vector3 leftBoundary = Quaternion.Euler(0, 0, -fieldOfViewAngle / 2) * direction;
         Vector3 rightBoundary = Quaternion.Euler(0, 0, fieldOfViewAngle / 2) * direction;
@@ -131,8 +143,8 @@ public class EnemyController : MonoBehaviour, IEnemy
             return false;
 
         LayerMask mask = LayerMask.GetMask("Wall", "Objects");
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, attackDistance, mask);
-        Debug.DrawRay(transform.position, directionToPlayer.normalized * attackDistance, Color.blue);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, enemySO.AttackRange, mask);
+        Debug.DrawRay(transform.position, directionToPlayer.normalized * enemySO.AttackRange, Color.blue);
 
         if (hit.collider != null)
             return false;

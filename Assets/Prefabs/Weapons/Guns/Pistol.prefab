@@ -108,6 +108,6 @@ MonoBehaviour:
       m_Calls: []
   gunBaseStats: {fileID: 11400000, guid: e114b5e6877674e4d82bd5825dd30394, type: 2}
   projectilePrefab: {fileID: 6778555485188572605, guid: 4a0b915c0d00a5542a0e546cea4c8224, type: 3}
-  ownerCreatureSO: {fileID: 0}
+  ownerCreatureSO: {fileID: 11400000, guid: b57c30698b639a34280e8aefcbdf3214, type: 2}
   anim: {fileID: 0}
   usesAmmo: 1

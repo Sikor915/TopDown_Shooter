@@ -29,7 +29,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
             if (enemy != null)
             {
                 enemy.transform.position = new Vector3(spawnPoint.x, spawnPoint.y, 0);
-                enemy.SetActive(true);
+                enemy.GetComponent<EnemyController>().ActivateEnemy();
                 enemies.Add(enemy);
                 enemy.GetComponent<BasicEnemyAI>().ActivateEnemy();
             }
