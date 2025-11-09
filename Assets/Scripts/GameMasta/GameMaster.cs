@@ -46,6 +46,15 @@ public class GameMaster : Singleton<GameMaster>
         }
     }
 
+    public void PreparePlayerSpawn(Room startingRoom)
+    {
+        Vector2Int spawnPosition = new Vector2Int(
+            startingRoom.Rect.x + startingRoom.Rect.width / 2,
+            startingRoom.Rect.y + startingRoom.Rect.height / 2
+        );
+        playerController.transform.position = new Vector3(spawnPosition.x, spawnPosition.y, 0);
+    }
+
     void AddScoreToCounter(int value)
     {
         Score += value;

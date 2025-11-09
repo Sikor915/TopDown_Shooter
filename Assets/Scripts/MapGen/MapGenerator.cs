@@ -10,21 +10,31 @@ public class MapGenerator : Singleton<MapGenerator>
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase wallTile;
     [SerializeField] string mapSeed = "Default";
-    
+
     [Header("BSP Generation Settings")]
-    [SerializeField] int minRoomSize = 10;
-    [SerializeField] int maxRoomSize = 20;
-    [SerializeField] int maxBSPDepth = 4;
-    [SerializeField] RectInt mapSpace = new RectInt(-50, -50, 100, 100);
-    
-    
+    [SerializeField] int minRoomSize;
+    [SerializeField] int maxRoomSize;
+    [SerializeField] int maxBSPDepth;
+    [SerializeField] RectInt mapSpace;
+
+
     BSPNode bspRoot;
     List<Room> rooms;
+    Room startRoom, endRoom;
     List<Vector2Int> corridors;
 
     void Start()
     {
         CommenceGeneration();
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        if (startRoom != null)
+            Gizmos.DrawSphere(new Vector3(startRoom.Rect.x + startRoom.Rect.width / 2, startRoom.Rect.y + startRoom.Rect.height / 2, 0), 1f);
+        if (endRoom != null)
+            Gizmos.DrawSphere(new Vector3(endRoom.Rect.x + endRoom.Rect.width / 2, endRoom.Rect.y + endRoom.Rect.height / 2, 0), 1f);
     }
 
     public void CommenceGeneration()
@@ -38,6 +48,7 @@ public class MapGenerator : Singleton<MapGenerator>
         DrawDungeon();
         PreparePatrolPoints();
         PrepareSpawnpoints();
+        GameMaster.Instance.PreparePlayerSpawn(startRoom);
     }
 
     public Room GetCurrentRoom(Vector2Int position)
@@ -52,12 +63,31 @@ public class MapGenerator : Singleton<MapGenerator>
         return null;
     }
 
+    public (Room, Room) GetStartAndEndRooms()
+    {
+        return (startRoom, endRoom);
+    }
+
     (List<Room>, List<Vector2Int>) GenerateRooms(BSPNode node)
     {
         List<Room> roomsNew = new List<Room>();
         TraverseAndCreateRooms(node, roomsNew);
+        GenerateStartEndRooms(roomsNew);
         List<Vector2Int> corridors = GenerateCorridors(roomsNew);
         return (roomsNew, corridors);
+    }
+
+    void GenerateStartEndRooms(List<Room> rooms)
+    {
+        int randomStartPos = Random.Range(mapSpace.xMin + minRoomSize / 2, mapSpace.xMax - minRoomSize / 2);
+        int randomEndPos = Random.Range(mapSpace.xMin + minRoomSize / 2, mapSpace.xMax - minRoomSize / 2);
+        RectInt startRoomRect = new RectInt(randomStartPos, mapSpace.yMin - minRoomSize / 2, minRoomSize / 2, minRoomSize / 2);
+        startRoom = new Room(startRoomRect);
+        RectInt endRoomRect = new RectInt(randomEndPos, mapSpace.yMax + minRoomSize / 2, minRoomSize / 2, minRoomSize / 2);
+        endRoom = new Room(endRoomRect);
+
+        rooms.Add(startRoom);
+        rooms.Add(endRoom);
     }
 
     List<Vector2Int> GenerateCorridors(List<Room> rooms)
@@ -84,7 +114,7 @@ public class MapGenerator : Singleton<MapGenerator>
                 corridors.Add(new Vector2Int(roomBCenter.x - 1, y));
                 corridors.Add(new Vector2Int(roomBCenter.x - 2, y));
             }
-        }        
+        }
         return corridors;
     }
 
@@ -110,7 +140,6 @@ public class MapGenerator : Singleton<MapGenerator>
         }
     }
 
-    // TODO: Add start and end rooms somewhere so that they connect to the rest of the dungeon
     // TODO: Remove unnecessary walls if there are floor tiles on each side.
     void DrawDungeon()
     {
@@ -122,6 +151,28 @@ public class MapGenerator : Singleton<MapGenerator>
             for (int x = room.Rect.xMin; x < room.Rect.xMax; x++)
             {
                 for (int y = room.Rect.yMin; y < room.Rect.yMax; y++)
+                {
+                    floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                }
+            }
+        }
+
+        if (startRoom != null)
+        {
+            for (int x = startRoom.Rect.xMin; x < startRoom.Rect.xMax; x++)
+            {
+                for (int y = startRoom.Rect.yMin; y < startRoom.Rect.yMax; y++)
+                {
+                    floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                }
+            }
+        }
+
+        if (endRoom != null)
+        {
+            for (int x = endRoom.Rect.xMin; x < endRoom.Rect.xMax; x++)
+            {
+                for (int y = endRoom.Rect.yMin; y < endRoom.Rect.yMax; y++)
                 {
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
                 }
@@ -171,6 +222,8 @@ public class MapGenerator : Singleton<MapGenerator>
         EnemySpawner.Instance.ClearSpawnPoints();
         foreach (var room in rooms)
         {
+            if (room == startRoom || room == endRoom)
+                continue;
             int randomAmountOfSpawns = Random.Range(1, 4);
             for (int i = 0; i < randomAmountOfSpawns; i++)
             {
@@ -185,6 +238,8 @@ public class MapGenerator : Singleton<MapGenerator>
     {
         foreach (var room in rooms)
         {
+            if (room == startRoom || room == endRoom)
+                continue;
             var randomAmountOfPatrols = (room.Rect.width * room.Rect.height) switch
             {
                 int size when size < 200 => 6,
