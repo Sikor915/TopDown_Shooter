@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Follow : AiState
 {
     PlayerController player;
+    List<Vector3> path;
+    int index = 0;
     protected override void OnEnter()
     {
         player = GameMaster.Instance.PlayerController;
@@ -18,9 +21,26 @@ public class Follow : AiState
                 controller.ChangeState(controller.attackState);
                 return;
             }
+            //Doesn't work
+            path = PathfinderManager.Instance.FindPath(
+                controller.EnemyController.transform.position,
+                player.transform.position
+            );
+            index = 0;
+            if (path != null && path.Count > 0)
+            {
+                Vector3 targetPos = path[index];
+                controller.EnemyController.MoveTowards(targetPos);
 
-            Vector3 playerPosition = player.transform.position;
-            controller.EnemyController.MoveTowards(playerPosition);
+                if (Vector3.Distance(controller.EnemyController.transform.position, targetPos) < 0.1f)
+                {
+                    index++;
+                    if (index >= path.Count)
+                    {
+                        index = path.Count - 1;
+                    }
+                }
+            }
 
             if (!controller.EnemyController.IsPlayerNearby())
             {

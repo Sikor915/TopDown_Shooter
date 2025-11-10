@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -61,6 +62,7 @@ public class MapGenerator : Singleton<MapGenerator>
         PreparePatrolPoints();
         PrepareSpawnpoints();
         GameMaster.Instance.PreparePlayerSpawn(startRoom);
+        PathfinderManager.Instance.InitGrid();
     }
 
     public Room GetCurrentRoom(Vector2Int position)
