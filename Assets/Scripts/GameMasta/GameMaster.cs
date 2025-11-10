@@ -19,13 +19,6 @@ public class GameMaster : Singleton<GameMaster>
         set { score = value; UIController.Instance.SetScore(score); }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        UIController.Instance.SetScore(score);
-        UIController.Instance.UpdateHealthText(playerController.CurrentHealth, playerSO.creatureSO.MaxHealth);
-    }
-
     void OnEnable()
     {
         EnemyController.OnEnemyKilled += AddScoreToCounter;

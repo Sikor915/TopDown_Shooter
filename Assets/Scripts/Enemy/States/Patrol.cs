@@ -52,7 +52,6 @@ public class Patrol : AiState
 
     public override void OnStuck()
     {
-        Debug.Log("Patrol State: Stuck, choosing new patrol point");
         pointToGo = controller.GetRandomPatrolPoint();
     }
 }

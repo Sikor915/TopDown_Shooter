@@ -41,8 +41,6 @@ public class BasicEnemyAI : MonoBehaviour
     {
         currentState?.OnStateExit();
 
-        Debug.Log("Changing state to: " + (newState != null ? newState.GetType().Name : "null"));
-
         currentState = newState;
         currentState?.OnStateEnter(this);
     }

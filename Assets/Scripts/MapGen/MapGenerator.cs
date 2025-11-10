@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,7 +10,7 @@ public class MapGenerator : Singleton<MapGenerator>
     [SerializeField] Tilemap wallTilemap;
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase wallTile;
-    [SerializeField] string mapSeed = "Default";
+    [SerializeField] int seedLength;
 
     [Header("BSP Generation Settings")]
     [SerializeField] int minRoomSize;
@@ -17,6 +18,8 @@ public class MapGenerator : Singleton<MapGenerator>
     [SerializeField] int maxBSPDepth;
     [SerializeField] RectInt mapSpace;
 
+
+    string mapSeed;
 
     BSPNode bspRoot;
     List<Room> rooms;
@@ -39,6 +42,15 @@ public class MapGenerator : Singleton<MapGenerator>
 
     public void CommenceGeneration()
     {
+        StringBuilder sb = new StringBuilder();
+        int numGuidsToConcat = ((seedLength - 1) / 32) + 1;
+        for(int i = 1; i <= numGuidsToConcat; i++)
+        {
+            sb.Append(System.Guid.NewGuid().ToString("N"));
+        }
+
+        mapSeed = sb.ToString(0, seedLength);
+
         Random.InitState(mapSeed.GetHashCode());
         bspRoot = null;
         EnemySpawner.Instance.ClearEnemies();
@@ -252,7 +264,6 @@ public class MapGenerator : Singleton<MapGenerator>
                 Vector2Int patrolPoint = new(Random.Range(room.Rect.xMin + 1, room.Rect.xMax - 1), Random.Range(room.Rect.yMin + 1, room.Rect.yMax - 1));
                 room.AddPatrolPoint(patrolPoint);
             }
-            Debug.Log("Room at " + room.Rect + " has " + room.PatrolPoints.Count + " patrol points.");
         }
     }
 
