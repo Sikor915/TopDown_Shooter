@@ -528,7 +528,7 @@ MonoBehaviour:
   scoreText: {fileID: 2025839318}
   playerGO: {fileID: 5027922657685205027}
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
-  playerInventorySO: {fileID: 11400000, guid: 86515469c10439742b3f0da05d35c24e, type: 2}
+  playerInventory: {fileID: 8452106920228156842}
   weaponBase: {fileID: 0}
 --- !u!1 &676336521
 GameObject:
@@ -1186,6 +1186,7 @@ GameObject:
   - component: {fileID: 1248442585}
   - component: {fileID: 1248442586}
   - component: {fileID: 1248442587}
+  - component: {fileID: 1248442588}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -1252,7 +1253,7 @@ MonoBehaviour:
   wallTilemap: {fileID: 927074183}
   floorTile: {fileID: 11400000, guid: c3611b9da76104b49b6d3807b67b310e, type: 2}
   wallTile: {fileID: 11400000, guid: cae42e0d1392e96488a2ea86e4469354, type: 2}
-  mapSeed: 12345
+  seedLength: 8
   minRoomSize: 30
   maxRoomSize: 35
   maxBSPDepth: 6
@@ -1279,6 +1280,19 @@ MonoBehaviour:
   pooledEnemies: []
   enemyToPool: {fileID: 518193928712820487, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}
   amountToPoolEnemies: 40
+--- !u!114 &1248442588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248442582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1274f31cae18f7543a5cb8341a38b642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorTilemap: {fileID: 23658296}
 --- !u!1 &1298199896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,7 +1356,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 13
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2450,6 +2464,7 @@ GameObject:
   - component: {fileID: 6579670053370055099}
   - component: {fileID: 8452106920228156841}
   - component: {fileID: 1240789708563266859}
+  - component: {fileID: 8452106920228156842}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2480,7 +2495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
-  playerInventorySO: {fileID: 11400000, guid: 86515469c10439742b3f0da05d35c24e, type: 2}
+  playerInventory: {fileID: 8452106920228156842}
 --- !u!4 &6692654101195256417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 792049420665976907, guid: 231779b0a84eb634096429646deec38a, type: 3}
@@ -2696,6 +2711,23 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 1298199898}
+--- !u!114 &8452106920228156842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5027922657685205027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77cdf463c01aeaf42b70ce7a4fd66077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onWeaponChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  currentWeapon: {fileID: 0}
+  weapons: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
