@@ -2,27 +2,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "PlayerInventory", menuName = "Scriptable Objects/PlayerInventory", order = 1)]
-public class PlayerInventorySO : ScriptableObject
+class PlayerInventory : Singleton<PlayerInventory>
 {
     [Header("Events")]
-    public UnityEvent onWeaponChangedEvent;
+    public UnityEvent onWeaponChangedEvent = new();
 
     [Header("Weapon Inventory")]
     public GameObject currentWeapon;
+    public bool HasCurrentWeapon => currentWeapon != null;
     [SerializeField] List<GameObject> weapons;
     public List<GameObject> Weapons => weapons;
 
     public void EquipWeapon(int index)
     {
         if (index < 0 || index >= weapons.Count) return;
+        Debug.Log("Correct index");
         if (currentWeapon != null)
         {
             currentWeapon.SetActive(false);
+            Debug.Log("Disabled current weapon");
         }
         currentWeapon = weapons[index];
+        Debug.Log("CurrentWeapon variable set to: " + currentWeapon.name);
         currentWeapon.SetActive(true);
+        Debug.Log("Enabled new weapon");
         onWeaponChangedEvent?.Invoke();
+        Debug.Log("Invoked onWeaponChangedEvent");
     }
 
     public void EquipNextWeapon()

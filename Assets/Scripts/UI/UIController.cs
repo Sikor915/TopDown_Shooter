@@ -10,28 +10,25 @@ public class UIController : Singleton<UIController>
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject playerGO;
     [SerializeField] PlayerSO playerSO;
-    [SerializeField] PlayerInventorySO playerInventorySO;
+    [SerializeField] PlayerInventory playerInventory;
 
     [SerializeField] Weapon weaponBase;
-
-    void Awake()
-    {
-        weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
-    }
 
     void Start()
     {
         StartCoroutine(TryGetWeaponBase());
-        UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         SetScore(0);
     }
 
     void OnEnable()
     {
+        if (weaponBase != null)
+        {
+            weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
+            weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
+        }
         playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
-        weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
-        weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
-        playerInventorySO.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
+        playerInventory.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
     }
 
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
@@ -65,9 +62,10 @@ public class UIController : Singleton<UIController>
 
     void UpdateCurrentWeaponEvents()
     {
+        if (weaponBase == null) return;
         weaponBase.onShootEvent.RemoveAllListeners();
         weaponBase.onReloadEvent.RemoveAllListeners();
-        weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
+        weaponBase = playerInventory.currentWeapon.GetComponent<Weapon>();
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
         weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
@@ -78,11 +76,12 @@ public class UIController : Singleton<UIController>
         while (weaponBase == null)
         {
             Debug.Log("Trying to get weapon base");
-            weaponBase = playerInventorySO.currentWeapon.GetComponent<Weapon>();
+            if (playerInventory.HasCurrentWeapon)
+            {
+                weaponBase = playerInventory.currentWeapon.GetComponent<Weapon>();
+            }
             yield return null;
         }
-        UpdateHealthText(GameMaster.Instance.PlayerController.CurrentHealth, playerSO.creatureSO.MaxHealth);
-        UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
-        
+        UpdateCurrentWeaponEvents();
     }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(PlayerInventory))]
 public class PlayerController : Singleton<PlayerController>, IPlayer
 {
     [SerializeField] PlayerSO playerSO;
     public PlayerSO PlayerSO => playerSO;
-    [SerializeField] PlayerInventorySO playerInventorySO;
+    [SerializeField] PlayerInventory playerInventory;
 
     float currentHealth;
     public float CurrentHealth => currentHealth;
@@ -37,18 +37,18 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         {
             if (child.TryGetComponent<Weapon>(out var weaponC))
             {
-                playerInventorySO.AddWeapon(child.gameObject);
+                playerInventory.AddWeapon(child.gameObject);
                 child.gameObject.SetActive(false);
                 weaponC.ownerCreatureSO = playerSO.creatureSO;
             }
         }
-        playerInventorySO.EquipWeapon(0); 
+        playerInventory.EquipWeapon(0); 
+        currentHealth = playerSO.creatureSO.MaxHealth;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentHealth = playerSO.creatureSO.MaxHealth;
         playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
     }
 
@@ -62,11 +62,11 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            playerInventorySO.EquipNextWeapon();
+            playerInventory.EquipNextWeapon();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
-            playerInventorySO.EquipPreviousWeapon();
+            playerInventory.EquipPreviousWeapon();
         }
     }
 
@@ -89,9 +89,9 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (canPickUp)
         {
             Debug.Log("Picking up weapon: " + nearestWeapon.name);
-            playerInventorySO.PickUpWeapon(nearestWeapon, transform);
-            playerInventorySO.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
-            playerInventorySO.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
+            playerInventory.PickUpWeapon(nearestWeapon, transform);
+            playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
+            playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
             return;
         }
     }
@@ -99,10 +99,10 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     public void OnDrop(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        if (playerInventorySO.currentWeapon != null)
+        if (playerInventory.currentWeapon != null)
         {
             Vector3 dropPosition = transform.position + transform.up * 1.0f; // Drop in front of the player
-            playerInventorySO.DropWeapon(playerInventorySO.currentWeapon, dropPosition);
+            playerInventory.DropWeapon(playerInventory.currentWeapon, dropPosition);
         }
     }
 
