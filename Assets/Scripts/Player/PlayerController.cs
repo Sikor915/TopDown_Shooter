@@ -32,6 +32,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         rb2d = GetComponent<Rigidbody2D>();
         foreach (Transform child in transform)
         {
@@ -93,6 +94,28 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
             playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
             playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
             return;
+        }
+        if (MapGenerator.Instance != null)
+        {
+            Room endRoom = MapGenerator.Instance.GetStartAndEndRooms().Item2;
+            if (endRoom != null && MapGenerator.Instance.IsPlayerInRoom(endRoom))
+            {
+                Debug.Log("Player interacted in end room. Loading Main Menu.");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Shop");
+                return;
+            }
+        }
+        if (ShopMaster.Instance != null)
+        {
+            Debug.Log("Checking shop exit point interaction");
+            float distance = Vector3.Distance(transform.position, ShopMaster.Instance.ExitPoint.transform.position);
+            if (distance < 5.0f)
+            {
+                Debug.Log("Player interacted at shop exit point. Loading Main Menu.");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
+                return;
+            }
+            Debug.Log($"Player not close enough to exit point. Distance was: {distance}");
         }
     }
 
