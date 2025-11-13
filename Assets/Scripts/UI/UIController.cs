@@ -8,11 +8,15 @@ public class UIController : Singleton<UIController>
     [SerializeField] TMP_Text ammoText, ammoReserveText;
     [SerializeField] TMP_Text healthText;
     [SerializeField] TMP_Text scoreText;
-    [SerializeField] GameObject playerGO;
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventory playerInventory;
 
     [SerializeField] Weapon weaponBase;
+
+    void Awake()
+    {
+        playerInventory = PlayerController.Instance.GetComponent<PlayerInventory>();
+    }
 
     void Start()
     {

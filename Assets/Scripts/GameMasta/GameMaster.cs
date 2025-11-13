@@ -21,6 +21,7 @@ public class GameMaster : Singleton<GameMaster>
 
     void OnEnable()
     {
+        playerController = FindFirstObjectByType<PlayerController>();
         EnemyController.OnEnemyKilled += AddScoreToCounter;
     }
 

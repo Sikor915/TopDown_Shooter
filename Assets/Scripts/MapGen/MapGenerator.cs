@@ -29,6 +29,9 @@ public class MapGenerator : Singleton<MapGenerator>
 
     void Start()
     {
+        floorTilemap = GameObject.FindWithTag("Floor").GetComponent<Tilemap>();
+        wallTilemap = GameObject.FindWithTag("Wall").GetComponent<Tilemap>();
+        PathfinderManager.Instance.floorTilemap = floorTilemap;
         CommenceGeneration();
     }
 
@@ -75,6 +78,12 @@ public class MapGenerator : Singleton<MapGenerator>
             }
         }
         return null;
+    }
+
+    public bool IsPlayerInRoom(Room room)
+    {
+        Vector2Int playerPos = Vector2Int.FloorToInt(GameMaster.Instance.PlayerController.transform.position);
+        return room.Rect.Contains(playerPos);
     }
 
     public (Room, Room) GetStartAndEndRooms()
