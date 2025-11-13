@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class MainMenuController : MonoBehaviour
+public class WeaponShop : MonoBehaviour, IShop
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -13,13 +14,13 @@ public class MainMenuController : MonoBehaviour
 
     }
 
-    public void OnStartButtonPressed()
+    public void OpenShop()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
+        Debug.Log("Weapon Shop opened");
     }
     
-    public void OnQuitButtonPressed()
+    public void CloseShop()
     {
-        Application.Quit();
+        Debug.Log("Weapon Shop closed");
     }
 }

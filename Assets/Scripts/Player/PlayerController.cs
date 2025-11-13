@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
@@ -20,11 +19,9 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     Vector3 mousePos;
 
-    GameObject nearestWeapon;
 
     bool isRolling = false;
     bool isSliding = false;
-    bool canPickUp = false;
 
     Coroutine iFrameCoroutine;
     Coroutine rollCooldownCoroutine;
@@ -86,37 +83,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        Debug.Log("Interact pressed");
-        if (canPickUp)
-        {
-            Debug.Log("Picking up weapon: " + nearestWeapon.name);
-            playerInventory.PickUpWeapon(nearestWeapon, transform);
-            playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
-            playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
-            return;
-        }
-        if (MapGenerator.Instance != null)
-        {
-            Room endRoom = MapGenerator.Instance.GetStartAndEndRooms().Item2;
-            if (endRoom != null && MapGenerator.Instance.IsPlayerInRoom(endRoom))
-            {
-                Debug.Log("Player interacted in end room. Loading Main Menu.");
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Shop");
-                return;
-            }
-        }
-        if (ShopMaster.Instance != null)
-        {
-            Debug.Log("Checking shop exit point interaction");
-            float distance = Vector3.Distance(transform.position, ShopMaster.Instance.ExitPoint.transform.position);
-            if (distance < 5.0f)
-            {
-                Debug.Log("Player interacted at shop exit point. Loading Main Menu.");
-                UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
-                return;
-            }
-            Debug.Log($"Player not close enough to exit point. Distance was: {distance}");
-        }
+        PlayerInteractManager.Instance.ProcessInteraction();
     }
 
     public void OnDrop(InputAction.CallbackContext context)
@@ -183,8 +150,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (coll.gameObject.CompareTag("Weapon"))
         {
             Debug.Log("Found weapon: " + coll.gameObject.name);
-            nearestWeapon = coll.gameObject;
-            canPickUp = true;
+            PlayerInteractManager.Instance.NearestWeapon = coll.gameObject;
+            PlayerInteractManager.Instance.CanPickUp = true;
         }
     }
 
@@ -193,8 +160,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (coll.gameObject.CompareTag("Weapon"))
         {
             Debug.Log("Lost weapon: " + coll.gameObject.name);
-            nearestWeapon = null;
-            canPickUp = false;
+            PlayerInteractManager.Instance.NearestWeapon = null;
+            PlayerInteractManager.Instance.CanPickUp = false;
         }
     }
 

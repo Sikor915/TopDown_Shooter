@@ -33,6 +33,7 @@ public class UIController : Singleton<UIController>
         }
         playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
+        MoneyManager.Instance.ScoreSO.onScoreChangedEvent.AddListener(SetScore);
     }
 
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)

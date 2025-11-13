@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 class ShopMaster : Singleton<ShopMaster>
@@ -5,6 +6,12 @@ class ShopMaster : Singleton<ShopMaster>
     [SerializeField] PlayerController pc;
     [SerializeField] GameObject exitPoint;
     public GameObject ExitPoint => exitPoint;
+    [SerializeField] PerkShop perkShopPoint;
+    public PerkShop PerkShopPoint => perkShopPoint;
+    [SerializeField] WeaponShop weaponShopPoint;
+    public WeaponShop WeaponShopPoint => weaponShopPoint;
+
+    
 
     void Awake()
     {
@@ -16,4 +23,6 @@ class ShopMaster : Singleton<ShopMaster>
     {
         pc.PlayerSO.creatureSO.onHealthChangedEvent?.Invoke(pc.CurrentHealth, pc.PlayerSO.creatureSO.MaxHealth);
     }
+
+    
 }
