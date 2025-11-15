@@ -46,7 +46,7 @@ public class BooletController : MonoBehaviour {
             StopAllCoroutines();
             ObjectPooling.Instance.ReturnProjectileToPool(gameObject);
         }
-        else if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Door"))
+        else if (collision.gameObject.CompareTag("Wall"))
         {
             StopAllCoroutines();
             ObjectPooling.Instance.ReturnProjectileToPool(gameObject);

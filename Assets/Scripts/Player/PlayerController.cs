@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
@@ -20,11 +19,9 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     Vector3 mousePos;
 
-    GameObject nearestWeapon;
 
     bool isRolling = false;
     bool isSliding = false;
-    bool canPickUp = false;
 
     Coroutine iFrameCoroutine;
     Coroutine rollCooldownCoroutine;
@@ -32,6 +29,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         rb2d = GetComponent<Rigidbody2D>();
         foreach (Transform child in transform)
         {
@@ -85,15 +83,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        Debug.Log("Interact pressed");
-        if (canPickUp)
-        {
-            Debug.Log("Picking up weapon: " + nearestWeapon.name);
-            playerInventory.PickUpWeapon(nearestWeapon, transform);
-            playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
-            playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
-            return;
-        }
+        PlayerInteractManager.Instance.ProcessInteraction();
     }
 
     public void OnDrop(InputAction.CallbackContext context)
@@ -160,8 +150,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (coll.gameObject.CompareTag("Weapon"))
         {
             Debug.Log("Found weapon: " + coll.gameObject.name);
-            nearestWeapon = coll.gameObject;
-            canPickUp = true;
+            PlayerInteractManager.Instance.NearestWeapon = coll.gameObject;
+            PlayerInteractManager.Instance.CanPickUp = true;
         }
     }
 
@@ -170,8 +160,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (coll.gameObject.CompareTag("Weapon"))
         {
             Debug.Log("Lost weapon: " + coll.gameObject.name);
-            nearestWeapon = null;
-            canPickUp = false;
+            PlayerInteractManager.Instance.NearestWeapon = null;
+            PlayerInteractManager.Instance.CanPickUp = false;
         }
     }
 

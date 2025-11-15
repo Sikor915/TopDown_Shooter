@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SMGSO
   m_EditorClassIdentifier: 
   weaponName: SMG
+  weaponIcon: {fileID: 21300000, guid: b724358cff2fe194e955c419579f0e7f, type: 3}
+  weaponDescription: Fast-firing SMG, melts enemies like butter
+  weaponPrice: 15
   baseDamage: 6
   baseFireRate: 30
   ammoReserve: 300

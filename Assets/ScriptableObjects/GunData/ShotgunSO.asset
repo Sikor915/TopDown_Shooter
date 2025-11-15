@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ShotgunSO
   m_EditorClassIdentifier: 
   weaponName: Shotgun
+  weaponIcon: {fileID: 21300000, guid: 5e77c3efcd6c44342b0620156cd45132, type: 3}
+  weaponDescription: Powerful shotgun, fires 5 rounds per shot
+  weaponPrice: 15
   baseDamage: 10
   baseFireRate: 2
   ammoReserve: 50

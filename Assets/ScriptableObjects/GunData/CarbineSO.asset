@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: CarbineSO
   m_EditorClassIdentifier: 
   weaponName: Carbine
+  weaponIcon: {fileID: 21300000, guid: 29b681d2a831cbc47a2f4a12f76c329f, type: 3}
+  weaponDescription: Standard issue carbine, good damage, average mag size
+  weaponPrice: 20
   baseDamage: 20
   baseFireRate: 10
   ammoReserve: 210

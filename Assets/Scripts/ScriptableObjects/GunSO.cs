@@ -5,6 +5,10 @@ using UnityEngine;
 public class GunSO : ScriptableObject
 {
     public string weaponName;
+    public Sprite weaponIcon;
+    public string weaponDescription;
+    public int weaponPrice;
+    public GameObject weaponPrefab;
     [Header("Stats")]
     public float baseDamage;
     public float baseFireRate;

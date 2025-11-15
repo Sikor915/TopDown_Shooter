@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        player = PlayerController.Instance.gameObject;
         cameraOffset = new Vector3(0, 0, -10);
         gameObject.transform.position = new Vector3(player.transform.position.x + cameraOffset.x, player.transform.position.y + cameraOffset.y, cameraOffset.z);
     }

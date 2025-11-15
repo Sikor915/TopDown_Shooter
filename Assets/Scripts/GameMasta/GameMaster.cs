@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameMaster : Singleton<GameMaster>
 {
@@ -10,23 +12,16 @@ public class GameMaster : Singleton<GameMaster>
     public PlayerController PlayerController => playerController;
 
     const string statsPath = "Assets/ScriptableObjects/Player";
-    const string upgradesPath = "Assets/ScriptableObjects/Upgrades";
 
-    int score = 0;
-    public int Score
+    void Start()
     {
-        get { return score; }
-        set { score = value; UIController.Instance.SetScore(score); }
+        playerController.PlayerSO.creatureSO.onHealthChangedEvent?.Invoke(playerController.CurrentHealth, playerController.PlayerSO.creatureSO.MaxHealth);
     }
 
-    void OnEnable()
+    void Awake()
     {
-        EnemyController.OnEnemyKilled += AddScoreToCounter;
-    }
-
-    void OnDisable()
-    {
-        EnemyController.OnEnemyKilled -= AddScoreToCounter;
+        playerController = PlayerController.Instance;
+        playerController.GetComponent<PlayerInput>().enabled = true;
     }
 
     void OnApplicationQuit()
@@ -46,31 +41,5 @@ public class GameMaster : Singleton<GameMaster>
             startingRoom.Rect.y + startingRoom.Rect.height / 2
         );
         playerController.transform.position = new Vector3(spawnPosition.x, spawnPosition.y, 0);
-    }
-
-    void AddScoreToCounter(int value)
-    {
-        Score += value;
-        if (Score % 5 == 0 && Score != 0)
-        {
-            RandomizeUpgradesToShow();
-        }
-    }
-
-    void RandomizeUpgradesToShow()
-    {
-        List<StatUpgradeSO> allUpgrades = HelperFunctions.GetScriptableObjectsOfType<StatUpgradeSO>(upgradesPath);
-        List<StatUpgradeSO> upgradesRandomized = new();
-        int upgradesToShow = 3;
-        while (upgradesRandomized.Count < upgradesToShow)
-        {
-            int randomIndex = Random.Range(0, allUpgrades.Count);
-            StatUpgradeSO randomUpgrade = allUpgrades[randomIndex];
-            if (!upgradesRandomized.Contains(randomUpgrade))
-            {
-                upgradesRandomized.Add(randomUpgrade);
-            }
-        }
-        UpgradeUIManager.Instance.CreateUpgradeCards(upgradesRandomized);
     }
 }
