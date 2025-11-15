@@ -12,8 +12,15 @@ public class UpgradeUIManager : Singleton<UpgradeUIManager>
 
     void Start()
     {
-        onUpgradeChosen += () => { foreach (Transform child in transform) { Destroy(child.gameObject); } };
-    } 
+        onUpgradeChosen += () =>
+        {
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+            PerkShop.Instance.CloseShop();
+        };
+    }
 
     public void CreateUpgradeCards(List<StatUpgradeSO> upgradesRandomized)
     {

@@ -63,11 +63,11 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
                 return;
             }
 
-            distance = Vector3.Distance(transform.position, ShopMaster.Instance.WeaponShopPoint.transform.position);
+            distance = Vector3.Distance(transform.position, ShopMaster.Instance.GunShopPoint.transform.position);
             if (distance < 4.0f)
             {
-                Debug.Log("Player interacted at weapon shop point. Opening Weapon Shop.");
-                ShopMaster.Instance.WeaponShopPoint.OpenShop();
+                Debug.Log("Player interacted at gun shop point. Opening Gun Shop.");
+                ShopMaster.Instance.GunShopPoint.OpenShop();
                 return;
             }
 

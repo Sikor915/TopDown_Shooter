@@ -8,8 +8,8 @@ class ShopMaster : Singleton<ShopMaster>
     public GameObject ExitPoint => exitPoint;
     [SerializeField] PerkShop perkShopPoint;
     public PerkShop PerkShopPoint => perkShopPoint;
-    [SerializeField] WeaponShop weaponShopPoint;
-    public WeaponShop WeaponShopPoint => weaponShopPoint;
+    [SerializeField] GunShop gunShopPoint;
+    public GunShop GunShopPoint => gunShopPoint;
 
     
 
