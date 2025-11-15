@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39cf02b3989a77344ba861357908d47a, type: 3}
   m_Name: ScoreSO
   m_EditorClassIdentifier: 
-  score: 10
-  money: 0
+  score: 20
+  money: 15
   onScoreChangedEvent:
     m_PersistentCalls:
       m_Calls: []
