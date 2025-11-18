@@ -77,8 +77,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   floorTilemap: {fileID: 0}
   wallTilemap: {fileID: 0}
-  floorTile: {fileID: 11400000, guid: c3611b9da76104b49b6d3807b67b310e, type: 2}
-  wallTile: {fileID: 11400000, guid: cae42e0d1392e96488a2ea86e4469354, type: 2}
+  floorTile: {fileID: 11400000, guid: b302cba2ae0914047923d2fca60ee327, type: 2}
+  wallTile: {fileID: 11400000, guid: 76605105efd51f14eae7f8ef44ace6fc, type: 2}
   seedLength: 8
   minRoomSize: 30
   maxRoomSize: 35

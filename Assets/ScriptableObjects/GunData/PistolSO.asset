@@ -16,6 +16,7 @@ MonoBehaviour:
   weaponIcon: {fileID: 21300000, guid: d1dadebaa3ef00b458652b806fbf1724, type: 3}
   weaponDescription: Pistol. Nothing more, nothing less
   weaponPrice: 5
+  weaponPrefab: {fileID: 7991235734762641486, guid: 19ba6bf106705454daa924e42efba854, type: 3}
   baseDamage: 10
   baseFireRate: 5
   ammoReserve: 70

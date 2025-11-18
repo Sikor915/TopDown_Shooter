@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ScoreSO
   m_EditorClassIdentifier: 
   score: 20
-  money: 15
+  money: 0
   onScoreChangedEvent:
     m_PersistentCalls:
       m_Calls: []

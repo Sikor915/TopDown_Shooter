@@ -19,7 +19,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   maxHealth: 100
-  currentHealth: 100
   instanceStats:
   - statType: 0
     statValue: 0
@@ -54,4 +53,18 @@ MonoBehaviour:
     statValue: 0
   - statType: 7
     statValue: 0
-  appliedUpgrades: []
+  appliedUpgrades:
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
+  - {fileID: 11400000, guid: 405a832791d9b3a489a885db94f606ec, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 6c02fc1ebe2f7b74a921b6e0234da3fd, type: 2}
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
+  - {fileID: 11400000, guid: 3a858adbf5f1b5143a71b68c62b1e4de, type: 2}
