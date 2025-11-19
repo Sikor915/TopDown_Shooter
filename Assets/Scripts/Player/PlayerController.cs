@@ -31,7 +31,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         DontDestroyOnLoad(gameObject);
         rb2d = GetComponent<Rigidbody2D>();
-        foreach (Transform child in transform)
+        foreach (Transform child in transform.GetChild(0))
         {
             if (child.TryGetComponent<Weapon>(out var weaponC))
             {
@@ -76,7 +76,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     void FixedUpdate()
     {
-        RotateToCursor();
         MoveCharacter();
     }
 
@@ -169,14 +168,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         currentHealth -= damage;
         playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
-    }
-
-    void RotateToCursor()
-    {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        Vector3 perpendicular = Vector3.Cross(transform.position - mousePos, Vector3.forward);
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, perpendicular);
     }
 
     void MoveCharacter()
