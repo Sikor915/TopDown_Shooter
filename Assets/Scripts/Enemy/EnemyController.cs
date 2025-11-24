@@ -197,6 +197,14 @@ public class EnemyController : MonoBehaviour, IEnemy
 
     void Died()
     {
+        int chance = Random.Range(0, 100);
+        if (chance < 50)
+        {
+            Debug.Log("Dropping Money");
+            GameObject moneyGO = Instantiate(MoneyManager.Instance.MoneyPrefab, transform.position, Quaternion.identity);
+            MoneyObject moneyObject = moneyGO.GetComponent<MoneyObject>();
+            moneyObject.Amount = enemySO.MoneyDropAmount;
+        }
         EnemySpawner.Instance.RemoveEnemy(gameObject);
         OnEnemyKilled?.Invoke(enemySO.EnemyScore);
         Debug.Log(EnemySpawner.Instance.Enemies.Count);

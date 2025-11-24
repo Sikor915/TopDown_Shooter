@@ -7,6 +7,7 @@ public class UIController : Singleton<UIController>
 {
     [SerializeField] TMP_Text ammoText, ammoReserveText;
     [SerializeField] TMP_Text healthText;
+    [SerializeField] TMP_Text moneyText;
     [SerializeField] TMP_Text scoreText;
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventory playerInventory;
@@ -21,7 +22,8 @@ public class UIController : Singleton<UIController>
     void Start()
     {
         StartCoroutine(TryGetWeaponBase());
-        SetScore(0);
+        SetScore(MoneyManager.Instance.GetScore());
+        UpdateMoneyText(MoneyManager.Instance.GetMoney());
     }
 
     void OnEnable()
@@ -34,6 +36,20 @@ public class UIController : Singleton<UIController>
         playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
         MoneyManager.Instance.ScoreSO.onScoreChangedEvent.AddListener(SetScore);
+        MoneyManager.Instance.ScoreSO.onMoneyChangedEvent.AddListener(UpdateMoneyText);
+    }
+
+    void OnDisable()
+    {
+        if (weaponBase != null)
+        {
+            weaponBase.onShootEvent.RemoveAllListeners();
+            weaponBase.onReloadEvent.RemoveAllListeners();
+        }
+        playerSO.creatureSO.onHealthChangedEvent.RemoveListener(UpdateHealthText);
+        playerInventory.onWeaponChangedEvent.RemoveListener(UpdateCurrentWeaponEvents);
+        MoneyManager.Instance.ScoreSO.onScoreChangedEvent.RemoveListener(SetScore);
+        MoneyManager.Instance.ScoreSO.onMoneyChangedEvent.RemoveListener(UpdateMoneyText);
     }
 
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
@@ -52,6 +68,11 @@ public class UIController : Singleton<UIController>
     {
         Debug.Log("Updating health text");
         healthText.text = currentHealth.ToString("F0") + "/" + maxHealth.ToString("F0");
+    }
+
+    public void UpdateMoneyText(int currentMoney)
+    {
+        moneyText.text = "$" + currentMoney.ToString();
     }
 
     public void SetScore(int score)

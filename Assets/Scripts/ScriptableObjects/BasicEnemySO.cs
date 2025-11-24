@@ -24,6 +24,13 @@ public class BasicEnemySO : CreatureSO
         get { return enemyScore; }
         set { enemyScore = value; }
     }
+
+    [SerializeField] int moneyDropAmount;
+    public int MoneyDropAmount
+    {
+        get { return moneyDropAmount; }
+        set { moneyDropAmount = value; }
+    }
     [SerializeField] float moveSpeed;
     public float MoveSpeed
     {
