@@ -28,7 +28,7 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         if (canPickUp)
         {
             Debug.Log("Picking up weapon: " + nearestWeapon.name);
-            playerInventory.PickUpWeapon(nearestWeapon, transform);
+            playerInventory.PickUpWeapon(nearestWeapon, transform.GetChild(0));
             playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
             playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
             return;
