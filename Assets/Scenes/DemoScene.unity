@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1516685847711304068, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2980584705575087192, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -523,6 +527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreSO: {fileID: 11400000, guid: f2ecda403d1358140bf1ad3fd3251c03, type: 2}
+  moneyPrefab: {fileID: 2362745196329160039, guid: f364767f44fe38d43b1783efea227cb4, type: 3}
 --- !u!4 &2074121170
 Transform:
   m_ObjectHideFlags: 0
