@@ -24,7 +24,7 @@ public class Katana : Weapon
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SecondaryAction();
+                ReloadAction();
             }
         }
         else
@@ -50,6 +50,12 @@ public class Katana : Weapon
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+    }
+
+    public override void ReloadAction()
+    {
+        // Katana does not reload
+        Debug.Log("Katana does not require reloading.");
     }
 
     public override void BotUse()

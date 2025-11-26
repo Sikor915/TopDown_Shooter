@@ -14,7 +14,7 @@ public class Pistol : Weapon
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SecondaryAction();
+                ReloadAction();
             }
         }
         else
@@ -64,12 +64,18 @@ public class Pistol : Weapon
 
     public override void SecondaryAction()
     {
-        TryReload();
+
     }
 
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+        Debug.Log("Pistol tertiary action triggered.");
+    }
+
+    public override void ReloadAction()
+    {
+        TryReload();
     }
 
     public override void BotUse()

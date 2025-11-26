@@ -5,6 +5,9 @@ public class PlayerAim : Singleton<PlayerAim>
 
     [SerializeField] Animator characterAnimator;
     [SerializeField] Transform weaponPivot;
+    [SerializeField] float throwForce;
+
+    Vector3 mousePosition;
 
     enum FacingDirection
     {
@@ -21,12 +24,22 @@ public class PlayerAim : Singleton<PlayerAim>
         RotateWeaponToCursor();
     }
 
+    public void ThrowWeapon()
+    {
+        if (!PlayerInventory.Instance.HasCurrentWeapon) return;
+        // Implement weapon throwing logic here
+        Debug.Log("Weapon thrown!");
+
+        PlayerInventory.Instance.ThrowCurrentWeapon(mousePosition, throwForce);
+
+    }
+
     void RotateWeaponToCursor()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = weaponPivot.position.z;
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = weaponPivot.position.z;
 
-        Vector3 lookDir = (mousePos - weaponPivot.position).normalized;
+        Vector3 lookDir = (mousePosition - weaponPivot.position).normalized;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
         weaponPivot.rotation = Quaternion.Euler(0, 0, angle);

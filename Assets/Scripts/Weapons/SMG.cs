@@ -14,7 +14,7 @@ public class SMG : Weapon
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SecondaryAction();
+                ReloadAction();
             }
         }
         else
@@ -64,12 +64,17 @@ public class SMG : Weapon
 
     public override void SecondaryAction()
     {
-        TryReload();
+        
     }
 
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+    }
+
+    public override void ReloadAction()
+    {
+        TryReload();
     }
 
     public override void BotUse()

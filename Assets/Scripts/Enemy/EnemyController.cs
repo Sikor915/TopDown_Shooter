@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour, IEnemy
     GameObject enemyWeaponGO;
 
     Rigidbody2D rb2d;
-    float health;
+    public float health;
     bool isColliding = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

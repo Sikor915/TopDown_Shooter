@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 267745940686479040, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1516685847711304068, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
       propertyPath: m_Name
       value: Player
@@ -176,7 +180,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 102827657382001001, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
