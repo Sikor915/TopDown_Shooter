@@ -18,6 +18,7 @@ public abstract class Weapon : MonoBehaviour
     [Header("Weapon Info")]
     public bool usesAmmo = true;
     public bool isUsedByPlayer = false;
+    public bool isMeleeWeapon = false;
 
     public struct WeaponStats
     {
@@ -61,6 +62,8 @@ public abstract class Weapon : MonoBehaviour
         set { isBeingThrown = value; }
     }
 
+    protected SpriteRenderer spriteRenderer;
+
     protected void Awake()
     {
         CopyFromSO();
@@ -71,6 +74,7 @@ public abstract class Weapon : MonoBehaviour
         {
             booletC.Damage = gunStats.damage;
         }
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public virtual void Update()
@@ -82,18 +86,20 @@ public abstract class Weapon : MonoBehaviour
     {
         isReloading = false;
         StopAllCoroutines();
-        ResetGraphics();
+        PlayerAim.Instance.onFacingDirectionChanged.RemoveListener(CorrectSpriteGraphics);
         ownerCreatureSO.onStatsChangedEvent.RemoveListener(CalculateUpgradableStats);
     }
 
     void OnEnable()
     {
+        PlayerAim.Instance.onFacingDirectionChanged.AddListener(CorrectSpriteGraphics);
         ownerCreatureSO.onStatsChangedEvent.AddListener(CalculateUpgradableStats);
         CalculateUpgradableStats();
     }
 
     void CopyFromSO()
     {
+        gunStats.weaponName = gunBaseStats.weaponName;
         gunStats.damage = gunBaseStats.baseDamage;
         gunStats.thrownDamage = gunBaseStats.baseThrownDamage;
         gunStats.fireRate = gunBaseStats.baseFireRate;
@@ -127,8 +133,6 @@ public abstract class Weapon : MonoBehaviour
     protected virtual IEnumerator ReloadCoroutine()
     {
         isReloading = true;
-        Color color = transform.GetComponent<SpriteRenderer>().color;
-        transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
 
         if (!isUsedByPlayer)
@@ -153,7 +157,6 @@ public abstract class Weapon : MonoBehaviour
         }
         onReloadEvent.Invoke(currentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
         Debug.Log("Reloaded. Current ammo: " + currentAmmo + ", Ammo reserve: " + gunStats.ammoReserve);
-        transform.GetComponent<SpriteRenderer>().color = color; // Revert color after reloading
         isReloading = false;
     }
 
@@ -179,7 +182,15 @@ public abstract class Weapon : MonoBehaviour
     public void PickUpWeaponPrepare(Transform parent)
     {
         transform.SetParent(parent);
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        if (isMeleeWeapon && TryGetComponent<Katana>(out var katana))
+        {
+            (Vector3 basePos, Quaternion baseRot) = katana.GetBaseTransform();
+            transform.SetLocalPositionAndRotation(basePos, baseRot);
+        }
+        else
+        {
+            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        }
         gameObject.GetComponent<Weapon>().enabled = true;
     }
 
@@ -201,6 +212,18 @@ public abstract class Weapon : MonoBehaviour
             totalDamage *= (1 + ownerCreatureSO.GetStat(StatInfo.Stat.PercentCritDamage));
         }
         return totalDamage;
+    }
+
+    protected virtual void CorrectSpriteGraphics(PlayerAim.FacingDirection facingDir)
+    {
+        if (facingDir == PlayerAim.FacingDirection.NW || facingDir == PlayerAim.FacingDirection.W || facingDir == PlayerAim.FacingDirection.SW)
+        {
+            spriteRenderer.flipY = true;
+        }
+        else
+        {
+            spriteRenderer.flipY = false;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -227,7 +250,7 @@ public abstract class Weapon : MonoBehaviour
                 Destroy(weaponCollider);
             }
             isBeingThrown = false;
-            
+
             DropWeapon(transform.position);
         }
     }
@@ -238,5 +261,5 @@ public abstract class Weapon : MonoBehaviour
     public abstract void ReloadAction();
     public abstract void BotUse();
     public abstract void HandleShoot();
-    public abstract void ResetGraphics();
+    
 }

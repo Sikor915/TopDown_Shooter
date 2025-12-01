@@ -86,9 +86,4 @@ public class Carbine : Weapon
     {
         CurrentAmmo--;
     }
-
-    public override void ResetGraphics()
-    {
-        //transform.GetComponent<SpriteRenderer>().color = Color.white;
-    }
 }

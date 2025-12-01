@@ -87,9 +87,4 @@ public class Pistol : Weapon
     {
         CurrentAmmo--;
     }
-
-    public override void ResetGraphics()
-    {
-        //transform.GetComponent<SpriteRenderer>().color = Color.white;
-    }
 }

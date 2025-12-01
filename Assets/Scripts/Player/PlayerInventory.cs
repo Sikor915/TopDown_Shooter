@@ -81,7 +81,7 @@ class PlayerInventory : Singleton<PlayerInventory>
             RemoveWeapon(weaponToDrop);
             weaponToDrop.GetComponent<Weapon>().DropWeaponPrepare();
             weaponToDrop.GetComponent<Weapon>().DropWeapon(dropPosition);
-            
+
             EquipNextWeapon();
         }
         else
@@ -96,11 +96,21 @@ class PlayerInventory : Singleton<PlayerInventory>
         {
             GameObject weaponToThrow = currentWeapon;
             RemoveWeapon(weaponToThrow);
-            
+
             weaponToThrow.GetComponent<Weapon>().DropWeaponPrepare();
             weaponToThrow.GetComponent<Weapon>().IsBeingThrown = true;
-            weaponToThrow.transform.position = transform.position + transform.up * 2.0f;
-
+            if (weaponToThrow.TryGetComponent<PolygonCollider2D>(out var polyCollider))
+            {
+                Debug.Log("PolygonCollider2D found on thrown weapon.");
+                weaponToThrow.transform.SetPositionAndRotation(new Vector3(3,1,0), Quaternion.Euler(0, 0, 30));
+                polyCollider.enabled = true;
+            }
+            else
+            {
+                weaponToThrow.transform.position = transform.position + (throwPoint - transform.position).normalized * 2f;
+                BoxCollider2D weaponCollider = weaponToThrow.AddComponent<BoxCollider2D>();
+                weaponCollider.size = new Vector2(1.0f, 1.0f);
+            }
             Debug.Log("Throwing weapon at position: " + throwPoint);
 
             Rigidbody2D rb2d = weaponToThrow.AddComponent<Rigidbody2D>();
@@ -110,12 +120,11 @@ class PlayerInventory : Singleton<PlayerInventory>
             rb2d.linearVelocity = Vector2.zero;
             rb2d.angularVelocity = 0;
 
+            Debug.Log("RB2D added to thrown weapon.");
+
             Vector3 throwDirection = (throwPoint - weaponToThrow.transform.position).normalized;
 
             rb2d.AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
-
-            BoxCollider2D weaponCollider = weaponToThrow.AddComponent<BoxCollider2D>();
-            weaponCollider.size = new Vector2(1.0f, 1.0f);
 
             EquipNextWeapon();
             Debug.Log("Threw weapon: " + weaponToThrow.GetComponent<Weapon>().gunStats.weaponName);

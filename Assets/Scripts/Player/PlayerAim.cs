@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAim : Singleton<PlayerAim>
 {
@@ -9,15 +10,24 @@ public class PlayerAim : Singleton<PlayerAim>
 
     Vector3 mousePosition;
 
-    enum FacingDirection
+    public enum FacingDirection
     {
         NW,
         N,
         NE,
         E,
+        SE,
         S,
+        SW,
         W
     }
+
+    FacingDirection currentFacingDirection;
+    public FacingDirection CurrentFacingDirection => currentFacingDirection;
+
+    FacingDirection oldFacingDirection;
+
+    public UnityEvent<FacingDirection> onFacingDirectionChanged = new UnityEvent<FacingDirection>();
 
     void FixedUpdate()
     {
@@ -44,24 +54,33 @@ public class PlayerAim : Singleton<PlayerAim>
 
         weaponPivot.rotation = Quaternion.Euler(0, 0, angle);
 
-        FacingDirection facingDir = GetFacingDirection(angle);
+        currentFacingDirection = GetFacingDirection(angle);
+        if (currentFacingDirection != oldFacingDirection)
+        {
+            onFacingDirectionChanged.Invoke(currentFacingDirection);
+            oldFacingDirection = currentFacingDirection;
+        }
 
-        characterAnimator.SetInteger("Facing", (int)facingDir);
+        characterAnimator.SetInteger("Facing", (int)currentFacingDirection);
     }
 
     FacingDirection GetFacingDirection(float angle)
     {
         if (angle >= 67.5f && angle < 112.5f)
             return FacingDirection.N;
-        else if (angle >= 22.5f && angle < 67.5f)
-            return FacingDirection.NE;
-        else if (angle >= -22.5f && angle < 22.5f)
-            return FacingDirection.E;
-        else if (angle >= -157.5f && angle < -22.5f)
-            return FacingDirection.S;
         else if (angle >= 112.5f && angle < 157.5f)
             return FacingDirection.NW;
-        else
+        else if (angle >= 157.5f || angle < -157.5f)
             return FacingDirection.W;
+        else if (angle >= -157.5f && angle < -112.5f)
+            return FacingDirection.SW;
+        else if (angle >= -112.5f && angle < -67.5f)
+            return FacingDirection.S;
+        else if (angle >= -67.5f && angle < -22.5f)
+            return FacingDirection.SE;
+        else if (angle >= -22.5f && angle < 22.5f)
+            return FacingDirection.E;
+        else // angle >= 22.5f && angle < 67.5f
+            return FacingDirection.NE;
     }
 }

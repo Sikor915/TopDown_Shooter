@@ -4,6 +4,10 @@ public class Katana : Weapon
 {
     Collider2D coll2d;
     [SerializeField] GameObject slashEffect;
+
+    Vector3 basePosition = new Vector3(-0.65f, -0.11f, 0f);
+    Quaternion baseRotation = Quaternion.Euler(0f, 0f, -125.3f);
+
     new void Awake()
     {
         usesAmmo = false;
@@ -73,9 +77,14 @@ public class Katana : Weapon
         StartCoroutine(DisableColliderAfterDelay(0.3f)); // Disable collider after short delay
     }
 
-    public override void ResetGraphics()
+    protected override void CorrectSpriteGraphics(PlayerAim.FacingDirection facingDir)
     {
-        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
+        
+    }
+
+    public (Vector3, Quaternion) GetBaseTransform()
+    {
+        return (basePosition, baseRotation);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -87,6 +96,18 @@ public class Katana : Weapon
             float damage = CalculateDamage();
             Debug.Log("Hit enemy for " + damage + " damage.");
             enemy.DeductHealth(damage);
+        }
+        if (IsBeingThrown)
+        {
+            if (TryGetComponent<Rigidbody2D>(out var rb2d))
+            {
+                Debug.Log("RB2D found on thrown katana.");
+                rb2d.linearVelocity = Vector2.zero;
+                rb2d.angularVelocity = 0;
+                Destroy(rb2d);
+                DisableCollider();
+                DropWeapon(transform.position);
+            }
         }
     }
 
