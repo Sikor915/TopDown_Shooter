@@ -15,7 +15,7 @@ public class Shotgun : Weapon
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SecondaryAction();
+                ReloadAction();
             }
         }
         else
@@ -74,12 +74,17 @@ public class Shotgun : Weapon
 
     public override void SecondaryAction()
     {
-        TryReload();
+        
     }
 
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+    }
+
+    public override void ReloadAction()
+    {
+        TryReload();
     }
 
     public override void BotUse()
@@ -95,7 +100,6 @@ public class Shotgun : Weapon
     protected override IEnumerator ReloadCoroutine()
     {
         IsReloading = true;
-        transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
         int ammoNeeded = 1;
         if (gunStats.ammoReserve >= ammoNeeded)
@@ -109,13 +113,7 @@ public class Shotgun : Weapon
             gunStats.ammoReserve = 0;
         }
         onReloadEvent.Invoke(CurrentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
-        transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
         IsReloading = false;
         TryReload(); // Automatically reload the next shell if available
-    }
-
-    public override void ResetGraphics()
-    {
-        //transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after reloading
     }
 }

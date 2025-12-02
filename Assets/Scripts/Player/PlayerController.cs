@@ -66,6 +66,11 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         {
             playerInventory.EquipPreviousWeapon();
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            PlayerAim.Instance.ThrowWeapon();
+        }
     }
 
     void OnEnable()
@@ -148,7 +153,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         if (coll.gameObject.CompareTag("Weapon"))
         {
-            Debug.Log("Found weapon: " + coll.gameObject.name);
             PlayerInteractManager.Instance.NearestWeapon = coll.gameObject;
             PlayerInteractManager.Instance.CanPickUp = true;
         }
@@ -158,7 +162,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         if (coll.gameObject.CompareTag("Weapon"))
         {
-            Debug.Log("Lost weapon: " + coll.gameObject.name);
             PlayerInteractManager.Instance.NearestWeapon = null;
             PlayerInteractManager.Instance.CanPickUp = false;
         }

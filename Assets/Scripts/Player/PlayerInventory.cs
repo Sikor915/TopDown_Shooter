@@ -16,18 +16,14 @@ class PlayerInventory : Singleton<PlayerInventory>
     public void EquipWeapon(int index)
     {
         if (index < 0 || index >= weapons.Count) return;
-        Debug.Log("Correct index");
         if (currentWeapon != null)
         {
             currentWeapon.SetActive(false);
             Debug.Log("Disabled current weapon");
         }
         currentWeapon = weapons[index];
-        Debug.Log("CurrentWeapon variable set to: " + currentWeapon.name);
         currentWeapon.SetActive(true);
-        Debug.Log("Enabled new weapon");
         onWeaponChangedEvent?.Invoke();
-        Debug.Log("Invoked onWeaponChangedEvent");
     }
 
     public void EquipNextWeapon()
@@ -52,7 +48,6 @@ class PlayerInventory : Singleton<PlayerInventory>
         {
             weapons.Add(newWeapon);
             newWeapon.SetActive(false);
-            Debug.Log("Added weapon: " + newWeapon.GetComponent<Weapon>().gunStats.weaponName);
         }
         else
         {
@@ -72,7 +67,6 @@ class PlayerInventory : Singleton<PlayerInventory>
             }
             weapons.Remove(weaponToRemove);
             weaponToRemove.GetComponent<Weapon>().isUsedByPlayer = false;
-            Debug.Log("Removed weapon: " + weaponToRemove.GetComponent<Weapon>().gunStats.weaponName);
         }
         else
         {
@@ -86,17 +80,58 @@ class PlayerInventory : Singleton<PlayerInventory>
         {
             RemoveWeapon(weaponToDrop);
             weaponToDrop.GetComponent<Weapon>().DropWeaponPrepare();
-            weaponToDrop.transform.position = dropPosition;
-            BoxCollider2D weaponCollider = weaponToDrop.AddComponent<BoxCollider2D>();
-            weaponCollider.size = new Vector2(1.0f, 1.0f);
-            weaponCollider.isTrigger = true;
+            weaponToDrop.GetComponent<Weapon>().DropWeapon(dropPosition);
 
             EquipNextWeapon();
-            Debug.Log("Dropped weapon: " + weaponToDrop.GetComponent<Weapon>().gunStats.weaponName);
         }
         else
         {
             Debug.Log("Weapon not found in inventory.");
+        }
+    }
+
+    public void ThrowCurrentWeapon(Vector3 throwPoint, float throwForce)
+    {
+        if (currentWeapon != null)
+        {
+            GameObject weaponToThrow = currentWeapon;
+            RemoveWeapon(weaponToThrow);
+
+            weaponToThrow.GetComponent<Weapon>().DropWeaponPrepare();
+            weaponToThrow.GetComponent<Weapon>().IsBeingThrown = true;
+            if (weaponToThrow.TryGetComponent<PolygonCollider2D>(out var polyCollider))
+            {
+                Debug.Log("PolygonCollider2D found on thrown weapon.");
+                weaponToThrow.transform.SetPositionAndRotation(new Vector3(3,1,0), Quaternion.Euler(0, 0, 30));
+                polyCollider.enabled = true;
+            }
+            else
+            {
+                weaponToThrow.transform.position = transform.position + (throwPoint - transform.position).normalized * 2f;
+                BoxCollider2D weaponCollider = weaponToThrow.AddComponent<BoxCollider2D>();
+                weaponCollider.size = new Vector2(1.0f, 1.0f);
+            }
+            Debug.Log("Throwing weapon at position: " + throwPoint);
+
+            Rigidbody2D rb2d = weaponToThrow.AddComponent<Rigidbody2D>();
+            rb2d.bodyType = RigidbodyType2D.Dynamic;
+            rb2d.gravityScale = 0;
+            rb2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb2d.linearVelocity = Vector2.zero;
+            rb2d.angularVelocity = 0;
+
+            Debug.Log("RB2D added to thrown weapon.");
+
+            Vector3 throwDirection = (throwPoint - weaponToThrow.transform.position).normalized;
+
+            rb2d.AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
+
+            EquipNextWeapon();
+            Debug.Log("Threw weapon: " + weaponToThrow.GetComponent<Weapon>().gunStats.weaponName);
+        }
+        else
+        {
+            Debug.Log("No current weapon to throw.");
         }
     }
 
@@ -116,7 +151,6 @@ class PlayerInventory : Singleton<PlayerInventory>
             {
                 weaponToPickUp.transform.SetLocalPositionAndRotation(new Vector3(-0.65f, -0.11f, 0), Quaternion.Euler(0, 0, -125.3f));
             }
-            Debug.Log("Picked up weapon: " + weaponToPickUp.GetComponent<Weapon>().gunStats.weaponName);
         }
         else
         {

@@ -16,6 +16,8 @@ MonoBehaviour:
   weaponIcon: {fileID: 21300000, guid: 5e77c3efcd6c44342b0620156cd45132, type: 3}
   weaponDescription: Powerful shotgun, fires 5 rounds per shot
   weaponPrice: 15
+  weaponPrefab: {fileID: 8089113121706100669, guid: 3116318e7997dee4eb7f90404e75b2f7, type: 3}
+  baseThrownDamage: 10
   baseDamage: 10
   baseFireRate: 2
   ammoReserve: 50

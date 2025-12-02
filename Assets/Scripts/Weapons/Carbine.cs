@@ -14,7 +14,7 @@ public class Carbine : Weapon
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SecondaryAction();
+                ReloadAction();
             }
         }
         else
@@ -64,12 +64,17 @@ public class Carbine : Weapon
 
     public override void SecondaryAction()
     {
-        TryReload();
+        
     }
 
     public override void TertiaryAction()
     {
         // Implement any tertiary action for the pistol here
+    }
+
+    public override void ReloadAction()
+    {
+        TryReload();
     }
 
     public override void BotUse()
@@ -80,10 +85,5 @@ public class Carbine : Weapon
     public override void HandleShoot()
     {
         CurrentAmmo--;
-    }
-
-    public override void ResetGraphics()
-    {
-        //transform.GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

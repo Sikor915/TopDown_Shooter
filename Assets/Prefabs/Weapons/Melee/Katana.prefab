@@ -148,6 +148,7 @@ MonoBehaviour:
   anim: {fileID: 3635144975542435224}
   usesAmmo: 1
   isUsedByPlayer: 0
+  isMeleeWeapon: 1
   slashEffect: {fileID: 6051216738667227294}
 --- !u!95 &3635144975542435224
 Animator:

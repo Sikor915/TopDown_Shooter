@@ -10,6 +10,7 @@ public class GunSO : ScriptableObject
     public int weaponPrice;
     public GameObject weaponPrefab;
     [Header("Stats")]
+    public float baseThrownDamage;
     public float baseDamage;
     public float baseFireRate;
     public int ammoReserve;

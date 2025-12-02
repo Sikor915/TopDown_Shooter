@@ -17,6 +17,7 @@ MonoBehaviour:
   weaponDescription: Standard issue carbine, good damage, average mag size
   weaponPrice: 20
   weaponPrefab: {fileID: 5978237818483539142, guid: 231779b0a84eb634096429646deec38a, type: 3}
+  baseThrownDamage: 10
   baseDamage: 20
   baseFireRate: 10
   ammoReserve: 210

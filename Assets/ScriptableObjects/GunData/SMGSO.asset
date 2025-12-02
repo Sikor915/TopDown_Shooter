@@ -17,6 +17,7 @@ MonoBehaviour:
   weaponDescription: Fast-firing SMG, melts enemies like butter
   weaponPrice: 15
   weaponPrefab: {fileID: 75713809423820024, guid: 08da3e39cd711d3479e5611489fb088e, type: 3}
+  baseThrownDamage: 10
   baseDamage: 6
   baseFireRate: 30
   ammoReserve: 300

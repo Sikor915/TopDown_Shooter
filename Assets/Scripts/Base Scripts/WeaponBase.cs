@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public abstract class Weapon : MonoBehaviour
 {
@@ -17,11 +18,13 @@ public abstract class Weapon : MonoBehaviour
     [Header("Weapon Info")]
     public bool usesAmmo = true;
     public bool isUsedByPlayer = false;
+    public bool isMeleeWeapon = false;
 
     public struct WeaponStats
     {
         public string weaponName;
         public float damage;
+        public float thrownDamage;
         public float fireRate;
         public int ammoReserve;
         public int spread;
@@ -52,6 +55,15 @@ public abstract class Weapon : MonoBehaviour
         set { isReloading = value; }
     }
 
+    bool isBeingThrown;
+    public bool IsBeingThrown
+    {
+        get { return isBeingThrown; }
+        set { isBeingThrown = value; }
+    }
+
+    protected SpriteRenderer spriteRenderer;
+
     protected void Awake()
     {
         CopyFromSO();
@@ -62,6 +74,7 @@ public abstract class Weapon : MonoBehaviour
         {
             booletC.Damage = gunStats.damage;
         }
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public virtual void Update()
@@ -73,19 +86,22 @@ public abstract class Weapon : MonoBehaviour
     {
         isReloading = false;
         StopAllCoroutines();
-        ResetGraphics();
+        PlayerAim.Instance.onFacingDirectionChanged.RemoveListener(CorrectSpriteGraphics);
         ownerCreatureSO.onStatsChangedEvent.RemoveListener(CalculateUpgradableStats);
     }
 
     void OnEnable()
     {
+        PlayerAim.Instance.onFacingDirectionChanged.AddListener(CorrectSpriteGraphics);
         ownerCreatureSO.onStatsChangedEvent.AddListener(CalculateUpgradableStats);
         CalculateUpgradableStats();
     }
 
     void CopyFromSO()
     {
+        gunStats.weaponName = gunBaseStats.weaponName;
         gunStats.damage = gunBaseStats.baseDamage;
+        gunStats.thrownDamage = gunBaseStats.baseThrownDamage;
         gunStats.fireRate = gunBaseStats.baseFireRate;
         gunStats.ammoReserve = gunBaseStats.ammoReserve;
         gunStats.spread = gunBaseStats.baseSpread;
@@ -117,8 +133,6 @@ public abstract class Weapon : MonoBehaviour
     protected virtual IEnumerator ReloadCoroutine()
     {
         isReloading = true;
-        Color color = transform.GetComponent<SpriteRenderer>().color;
-        transform.GetComponent<SpriteRenderer>().color = Color.green; // Change color to indicate reloading
         yield return new WaitForSeconds(gunStats.reloadTime);
 
         if (!isUsedByPlayer)
@@ -143,7 +157,6 @@ public abstract class Weapon : MonoBehaviour
         }
         onReloadEvent.Invoke(currentAmmo, gunStats.magazineSize, gunStats.ammoReserve);
         Debug.Log("Reloaded. Current ammo: " + currentAmmo + ", Ammo reserve: " + gunStats.ammoReserve);
-        transform.GetComponent<SpriteRenderer>().color = color; // Revert color after reloading
         isReloading = false;
     }
 
@@ -157,10 +170,27 @@ public abstract class Weapon : MonoBehaviour
         ownerCreatureSO = null;
     }
 
+    public void DropWeapon(Vector3 dropPosition)
+    {
+        transform.position = dropPosition;
+
+        BoxCollider2D weaponCollider = gameObject.AddComponent<BoxCollider2D>();
+        weaponCollider.size = new Vector2(1.0f, 1.0f);
+        weaponCollider.isTrigger = true;
+    }
+
     public void PickUpWeaponPrepare(Transform parent)
     {
         transform.SetParent(parent);
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        if (isMeleeWeapon && TryGetComponent<Katana>(out var katana))
+        {
+            (Vector3 basePos, Quaternion baseRot) = katana.GetBaseTransform();
+            transform.SetLocalPositionAndRotation(basePos, baseRot);
+        }
+        else
+        {
+            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        }
         gameObject.GetComponent<Weapon>().enabled = true;
     }
 
@@ -184,10 +214,52 @@ public abstract class Weapon : MonoBehaviour
         return totalDamage;
     }
 
+    protected virtual void CorrectSpriteGraphics(PlayerAim.FacingDirection facingDir)
+    {
+        if (facingDir == PlayerAim.FacingDirection.NW || facingDir == PlayerAim.FacingDirection.W || facingDir == PlayerAim.FacingDirection.SW)
+        {
+            spriteRenderer.flipY = true;
+        }
+        else
+        {
+            spriteRenderer.flipY = false;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isBeingThrown)
+        {
+            Debug.Log("Thrown weapon collided with: " + collision.collider.name);
+            if (collision.collider.CompareTag("Enemy"))
+            {
+                collision.collider.GetComponent<IEnemy>().DeductHealth(gunStats.thrownDamage);
+                Debug.Log("Thrown weapon hit enemy for " + gunStats.thrownDamage + " damage.");
+
+            }
+            Rigidbody2D rb2d = GetComponent<Rigidbody2D>();
+            if (rb2d != null)
+            {
+                rb2d.linearVelocity = Vector2.zero;
+                rb2d.angularVelocity = 0;
+                Destroy(rb2d);
+            }
+            BoxCollider2D weaponCollider = GetComponent<BoxCollider2D>();
+            if (weaponCollider != null)
+            {
+                Destroy(weaponCollider);
+            }
+            isBeingThrown = false;
+
+            DropWeapon(transform.position);
+        }
+    }
+
     public abstract void PrimaryAction();
     public abstract void SecondaryAction();
     public abstract void TertiaryAction();
+    public abstract void ReloadAction();
     public abstract void BotUse();
     public abstract void HandleShoot();
-    public abstract void ResetGraphics();
+    
 }
