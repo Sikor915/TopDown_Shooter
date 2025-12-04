@@ -1,34 +1,40 @@
 fileFormatVersion: 2
-guid: bd48b3f646b7ccd419e9e76d4fccfe1b
+guid: 0e51082262179d74fb67d5ecbd2c58f8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1230916563017116426
-    second: PlayerMulti_0
+      213: -6117646534816418520
+    second: PlayerMulti3_0
   - first:
-      213: 7749058124729933590
-    second: PlayerMulti_1
+      213: -864337245447706193
+    second: PlayerMulti3_1
   - first:
-      213: -6440498164961364082
-    second: PlayerMulti_2
+      213: -8155914228484651085
+    second: PlayerMulti3_2
   - first:
-      213: -1858914757050769005
-    second: PlayerMulti_3
+      213: 4261157099078826799
+    second: PlayerMulti3_3
   - first:
-      213: -3107924332134922796
-    second: PlayerMulti_4
+      213: 5442612429245627744
+    second: PlayerMulti3_4
   - first:
-      213: -6810412556946230613
-    second: PlayerMulti_5
+      213: 6992641748196197712
+    second: PlayerMulti3_5
   - first:
-      213: 6848200502843600897
-    second: PlayerMulti_6
+      213: 7090034076137732979
+    second: PlayerMulti3_6
   - first:
-      213: 915505850562170564
-    second: PlayerMulti_7
+      213: 9057484037156475759
+    second: PlayerMulti3_7
   - first:
-      213: 2753849940502894798
-    second: PlayerMulti_8
+      213: 8717553164401698613
+    second: PlayerMulti3_8
+  - first:
+      213: 6907534520490206153
+    second: PlayerMulti3_9
+  - first:
+      213: -6215197224524319835
+    second: PlayerMulti3_10
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -124,57 +130,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerMulti_0
+      name: PlayerMulti3_8
       rect:
         serializedVersion: 2
-        x: 33
-        y: 890
-        width: 185
-        height: 296
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a0ba7c6a718151110800000000000000
-      internalID: 1230916563017116426
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PlayerMulti_4
-      rect:
-        serializedVersion: 2
-        x: 309
-        y: 478
-        width: 182
-        height: 296
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4d50e42594f6ed4d0800000000000000
-      internalID: -3107924332134922796
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PlayerMulti_6
-      rect:
-        serializedVersion: 2
-        x: 41
-        y: 49
+        x: 46
+        y: 52
         width: 181
-        height: 299
+        height: 297
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -183,8 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 100f4a2f212b90f50800000000000000
-      internalID: 6848200502843600897
+      spriteID: 537eeba5a68faf870800000000000000
+      internalID: 8717553164401698613
       vertices: []
       indices: 
       edges: []
@@ -193,7 +155,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 75d362f353e5c624c99647fd5decdabf
+    spriteID: bdcda05b162af554ca8db316088cf93e
     internalID: 0
     vertices: []
     indices: 
@@ -203,15 +165,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerMulti_0: 1230916563017116426
-      PlayerMulti_1: 7749058124729933590
-      PlayerMulti_2: -6440498164961364082
-      PlayerMulti_3: -1858914757050769005
-      PlayerMulti_4: -3107924332134922796
-      PlayerMulti_5: -6810412556946230613
-      PlayerMulti_6: 6848200502843600897
-      PlayerMulti_7: 915505850562170564
-      PlayerMulti_8: 2753849940502894798
+      PlayerMulti3_8: 8717553164401698613
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
