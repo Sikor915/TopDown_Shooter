@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &100652408
+--- !u!43 &235315327
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -679,35 +679,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1905406557 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2579740753532860, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-  m_PrefabInstance: {fileID: 2895341678165423886}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1905406558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905406557}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad88321a4597b2443abf08c2aba4ff87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1905406559}
-  spriteRenderer: {fileID: 1905406568}
---- !u!95 &1905406559 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7918543270403783567, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-  m_PrefabInstance: {fileID: 2895341678165423886}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &1905406568 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5869474431076722048, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-  m_PrefabInstance: {fileID: 2895341678165423886}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1931524504
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,22 +938,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 5869474431076722048, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      propertyPath: m_Size.x
-      value: 1.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 5869474431076722048, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      propertyPath: m_Size.y
-      value: 2.96
-      objectReference: {fileID: 0}
-    - target: {fileID: 5869474431076722048, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 1230916563017116426, guid: a5dbd434bd6b99b4ba267bc080730bb8, type: 3}
-    - target: {fileID: 5869474431076722048, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7584520477556014481, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -1023,18 +978,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7918543270403783567, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 425eb7d40aa0224478a7cdcf696b681f, type: 2}
-    m_RemovedComponents:
-    - {fileID: 3331987244156875895, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2579740753532860, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
-      insertIndex: 10
-      addedObject: {fileID: 1905406558}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b252c6a357c87f4882b03f719bd6da8, type: 3}
 --- !u!1001 &3928321701303825289
 PrefabInstance:

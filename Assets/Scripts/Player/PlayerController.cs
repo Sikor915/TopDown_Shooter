@@ -17,13 +17,14 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     Vector2 m_GoalVel;
     Vector2 m_UnitGoal;
 
-    Vector3 mousePos;
-
 
     bool isRolling = false;
+    bool rollingCooldown = false;
     bool isSliding = false;
+    bool slidingCooldown = false;
 
     Coroutine iFrameCoroutine;
+    Coroutine manouverIFrameCoroutine;
     Coroutine rollCooldownCoroutine;
     Coroutine slideCooldownCoroutine;
 
@@ -40,7 +41,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
                 weaponC.ownerCreatureSO = playerSO.creatureSO;
             }
         }
-        playerInventory.EquipWeapon(0); 
+        playerInventory.EquipWeapon(0);
         currentHealth = playerSO.creatureSO.MaxHealth;
     }
 
@@ -107,46 +108,60 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     public void OnRoll(InputAction.CallbackContext context)
     {
-        if (!context.performed || isRolling)
+        if (!context.performed || isRolling || rollingCooldown)
         {
             return;
         }
         playerSO.CanBeHit = false;
-        StartIFrames();
+        StartManouverIFrames();
 
         Vector2 targetVel = new(m_UnitGoal.x * playerSO.rollSpeed, m_UnitGoal.y * playerSO.rollSpeed);
         float t = playerSO.maxAccelForce * Time.fixedDeltaTime;
         rb2d.linearVelocity = Vector2.Lerp(rb2d.linearVelocity, targetVel, t);
 
+        if (isSliding)
+        {
+            isSliding = false;
+            PlayerAnimationController.Instance.SetIsSliding(false);
+        }
+
         isRolling = true;
+        rollingCooldown = true;
         if (rollCooldownCoroutine != null)
         {
             StopCoroutine(rollCooldownCoroutine);
         }
         rollCooldownCoroutine = StartCoroutine(RollCooldown());
-
+        PlayerAnimationController.Instance.SetIsRolling(true);
     }
 
     public void OnSlide(InputAction.CallbackContext context)
     {
-        if (!context.performed || isSliding)
+        if (!context.performed || isSliding || slidingCooldown)
         {
             return;
         }
         playerSO.CanBeHit = false;
-        StartIFrames();
+        StartManouverIFrames();
 
         Vector2 targetVel = new(m_UnitGoal.x * playerSO.slideSpeed, m_UnitGoal.y * playerSO.slideSpeed);
         float t = playerSO.maxAccelForce * Time.fixedDeltaTime;
         rb2d.linearVelocity = Vector2.Lerp(rb2d.linearVelocity, targetVel, t);
 
+        if (isRolling)
+        {
+            isRolling = false;
+            PlayerAnimationController.Instance.SetIsRolling(false);
+        }
+
         isSliding = true;
+        slidingCooldown = true;
         if (slideCooldownCoroutine != null)
         {
             StopCoroutine(slideCooldownCoroutine);
         }
         slideCooldownCoroutine = StartCoroutine(SlideCooldown());
-
+        PlayerAnimationController.Instance.SetIsSliding(true);
     }
 
     void OnTriggerStay2D(Collider2D coll)
@@ -184,8 +199,11 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         goalVel,
         playerSO.acceleration * Time.fixedDeltaTime);
 
+        PlayerAnimationController.Instance.SetIsMoving(m_UnitGoal.magnitude > 0.1f && !isRolling && !isSliding);
+
         Vector2 neededAccel = (m_GoalVel - rb2d.linearVelocity) / Time.fixedDeltaTime;
         neededAccel = Vector2.ClampMagnitude(neededAccel, playerSO.maxAccelForce);
+
         rb2d.AddForce(neededAccel, ForceMode2D.Force);
     }
 
@@ -198,22 +216,47 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         iFrameCoroutine = StartCoroutine(IFrames());
     }
 
+    void StartManouverIFrames()
+    {
+        if (manouverIFrameCoroutine != null)
+        {
+            StopCoroutine(manouverIFrameCoroutine);
+        }
+        manouverIFrameCoroutine = StartCoroutine(ManouverIFrames());
+    }
+
+    IEnumerator ManouverIFrames()
+    {
+        yield return new WaitForSeconds(playerSO.manouverIFrameDuration);
+        playerSO.CanBeHit = true; if (isRolling)
+        {
+            isRolling = false;
+            PlayerAnimationController.Instance.SetIsRolling(false);
+        }
+        if (isSliding)
+        {
+            isSliding = false;
+            PlayerAnimationController.Instance.SetIsSliding(false);
+        }
+    }
+
     IEnumerator IFrames()
     {
         yield return new WaitForSeconds(playerSO.iFrameDuration);
         playerSO.CanBeHit = true;
+
     }
 
     IEnumerator RollCooldown()
     {
         yield return new WaitForSeconds(playerSO.rollCooldown);
-        isRolling = false;
+        rollingCooldown = false;
     }
 
     IEnumerator SlideCooldown()
     {
         yield return new WaitForSeconds(playerSO.slideCooldown);
-        isSliding = false;
+        slidingCooldown = false;
     }
 
 }

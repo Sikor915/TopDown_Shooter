@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 class PlayerAnimationController : Singleton<PlayerAnimationController>
@@ -39,6 +37,21 @@ class PlayerAnimationController : Singleton<PlayerAnimationController>
     void OnDisable()
     {
         PlayerAim.Instance.onFacingDirectionChanged.RemoveListener(UpdateSprite);
+    }
+
+    public void SetIsMoving(bool isMoving)
+    {
+        animator.SetBool("isMoving", isMoving);
+    }
+
+    public void SetIsSliding(bool isSliding)
+    {
+        animator.SetBool("isSliding", isSliding);
+    }
+
+    public void SetIsRolling(bool isRolling)
+    {
+        animator.SetBool("isRolling", isRolling);
     }
 
     public void UpdateSprite(PlayerAim.FacingDirection facingDirection)
