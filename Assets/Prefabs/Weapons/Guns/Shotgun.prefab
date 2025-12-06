@@ -108,6 +108,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   gunBaseStats: {fileID: 11400000, guid: 62feb2e0f8890384baac3ece6a8b1239, type: 2}
+  shootSound: {fileID: 8300000, guid: d5fce2fb18344534fa14b8e765e9cae6, type: 3}
   projectilePrefab: {fileID: 5587952641114793675, guid: 503fc02a189ad8848babf43e4ede6b3b, type: 3}
   ownerCreatureSO: {fileID: 0}
   anim: {fileID: 0}

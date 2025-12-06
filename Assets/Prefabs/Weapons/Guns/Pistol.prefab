@@ -146,6 +146,7 @@ MonoBehaviour:
   usesAmmo: 1
   isUsedByPlayer: 0
   isMeleeWeapon: 0
+  shootSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
 --- !u!1001 &2981208683531940910
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -100,5 +100,6 @@ public class SMG : Weapon
         {
             muzzleFlash.Play();
         }
+        AudioSource.PlayClipAtPoint(shootSound, transform.position);
     }
 }

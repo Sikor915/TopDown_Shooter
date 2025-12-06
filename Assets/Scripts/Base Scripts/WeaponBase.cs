@@ -11,6 +11,7 @@ public abstract class Weapon : MonoBehaviour
 
     [Header("References")]
     [SerializeField] GunSO gunBaseStats;
+    [SerializeField] protected AudioClip shootSound;
     public GameObject projectilePrefab;
     public CreatureSO ownerCreatureSO;
     [SerializeField] protected Animator anim;

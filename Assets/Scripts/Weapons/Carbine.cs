@@ -101,5 +101,6 @@ public class Carbine : Weapon
         {
             muzzleFlash.Play();
         }
+        AudioSource.PlayClipAtPoint(shootSound, transform.position);
     }
 }

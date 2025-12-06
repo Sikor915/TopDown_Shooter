@@ -111,6 +111,7 @@ public class Shotgun : Weapon
         {
             muzzleFlash.Play();
         }
+        AudioSource.PlayClipAtPoint(shootSound, transform.position);
     }
 
     protected override IEnumerator ReloadCoroutine()

@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
-    
     ParticleSystem muzzleFlash;
-
     void Start()
     {
         muzzleFlash = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
@@ -103,5 +101,6 @@ public class Pistol : Weapon
         {
             muzzleFlash.Play();
         }
+        AudioSource.PlayClipAtPoint(shootSound, transform.position);
     }
 }
