@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class Shotgun : Weapon
 {
+    ParticleSystem muzzleFlash;
+
+    void Start()
+    {
+        muzzleFlash = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+    }
+
     public override void Update()
     {
         base.Update();
@@ -74,7 +81,7 @@ public class Shotgun : Weapon
 
     public override void SecondaryAction()
     {
-        
+
     }
 
     public override void TertiaryAction()
@@ -95,6 +102,15 @@ public class Shotgun : Weapon
     public override void HandleShoot()
     {
         CurrentAmmo--;
+        if( muzzleFlash.isPlaying )
+        {
+            muzzleFlash.Stop();
+            muzzleFlash.Play();
+        }
+        else
+        {
+            muzzleFlash.Play();
+        }
     }
 
     protected override IEnumerator ReloadCoroutine()

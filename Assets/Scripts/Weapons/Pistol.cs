@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class Pistol : Weapon
 {
+    
+    ParticleSystem muzzleFlash;
+
+    void Start()
+    {
+        muzzleFlash = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+    }
+
     public override void Update()
     {
         base.Update();
@@ -86,5 +94,14 @@ public class Pistol : Weapon
     public override void HandleShoot()
     {
         CurrentAmmo--;
+        if( muzzleFlash.isPlaying )
+        {
+            muzzleFlash.Stop();
+            muzzleFlash.Play();
+        }
+        else
+        {
+            muzzleFlash.Play();
+        }
     }
 }
