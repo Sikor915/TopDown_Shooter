@@ -21,6 +21,7 @@ public class PlayerSO : ScriptableObject
     public float rollCooldown;
     public float slideCooldown;
     public float iFrameDuration;
+    public float manouverIFrameDuration;
     bool canBeHit = true;
     public bool CanBeHit
     {

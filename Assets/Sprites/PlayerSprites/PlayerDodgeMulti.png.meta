@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 7936bdcabebce7a4d884864528fb5e9d
+guid: 08cc30d0cc281f44d8c31ea4ab49ad72
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4334783836991956000
-    second: player_0
+      213: 3555443674660856420
+    second: playerSlideMulti_0
+  - first:
+      213: 2526408329010149782
+    second: playerSlideMulti_1
+  - first:
+      213: -8865740434390510180
+    second: playerSlideMulti_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,23 +106,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_0
+      name: playerSlideMulti_1
       rect:
         serializedVersion: 2
-        x: 21
-        y: 32
-        width: 180
-        height: 268
+        x: 207
+        y: 823
+        width: 250
+        height: 324
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 024a20edeee382c30800000000000000
-      internalID: 4334783836991956000
+      spriteID: 699fc306dfa9f0320800000000000000
+      internalID: 2526408329010149782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: playerSlideMulti_2
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 558
+        width: 371
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9516513c0096f480800000000000000
+      internalID: -8865740434390510180
       vertices: []
       indices: 
       edges: []
@@ -125,7 +153,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: ef84da548debaeb45ac9d3eac4b9d39b
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +163,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      player_0: 4334783836991956000
+      playerDodgeMulti_0: 1086350655
+      playerSlideMulti_0: 3555443674660856420
+      playerSlideMulti_1: 2526408329010149782
+      playerSlideMulti_2: -8865740434390510180
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

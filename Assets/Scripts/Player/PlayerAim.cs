@@ -60,8 +60,6 @@ public class PlayerAim : Singleton<PlayerAim>
             onFacingDirectionChanged.Invoke(currentFacingDirection);
             oldFacingDirection = currentFacingDirection;
         }
-
-        characterAnimator.SetInteger("Facing", (int)currentFacingDirection);
     }
 
     FacingDirection GetFacingDirection(float angle)

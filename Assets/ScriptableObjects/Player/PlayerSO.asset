@@ -16,6 +16,9 @@ MonoBehaviour:
   onHitEvent:
     m_PersistentCalls:
       m_Calls: []
+  tookDamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
   maxSpeed: 25
   acceleration: 200
   maxAccelForce: 150
@@ -24,3 +27,4 @@ MonoBehaviour:
   rollCooldown: 1
   slideCooldown: 1.5
   iFrameDuration: 1
+  manouverIFrameDuration: 0.5

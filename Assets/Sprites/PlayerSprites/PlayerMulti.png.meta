@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 0aa68fb88d291b04d8be9fc3a8509785
+guid: 1794a7f0023f58a4e8967cdd1c5a473e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6888409189966158242
-    second: booletSprite_0
+      213: 1230916563017116426
+    second: PlayerMulti_0
+  - first:
+      213: 7749058124729933590
+    second: PlayerMulti_1
+  - first:
+      213: -6440498164961364082
+    second: PlayerMulti_2
+  - first:
+      213: -1858914757050769005
+    second: PlayerMulti_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,13 +55,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 100, y: 74, z: 108, w: 12}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -100,23 +109,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: booletSprite_0
+      name: PlayerMulti_0
       rect:
         serializedVersion: 2
-        x: 93
-        y: 73
-        width: 112
-        height: 226
+        x: 35
+        y: 890
+        width: 183
+        height: 296
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e56e78c86547760a0800000000000000
-      internalID: -6888409189966158242
+      spriteID: a0ba7c6a718151110800000000000000
+      internalID: 1230916563017116426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerMulti_1
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 891
+        width: 182
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61fd164ee4f2a8b60800000000000000
+      internalID: 7749058124729933590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerMulti_2
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 884
+        width: 181
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e873cecca01ce96a0800000000000000
+      internalID: -6440498164961364082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerMulti_3
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 538
+        width: 181
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 391e14e90eec336e0800000000000000
+      internalID: -1858914757050769005
       vertices: []
       indices: 
       edges: []
@@ -125,8 +200,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -134,8 +209,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      booletSprite_0: -6888409189966158242
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
