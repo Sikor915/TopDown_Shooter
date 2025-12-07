@@ -37,6 +37,7 @@ public class Shotgun : Weapon
         {
             IsReloading = false; // Interrupt reloading for shotgun
             StopAllCoroutines();
+            UIController.Instance.StopReloadProgressBar();
             transform.GetComponent<SpriteRenderer>().color = Color.white; // Revert color after interrupting
         }
 

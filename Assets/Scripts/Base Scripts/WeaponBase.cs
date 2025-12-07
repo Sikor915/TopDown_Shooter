@@ -116,6 +116,10 @@ public abstract class Weapon : MonoBehaviour
     virtual public void TryReload()
     {
         if (isReloading || gunStats.ammoReserve <= 0 || currentAmmo == gunStats.magazineSize) return;
+        if (isUsedByPlayer)
+        {
+            UIController.Instance.RunReloadProgressBar(gunStats.reloadTime);
+        }
         StartCoroutine(ReloadCoroutine());
     }
 

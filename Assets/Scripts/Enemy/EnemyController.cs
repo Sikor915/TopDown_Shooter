@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -91,6 +92,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         try
         {
             health -= damage;
+            StartCoroutine(FlashRed());
             if (health <= 0)
             {
                 Died();
@@ -220,5 +222,13 @@ public class EnemyController : MonoBehaviour, IEnemy
             totalDamage *= (1 + enemySO.GetStat(StatInfo.Stat.PercentCritDamage));
         }
         return totalDamage;
+    }
+
+    IEnumerator FlashRed()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
     }
 }

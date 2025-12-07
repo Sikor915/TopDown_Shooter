@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
@@ -98,6 +99,27 @@ class PlayerAnimationController : Singleton<PlayerAnimationController>
                 animator.SetFloat("DirY", dirXY[Direction.W].Item2);
                 spriteRenderer.flipX = true;
                 break;
+        }
+    }
+    public void FlashRed()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FlashRedCoroutine());
+    }
+
+    IEnumerator FlashRedCoroutine(float interval = 0.1f)
+    {
+        Color originalColor = spriteRenderer.color;
+        int times = PlayerController.Instance.PlayerSO.iFrameDuration % (interval * 2) == 0 ?
+            (int)(PlayerController.Instance.PlayerSO.iFrameDuration / (interval * 2)) :
+            (int)(PlayerController.Instance.PlayerSO.iFrameDuration / (interval * 2)) + 1;
+        
+        for (int i = 0; i < times; i++)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(interval);
+            spriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(interval);
         }
     }
 }

@@ -9,6 +9,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     [SerializeField] PlayerSO playerSO;
     public PlayerSO PlayerSO => playerSO;
     [SerializeField] PlayerInventory playerInventory;
+    [SerializeField] AudioClip playerHurtSound;
 
     float currentHealth;
     public float CurrentHealth => currentHealth;
@@ -186,6 +187,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         currentHealth -= damage;
         playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
+        AudioSource.PlayClipAtPoint(playerHurtSound, transform.position);
     }
 
     void MoveCharacter()
@@ -242,6 +244,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     IEnumerator IFrames()
     {
+        PlayerAnimationController.Instance.FlashRed();
         yield return new WaitForSeconds(playerSO.iFrameDuration);
         playerSO.CanBeHit = true;
 

@@ -9,8 +9,12 @@ public class UIController : Singleton<UIController>
     [SerializeField] TMP_Text healthText;
     [SerializeField] TMP_Text moneyText;
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] GameObject reloadProgressBar;
+
+
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventory playerInventory;
+    
 
     [SerializeField] Weapon weaponBase;
 
@@ -52,6 +56,19 @@ public class UIController : Singleton<UIController>
         MoneyManager.Instance.ScoreSO.onMoneyChangedEvent.RemoveListener(UpdateMoneyText);
     }
 
+    public void RunReloadProgressBar(float reloadTime)
+    {
+        reloadProgressBar.SetActive(true);
+        ProgressBar pb = reloadProgressBar.GetComponent<ProgressBar>();
+        pb.SetProgress(1f, 1f / reloadTime);
+    }
+
+    public void StopReloadProgressBar()
+    {
+        reloadProgressBar.GetComponent<ProgressBar>().StopAllCoroutines();
+        reloadProgressBar.SetActive(false);
+    }
+
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
     {
         if (!weaponBase.usesAmmo)
@@ -60,6 +77,7 @@ public class UIController : Singleton<UIController>
             ammoReserveText.text = null;
             return;
         }
+        StopReloadProgressBar();
         ammoReserveText.text = ammoReserve.ToString();
         ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
     }

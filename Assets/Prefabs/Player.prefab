@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
   playerInventory: {fileID: 4794989366925398996}
+  playerHurtSound: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
 --- !u!114 &852080918831246162
 MonoBehaviour:
   m_ObjectHideFlags: 0
