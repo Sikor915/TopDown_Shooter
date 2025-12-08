@@ -12,6 +12,11 @@ public class EnemyController : MonoBehaviour, IEnemy
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerController playerController;
     [SerializeField] Weapon enemyWeapon;
+    public Weapon EnemyWeapon
+    {
+        get { return enemyWeapon; }
+        set { enemyWeapon = value; }
+    }
 
     [Header("Enemy Senses")]
     [SerializeField] float fieldOfViewAngle;
@@ -206,6 +211,17 @@ public class EnemyController : MonoBehaviour, IEnemy
             GameObject moneyGO = Instantiate(MoneyManager.Instance.MoneyPrefab, transform.position, Quaternion.identity);
             MoneyObject moneyObject = moneyGO.GetComponent<MoneyObject>();
             moneyObject.Amount = enemySO.MoneyDropAmount;
+        }
+        chance = Random.Range(0, 100);
+        if (chance < 20)
+        {
+            Debug.Log("Dropping weapon");
+            GameObject weaponDrop = Instantiate(enemyWeapon.gameObject, transform.position, Quaternion.identity);
+            weaponDrop.SetActive(true);
+            weaponDrop.GetComponent<Weapon>().DropWeaponPrepare();
+            BoxCollider2D weaponCollider = weaponDrop.AddComponent<BoxCollider2D>();
+            weaponCollider.size = new Vector2(1.0f, 1.0f);
+            weaponCollider.isTrigger = true;
         }
         EnemySpawner.Instance.RemoveEnemy(gameObject);
         OnEnemyKilled?.Invoke(enemySO.EnemyScore);
