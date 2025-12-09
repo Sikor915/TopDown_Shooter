@@ -146,7 +146,7 @@ class PlayerInventory : Singleton<PlayerInventory>
             EquipWeapon(weapons.IndexOf(weaponToPickUp));
             if (weaponToPickUp.name != "Katana")
             {
-                weaponToPickUp.transform.SetLocalPositionAndRotation(new Vector3(1.51f, 0, 0), Quaternion.Euler(0, 0, 90));
+                weaponToPickUp.transform.SetLocalPositionAndRotation(new Vector3(1.51f, 0, 0), Quaternion.identity);
             }
             else
             {

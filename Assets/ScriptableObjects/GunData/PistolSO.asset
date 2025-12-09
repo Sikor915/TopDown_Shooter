@@ -20,7 +20,7 @@ MonoBehaviour:
   baseThrownDamage: 10
   baseDamage: 10
   baseFireRate: 5
-  ammoReserve: 70
+  ammoReserve: 35
   baseSpread: 2
   baseProjectileSpeed: 30
   baseProjectileLifespan: 2

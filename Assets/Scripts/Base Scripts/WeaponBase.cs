@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public abstract class Weapon : MonoBehaviour
 {
@@ -173,6 +174,9 @@ public abstract class Weapon : MonoBehaviour
         gameObject.SetActive(true);
         gameObject.GetComponent<Weapon>().enabled = false;
         ownerCreatureSO = null;
+        Light2D weaponLight = gameObject.AddComponent<Light2D>();
+        weaponLight.intensity = 2.0f;
+        weaponLight.pointLightOuterRadius = 3.0f;
     }
 
     public void DropWeapon(Vector3 dropPosition)
@@ -195,6 +199,10 @@ public abstract class Weapon : MonoBehaviour
         else
         {
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        }
+        if (TryGetComponent<Light2D>(out var light2d))
+        {
+            Destroy(light2d);
         }
         gameObject.GetComponent<Weapon>().enabled = true;
     }
@@ -266,5 +274,5 @@ public abstract class Weapon : MonoBehaviour
     public abstract void ReloadAction();
     public abstract void BotUse();
     public abstract void HandleShoot();
-    
+
 }

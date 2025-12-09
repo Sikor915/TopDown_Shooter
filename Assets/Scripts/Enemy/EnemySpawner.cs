@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class EnemySpawner : Singleton<EnemySpawner>
 {
     [SerializeField] List<Vector2Int> spawnPoints;
     [SerializeField] GameObject enemyPrefab;
+    [SerializeField] List<GameObject> weaponPrefabs;
 
     readonly List<GameObject> enemies = new();
     public List<GameObject> Enemies { get { return enemies; } }
 
+    const string gunPrefabsPath = "Prefabs/Weapons/Guns/";
 
     public void AddSpawnPoint(Vector2Int point)
     {
@@ -28,6 +29,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
             GameObject enemy = ObjectPooling.Instance.GetPooledEnemy();
             if (enemy != null)
             {
+                enemy.GetComponent<EnemyController>().EnemyWeapon = RandomizeSpawnWeapon().GetComponent<Weapon>();
                 enemy.transform.position = new Vector3(spawnPoint.x, spawnPoint.y, 0);
                 enemy.GetComponent<EnemyController>().ActivateEnemy();
                 enemies.Add(enemy);
@@ -50,5 +52,12 @@ public class EnemySpawner : Singleton<EnemySpawner>
     {
         ObjectPooling.Instance.ReturnEnemyToPool(enemy.GetComponent<EnemyController>());
         enemies.Remove(enemy);
+    }
+
+    GameObject RandomizeSpawnWeapon()
+    {
+        int randomIndex = Random.Range(0, weaponPrefabs.Count);
+        GameObject gunPrefab = weaponPrefabs[randomIndex];
+        return gunPrefab;
     }
 }

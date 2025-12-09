@@ -63,6 +63,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoints: []
   enemyPrefab: {fileID: 7490617015663804829, guid: 220de169b4482864ba905ea16d2cf9d9, type: 3}
+  weaponPrefabs:
+  - {fileID: 5978237818483539142, guid: 231779b0a84eb634096429646deec38a, type: 3}
+  - {fileID: 7991235734762641486, guid: 19ba6bf106705454daa924e42efba854, type: 3}
+  - {fileID: 8089113121706100669, guid: 3116318e7997dee4eb7f90404e75b2f7, type: 3}
+  - {fileID: 75713809423820024, guid: 08da3e39cd711d3479e5611489fb088e, type: 3}
 --- !u!114 &640072820193425745
 MonoBehaviour:
   m_ObjectHideFlags: 0
