@@ -175,8 +175,8 @@ public abstract class Weapon : MonoBehaviour
         gameObject.GetComponent<Weapon>().enabled = false;
         ownerCreatureSO = null;
         Light2D weaponLight = gameObject.AddComponent<Light2D>();
-        weaponLight.intensity = 1.0f;
-        weaponLight.pointLightOuterRadius = 2.0f;
+        weaponLight.intensity = 2.0f;
+        weaponLight.pointLightOuterRadius = 3.0f;
     }
 
     public void DropWeapon(Vector3 dropPosition)
