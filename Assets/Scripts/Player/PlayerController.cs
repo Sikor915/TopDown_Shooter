@@ -73,6 +73,15 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         {
             PlayerAim.Instance.ThrowWeapon();
         }
+
+        if (Input.GetKeyDown(KeyCode.E) && PlayerInteractManager.Instance.IsPlayerNearInteractable())
+        {
+            UIController.Instance.RunPlayerInteractProgressBar();
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            UIController.Instance.StopPlayerInteractProgressBar();
+        }
     }
 
     void OnEnable()

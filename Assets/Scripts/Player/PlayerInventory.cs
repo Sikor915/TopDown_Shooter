@@ -159,6 +159,22 @@ class PlayerInventory : Singleton<PlayerInventory>
         }
     }
 
+    public GameObject GetPreviousWeapon()
+    {
+        if (weapons.Count == 0 || currentWeapon == null) return null;
+        int currentIndex = weapons.IndexOf(currentWeapon);
+        int previousIndex = (currentIndex - 1 + weapons.Count) % weapons.Count;
+        return weapons[previousIndex];
+    }
+
+    public GameObject GetNextWeapon()
+    {
+        if (weapons.Count == 0 || currentWeapon == null) return null;
+        int currentIndex = weapons.IndexOf(currentWeapon);
+        int nextIndex = (currentIndex + 1) % weapons.Count;
+        return weapons[nextIndex];
+    }
+
     public GameObject GetWeaponByName(string weaponName)
     {
         return weapons.Find(w => w.GetComponent<Weapon>().gunStats.weaponName == weaponName);

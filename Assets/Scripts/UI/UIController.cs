@@ -5,17 +5,22 @@ using System.Collections;
 
 public class UIController : Singleton<UIController>
 {
-    [SerializeField] TMP_Text ammoText, ammoReserveText;
+    [Header("Weapon UI Elements")]
+    [SerializeField] TMP_Text ammoText;
+    [SerializeField] TMP_Text ammoReserveText;
+    [SerializeField] TMP_Text weaponNameText, previousWeaponNameText, nextWeaponNameText;
+
+    [Header("Player UI Elements")]
     [SerializeField] TMP_Text healthText;
-    [SerializeField] TMP_Text moneyText;
-    [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text moneyText, scoreText;
+
+    [Header("UI GameObjects")]
     [SerializeField] GameObject reloadProgressBar;
+    [SerializeField] GameObject playerInteractProgressBar;
 
-
+    [Header("References")]
     [SerializeField] PlayerSO playerSO;
     [SerializeField] PlayerInventory playerInventory;
-    
-
     [SerializeField] Weapon weaponBase;
 
     void Awake()
@@ -69,6 +74,19 @@ public class UIController : Singleton<UIController>
         reloadProgressBar.SetActive(false);
     }
 
+    public void RunPlayerInteractProgressBar(float interactTime = 0.4f)
+    {
+        playerInteractProgressBar.SetActive(true);
+        ProgressBar pb = playerInteractProgressBar.GetComponent<ProgressBar>();
+        pb.SetProgress(1f, 1f / interactTime);
+    }
+
+    public void StopPlayerInteractProgressBar()
+    {
+        playerInteractProgressBar.GetComponent<ProgressBar>().StopAllCoroutines();
+        playerInteractProgressBar.SetActive(false);
+    }
+
     public void UpdateAmmoText(int currentAmmo, int maxAmmo, int ammoReserve)
     {
         if (!weaponBase.usesAmmo)
@@ -80,6 +98,21 @@ public class UIController : Singleton<UIController>
         StopReloadProgressBar();
         ammoReserveText.text = ammoReserve.ToString();
         ammoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+    }
+
+    public void UpdateWeaponNameText(string weaponName)
+    {
+        weaponNameText.text = weaponName;
+    }
+
+    public void UpdatePreviousWeaponNameText(string weaponName)
+    {
+        previousWeaponNameText.text = weaponName;
+    }
+
+    public void UpdateNextWeaponNameText(string weaponName)
+    {
+        nextWeaponNameText.text = weaponName;
     }
 
     public void UpdateHealthText(float currentHealth, float maxHealth)
@@ -112,7 +145,32 @@ public class UIController : Singleton<UIController>
         weaponBase = playerInventory.currentWeapon.GetComponent<Weapon>();
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
         weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
+        UpdateUIElements();
+    }
+
+    void UpdateUIElements()
+    {
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
+        UpdateWeaponNameText(weaponBase.gunStats.weaponName);
+        GameObject previousWeapon = PlayerInventory.Instance.GetPreviousWeapon();
+        GameObject nextWeapon = PlayerInventory.Instance.GetNextWeapon();
+
+        if (previousWeapon != null)
+        {
+            UpdatePreviousWeaponNameText(previousWeapon.GetComponent<Weapon>().gunStats.weaponName);
+        }
+        else
+        {
+            UpdatePreviousWeaponNameText("");
+        }
+        if (nextWeapon != null)
+        {
+            UpdateNextWeaponNameText(nextWeapon.GetComponent<Weapon>().gunStats.weaponName);
+        }
+        else
+        {
+            UpdateNextWeaponNameText("");
+        }
     }
 
     IEnumerator TryGetWeaponBase()

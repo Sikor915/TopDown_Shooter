@@ -34,10 +34,9 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         }
         if (MapGenerator.Instance != null)
         {
-            Room endRoom = MapGenerator.Instance.GetStartAndEndRooms().Item2;
-            if (endRoom != null && MapGenerator.Instance.IsPlayerInRoom(endRoom))
+            if (CheckInteractionInEndRoom())
             {
-                Debug.Log("Player interacted in end room. Loading Main Menu.");
+                Debug.Log("Player interacted in end room. Loading Shop.");
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Shop");
                 return;
             }
@@ -45,31 +44,70 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         if (ShopMaster.Instance != null)
         {
             Debug.Log("Checking shop exit point interaction");
-            float distance = Vector3.Distance(transform.position, ShopMaster.Instance.ExitPoint.transform.position);
-            if (distance < 5.0f)
+
+            if (CheckInteractionsInShop())
             {
-                Debug.Log("Player interacted at shop exit point. Loading Main Menu.");
-                UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
                 return;
             }
-            Debug.Log($"Player not close enough to exit point. Distance was: {distance}");
-
-            distance = Vector3.Distance(transform.position, ShopMaster.Instance.PerkShopPoint.transform.position);
-            if (distance < 4.0f)
-            {
-                Debug.Log("Player interacted at perk shop point. Opening Perk Shop.");
-                ShopMaster.Instance.PerkShopPoint.OpenShop();
-                return;
-            }
-
-            distance = Vector3.Distance(transform.position, ShopMaster.Instance.GunShopPoint.transform.position);
-            if (distance < 4.0f)
-            {
-                Debug.Log("Player interacted at gun shop point. Opening Gun Shop.");
-                ShopMaster.Instance.GunShopPoint.OpenShop();
-                return;
-            }
-
         }
+    }
+
+    public bool IsPlayerNearInteractable()
+    {
+        Vector2Int playerPos = new Vector2Int((int)PlayerController.Instance.transform.position.x, (int)PlayerController.Instance.transform.position.y);
+        return canPickUp || 
+        (MapGenerator.Instance != null && MapGenerator.Instance.GetCurrentRoom(playerPos) == MapGenerator.Instance.GetStartAndEndRooms().Item2) || 
+        (ShopMaster.Instance != null && IsNearAnythingInShop());
+    }
+
+    bool CheckInteractionInEndRoom()
+    {
+        if (MapGenerator.Instance != null)
+        {
+            Room endRoom = MapGenerator.Instance.GetStartAndEndRooms().Item2;
+            if (endRoom != null && MapGenerator.Instance.IsPlayerInRoom(endRoom))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool IsNearAnythingInShop()
+    {
+        return IsNearPoint(ShopMaster.Instance.ExitPoint.transform.position, 5.0f) ||
+               IsNearPoint(ShopMaster.Instance.PerkShopPoint.transform.position, 4.0f) ||
+               IsNearPoint(ShopMaster.Instance.GunShopPoint.transform.position, 4.0f);
+    }
+
+    bool IsNearPoint(Vector3 point, float threshold)
+    {
+        float distance = Vector3.Distance(transform.position, point);
+        return distance < threshold;
+    }
+
+    bool CheckInteractionsInShop()
+    {
+        if (IsNearPoint(ShopMaster.Instance.ExitPoint.transform.position, 5.0f))
+        {
+            Debug.Log("Player interacted at shop exit point. Loading Main Menu.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
+            return true;
+        }
+
+        if (IsNearPoint(ShopMaster.Instance.PerkShopPoint.transform.position, 4.0f))
+        {
+            Debug.Log("Player interacted at perk shop point. Opening Perk Shop.");
+            ShopMaster.Instance.PerkShopPoint.OpenShop();
+            return true;
+        }
+
+        if (IsNearPoint(ShopMaster.Instance.GunShopPoint.transform.position, 4.0f))
+        {
+            Debug.Log("Player interacted at gun shop point. Opening Gun Shop.");
+            ShopMaster.Instance.GunShopPoint.OpenShop();
+            return true;
+        }
+        return false;
     }
 }
