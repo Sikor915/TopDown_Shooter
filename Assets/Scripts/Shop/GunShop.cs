@@ -35,7 +35,7 @@ public class GunShop : Singleton<GunShop>, IShop
             Debug.Log("Not enough money to buy " + gun.weaponName);
             return false;
         }
-        MoneyManager.Instance.AddMoney(-gun.weaponPrice);
+        MoneyManager.Instance.RemoveMoney(gun.weaponPrice);
         Vector3 weaponSpawnPosition = PlayerController.Instance.transform.position + new Vector3(Random.Range(1f, 3f), Random.Range(1f, 3f), 0);
         GameObject createdGun = Instantiate(gun.weaponPrefab, weaponSpawnPosition, Quaternion.identity);
         createdGun.SetActive(true);

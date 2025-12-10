@@ -12,9 +12,9 @@ public class MoneyManager : Singleton<MoneyManager>
 
     void Awake()
     {
-        AddMoney(-GetMoney());
+        RemoveMoney(GetMoney());
         AddMoney(50);
-        AddScore(-GetScore());
+        RemoveScore(GetScore());
         AddScore(100);
         if (Instance != this)
         {
@@ -47,6 +47,11 @@ public class MoneyManager : Singleton<MoneyManager>
         AddScore(amount);
     }
 
+    public void RemoveMoney(int amount)
+    {
+        scoreSO.AddMoney(-amount);
+    }
+
     public int GetMoney()
     {
         return scoreSO.Money;
@@ -55,6 +60,11 @@ public class MoneyManager : Singleton<MoneyManager>
     public void AddScore(int amount)
     {
         scoreSO.AddScore(amount);
+    }
+
+    public void RemoveScore(int amount)
+    {
+        scoreSO.AddScore(-amount);
     }
 
     public int GetScore()
@@ -71,7 +81,7 @@ public class MoneyManager : Singleton<MoneyManager>
                 yield break;
             }
             yield return _waitForSeconds10;
-            if (ScoreSO.Score > 0)  scoreSO.AddScore(-1);
+            if (ScoreSO.Score > 0)  RemoveScore(1);
         }
     }
 
