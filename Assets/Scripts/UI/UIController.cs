@@ -13,6 +13,7 @@ public class UIController : Singleton<UIController>
     [Header("Player UI Elements")]
     [SerializeField] TMP_Text healthText;
     [SerializeField] TMP_Text moneyText, scoreText;
+    [SerializeField] TMP_Text interactionPromptText;
 
     [Header("UI GameObjects")]
     [SerializeField] GameObject reloadProgressBar;
@@ -34,6 +35,18 @@ public class UIController : Singleton<UIController>
         StartCoroutine(TryGetWeaponBase());
         SetScore(MoneyManager.Instance.GetScore());
         UpdateMoneyText(MoneyManager.Instance.GetMoney());
+    }
+
+    void Update()
+    {
+        if (PlayerInteractManager.Instance.IsPlayerNearInteractable())
+        {
+            interactionPromptText.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactionPromptText.gameObject.SetActive(false);
+        }
     }
 
     void OnEnable()
