@@ -17,6 +17,7 @@ public class UIController : Singleton<UIController>
     [Header("UI GameObjects")]
     [SerializeField] GameObject reloadProgressBar;
     [SerializeField] GameObject playerInteractProgressBar;
+    [SerializeField] GameObject healthBar, lostHealthBar;
 
     [Header("References")]
     [SerializeField] PlayerSO playerSO;
@@ -117,8 +118,8 @@ public class UIController : Singleton<UIController>
 
     public void UpdateHealthText(float currentHealth, float maxHealth)
     {
-        Debug.Log("Updating health text");
         healthText.text = currentHealth.ToString("F0") + "/" + maxHealth.ToString("F0");
+        UpdateHealthBar(currentHealth, maxHealth);
     }
 
     public void UpdateMoneyText(int currentMoney)
@@ -137,6 +138,14 @@ public class UIController : Singleton<UIController>
         ammoText.text = null;
     }
 
+    void UpdateHealthBar(float currentHealth, float maxHealth)
+    {
+        if (healthBar == null || lostHealthBar == null) return;
+        float healthPercent = currentHealth / maxHealth;
+        healthBar.GetComponent<ProgressBar>().SetProgress(healthPercent, 1f, false);
+        lostHealthBar.GetComponent<ProgressBar>().SetProgress(1f - healthPercent, 0.5f, false);
+    }
+
     void UpdateCurrentWeaponEvents()
     {
         if (weaponBase == null) return;
@@ -145,10 +154,10 @@ public class UIController : Singleton<UIController>
         weaponBase = playerInventory.currentWeapon.GetComponent<Weapon>();
         weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
         weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
-        UpdateUIElements();
+        UpdateWeaponUIElements();
     }
 
-    void UpdateUIElements()
+    void UpdateWeaponUIElements()
     {
         UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve);
         UpdateWeaponNameText(weaponBase.gunStats.weaponName);
