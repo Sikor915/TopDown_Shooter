@@ -15,7 +15,7 @@ public class PerkShop : Singleton<PerkShop>, IShop
             Debug.Log("Not enough money to open Perk Shop");
             return;
         }
-        MoneyManager.Instance.AddMoney(-5);
+        MoneyManager.Instance.RemoveMoney(25);
         RandomizeUpgradesToShow();
         isOpen = true;
     }

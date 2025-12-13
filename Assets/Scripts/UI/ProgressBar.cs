@@ -17,14 +17,14 @@ public class ProgressBar : MonoBehaviour
         SetProgress(targetFillAmount, defaultFillSpeed);
     }
 
-    public void SetProgress(float targetFillAmount, float fillSpeed)
+    public void SetProgress(float targetFillAmount, float fillSpeed, bool shouldReset = true)
     {
         if (targetFillAmount < 0f || targetFillAmount > 1f)
         {
             Debug.LogError("Target fill amount must be between 0 and 1.");
             targetFillAmount = Mathf.Clamp01(targetFillAmount);
         }
-        progressImage.fillAmount = 0f;
+        if (shouldReset) progressImage.fillAmount = 0f;
         if (targetFillAmount != progressImage.fillAmount)
         {
             if (fillCoroutine != null)

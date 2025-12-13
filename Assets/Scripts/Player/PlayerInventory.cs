@@ -23,7 +23,7 @@ class PlayerInventory : Singleton<PlayerInventory>
         }
         currentWeapon = weapons[index];
         currentWeapon.SetActive(true);
-        UIController.Instance.StopReloadProgressBar();
+        UIController.Instance?.StopReloadProgressBar();
         onWeaponChangedEvent?.Invoke();
     }
 
@@ -157,6 +157,22 @@ class PlayerInventory : Singleton<PlayerInventory>
         {
             Debug.Log("Weapon already in inventory.");
         }
+    }
+
+    public GameObject GetPreviousWeapon()
+    {
+        if (weapons.Count == 0 || currentWeapon == null) return null;
+        int currentIndex = weapons.IndexOf(currentWeapon);
+        int previousIndex = (currentIndex - 1 + weapons.Count) % weapons.Count;
+        return weapons[previousIndex];
+    }
+
+    public GameObject GetNextWeapon()
+    {
+        if (weapons.Count == 0 || currentWeapon == null) return null;
+        int currentIndex = weapons.IndexOf(currentWeapon);
+        int nextIndex = (currentIndex + 1) % weapons.Count;
+        return weapons[nextIndex];
     }
 
     public GameObject GetWeaponByName(string weaponName)

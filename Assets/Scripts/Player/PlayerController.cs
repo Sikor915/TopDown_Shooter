@@ -32,6 +32,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        currentHealth = playerSO.creatureSO.MaxHealth;
         rb2d = GetComponent<Rigidbody2D>();
         foreach (Transform child in transform.GetChild(0))
         {
@@ -43,7 +44,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
             }
         }
         playerInventory.EquipWeapon(0);
-        currentHealth = playerSO.creatureSO.MaxHealth;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -72,6 +72,15 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (Input.GetMouseButtonDown(1))
         {
             PlayerAim.Instance.ThrowWeapon();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && PlayerInteractManager.Instance.IsPlayerNearInteractable())
+        {
+            UIController.Instance.RunPlayerInteractProgressBar();
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            UIController.Instance.StopPlayerInteractProgressBar();
         }
     }
 

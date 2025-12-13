@@ -1,6 +1,9 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 public class MoneyManager : Singleton<MoneyManager>
 {
+    static readonly WaitForSeconds _waitForSeconds10 = new(10f);
     [SerializeField] ScoreSO scoreSO;
     public ScoreSO ScoreSO => scoreSO;
     
@@ -9,12 +12,17 @@ public class MoneyManager : Singleton<MoneyManager>
 
     void Awake()
     {
+        RemoveMoney(GetMoney());
+        AddMoney(50);
+        RemoveScore(GetScore());
+        AddScore(100);
         if (Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         DontDestroyOnLoad(gameObject);
+        StartCoroutine(ScoreTimePenaltyCoroutine());
     }
 
     void OnEnable()
@@ -36,6 +44,12 @@ public class MoneyManager : Singleton<MoneyManager>
     public void AddMoney(int amount)
     {
         scoreSO.AddMoney(amount);
+        AddScore(amount);
+    }
+
+    public void RemoveMoney(int amount)
+    {
+        scoreSO.AddMoney(-amount);
     }
 
     public int GetMoney()
@@ -48,9 +62,27 @@ public class MoneyManager : Singleton<MoneyManager>
         scoreSO.AddScore(amount);
     }
 
+    public void RemoveScore(int amount)
+    {
+        scoreSO.AddScore(-amount);
+    }
+
     public int GetScore()
     {
         return scoreSO.Score;
+    }
+
+    IEnumerator ScoreTimePenaltyCoroutine()
+    {
+        while (true)
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "DemoScene")
+            {
+                yield break;
+            }
+            yield return _waitForSeconds10;
+            if (ScoreSO.Score > 0)  RemoveScore(1);
+        }
     }
 
 }

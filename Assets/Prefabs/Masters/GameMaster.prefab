@@ -85,6 +85,8 @@ MonoBehaviour:
   floorTile: {fileID: 11400000, guid: b302cba2ae0914047923d2fca60ee327, type: 2}
   wallTile: {fileID: 11400000, guid: 76605105efd51f14eae7f8ef44ace6fc, type: 2}
   seedLength: 8
+  lightPrefab: {fileID: 479569507611406667, guid: 7c942a1ca077db8408dbb98d2e873a81, type: 3}
+  endRoomLightPrefab: {fileID: 479569507611406667, guid: 73f5514d37511004da151479dbdb1772, type: 3}
   minRoomSize: 30
   maxRoomSize: 35
   maxBSPDepth: 6

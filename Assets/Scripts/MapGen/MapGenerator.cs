@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 public class MapGenerator : Singleton<MapGenerator>
@@ -12,6 +13,8 @@ public class MapGenerator : Singleton<MapGenerator>
     [SerializeField] TileBase floorTile;
     [SerializeField] TileBase wallTile;
     [SerializeField] int seedLength;
+    [SerializeField] GameObject lightPrefab;
+    [SerializeField] GameObject endRoomLightPrefab;
 
     [Header("BSP Generation Settings")]
     [SerializeField] int minRoomSize;
@@ -60,7 +63,7 @@ public class MapGenerator : Singleton<MapGenerator>
         EnemySpawner.Instance.ClearEnemies();
         BSPGenerator bspGenerator = new BSPGenerator();
         bspRoot = bspGenerator.GenerateBSP(mapSpace, minRoomSize, maxBSPDepth);
-        (rooms, corridors) = GenerateRooms(bspRoot);
+        GenerateRooms(bspRoot);
         DrawDungeon();
         PreparePatrolPoints();
         PrepareSpawnpoints();
@@ -91,13 +94,14 @@ public class MapGenerator : Singleton<MapGenerator>
         return (startRoom, endRoom);
     }
 
-    (List<Room>, List<Vector2Int>) GenerateRooms(BSPNode node)
+    void GenerateRooms(BSPNode node)
     {
         List<Room> roomsNew = new List<Room>();
         TraverseAndCreateRooms(node, roomsNew);
         GenerateStartEndRooms(roomsNew);
-        List<Vector2Int> corridors = GenerateCorridors(roomsNew);
-        return (roomsNew, corridors);
+        rooms = roomsNew;
+        List<Vector2Int> corridorsNew = GenerateCorridors(roomsNew);
+        corridors = corridorsNew;
     }
 
     void GenerateStartEndRooms(List<Room> rooms)
@@ -106,9 +110,44 @@ public class MapGenerator : Singleton<MapGenerator>
         int randomEndPos = Random.Range(mapSpace.xMin + minRoomSize / 2, mapSpace.xMax - minRoomSize / 2);
         RectInt startRoomRect = new RectInt(randomStartPos, mapSpace.yMin - minRoomSize / 2, minRoomSize / 2, minRoomSize / 2);
         startRoom = new Room(startRoomRect);
+        for (int x = 0; x < 4; x++)
+        {
+            switch (x)
+            {
+                case 0:
+                    Instantiate(lightPrefab, new Vector3(startRoomRect.xMin + 3, startRoomRect.yMin + 3, 0), Quaternion.identity);
+                    break;
+                case 1:
+                    Instantiate(lightPrefab, new Vector3(startRoomRect.xMax - 3, startRoomRect.yMin + 3, 0), Quaternion.identity);
+                    break;
+                case 2:
+                    Instantiate(lightPrefab, new Vector3(startRoomRect.xMin + 3, startRoomRect.yMax - 3, 0), Quaternion.identity);
+                    break;
+                case 3:
+                    Instantiate(lightPrefab, new Vector3(startRoomRect.xMax - 3, startRoomRect.yMax - 3, 0), Quaternion.identity);
+                    break;
+            }
+        }
         RectInt endRoomRect = new RectInt(randomEndPos, mapSpace.yMax + minRoomSize / 2, minRoomSize / 2, minRoomSize / 2);
         endRoom = new Room(endRoomRect);
-
+        for (int x = 0; x < 4; x++)
+        {
+            switch (x)
+            {
+                case 0:
+                    Instantiate(endRoomLightPrefab, new Vector3(endRoomRect.xMin + 3, endRoomRect.yMin + 3, 0), Quaternion.identity);
+                    break;
+                case 1:
+                    Instantiate(endRoomLightPrefab, new Vector3(endRoomRect.xMax - 3, endRoomRect.yMin + 3, 0), Quaternion.identity);
+                    break;
+                case 2:
+                    Instantiate(endRoomLightPrefab, new Vector3(endRoomRect.xMin + 3, endRoomRect.yMax - 3, 0), Quaternion.identity);
+                    break;
+                case 3:
+                    Instantiate(endRoomLightPrefab, new Vector3(endRoomRect.xMax - 3, endRoomRect.yMax - 3, 0), Quaternion.identity);
+                    break;
+            }
+        }
         rooms.Add(startRoom);
         rooms.Add(endRoom);
     }
@@ -128,6 +167,10 @@ public class MapGenerator : Singleton<MapGenerator>
                 corridors.Add(new Vector2Int(x, roomACenter.y + 2));
                 corridors.Add(new Vector2Int(x, roomACenter.y - 1));
                 corridors.Add(new Vector2Int(x, roomACenter.y - 2));
+                if (GetCurrentRoom(new Vector2Int(x, roomACenter.y)) == null && x % 5 == 0)
+                {
+                    Instantiate(lightPrefab, new Vector3(x, roomACenter.y, 0), Quaternion.identity, transform);
+                }
             }
             for (int y = Mathf.Min(roomACenter.y, roomBCenter.y); y <= Mathf.Max(roomACenter.y, roomBCenter.y); y++)
             {
@@ -136,6 +179,10 @@ public class MapGenerator : Singleton<MapGenerator>
                 corridors.Add(new Vector2Int(roomBCenter.x + 2, y));
                 corridors.Add(new Vector2Int(roomBCenter.x - 1, y));
                 corridors.Add(new Vector2Int(roomBCenter.x - 2, y));
+                if (GetCurrentRoom(new Vector2Int(roomBCenter.x, y)) == null && y % 5 == 0)
+                {
+                    Instantiate(lightPrefab, new Vector3(roomBCenter.x, y, 0), Quaternion.identity, transform);
+                }
             }
         }
         return corridors;
