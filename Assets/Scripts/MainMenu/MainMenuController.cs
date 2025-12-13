@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MainMenuController : MonoBehaviour
+public class MainMenuController : Singleton<MainMenuController>
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
