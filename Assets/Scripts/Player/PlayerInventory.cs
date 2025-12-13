@@ -23,7 +23,7 @@ class PlayerInventory : Singleton<PlayerInventory>
         }
         currentWeapon = weapons[index];
         currentWeapon.SetActive(true);
-        UIController.Instance.StopReloadProgressBar();
+        UIController.Instance?.StopReloadProgressBar();
         onWeaponChangedEvent?.Invoke();
     }
 
