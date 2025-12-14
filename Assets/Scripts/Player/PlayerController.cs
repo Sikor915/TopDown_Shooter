@@ -193,6 +193,13 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         Debug.Log("Menu button pressed");
     }
 
+    public void RestoreHealth(float amount)
+    {
+        Debug.Log("Restoring Health: " + amount);
+        currentHealth = Mathf.Min(currentHealth + amount, playerSO.creatureSO.MaxHealth);
+        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
+    }
+
     void OnTriggerStay2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Weapon"))
