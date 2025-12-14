@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class Settings : MonoBehaviour
+public class Settings : Singleton<Settings>
 {
     [Header("UI References")]
     [SerializeField] Slider musicSlider;
@@ -58,30 +58,6 @@ public class Settings : MonoBehaviour
             overlayColor.a = 1f - _brightness;
             brightnessOverlay.color = overlayColor;
         }
-    }
-
-
-    void Awake()
-    {
-        // Ensure only one instance of Settings exists - I AM TIRED OF THIS SHIT
-        var settingsList = FindObjectsByType<Settings>(FindObjectsSortMode.None);
-        if (settingsList.Length > 1 && settingsList[0] != this)
-        {
-            Brightness = settingsList[1].Brightness;
-            MusicVolume = settingsList[1].MusicVolume;
-            SFXVolume = settingsList[1].SFXVolume;
-            IsFullscreen = settingsList[1].IsFullscreen;
-            Destroy(settingsList[1].gameObject);
-        }
-        else if (settingsList.Length > 1 && settingsList[1] != this)
-        {
-            Brightness = settingsList[0].Brightness;
-            MusicVolume = settingsList[0].MusicVolume;
-            SFXVolume = settingsList[0].SFXVolume;
-            IsFullscreen = settingsList[0].IsFullscreen;
-            Destroy(settingsList[0].gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

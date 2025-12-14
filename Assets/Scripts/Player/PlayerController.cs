@@ -52,6 +52,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
                 weaponC.ownerCreatureSO = playerSO.creatureSO;
             }
         }
+        playerInventory.EquipWeapon(1);
         playerInventory.EquipWeapon(0);
     }
 
