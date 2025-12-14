@@ -121,4 +121,12 @@ public class Settings : Singleton<Settings>
     {
         SFXVolume = sfxSlider.value;
     }
+
+    public void ReturnToMainMenu()
+    {
+        Destroy(PlayerController.Instance.gameObject);
+        Destroy(MoneyManager.Instance.gameObject);
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+    }
 }

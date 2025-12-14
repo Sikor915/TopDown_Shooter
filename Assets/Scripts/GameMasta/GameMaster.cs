@@ -45,6 +45,6 @@ public class GameMaster : Singleton<GameMaster>
 
     public void ReturnToMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+        Settings.Instance.ReturnToMainMenu();
     }
 }

@@ -15,6 +15,10 @@ public class MainMenuController : Singleton<MainMenuController>
 
     public void OnStartButtonPressed()
     {
+        if (Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+        }
         UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
     }
     
