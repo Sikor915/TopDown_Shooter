@@ -140,13 +140,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   gunBaseStats: {fileID: 11400000, guid: e114b5e6877674e4d82bd5825dd30394, type: 2}
+  shootSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
   projectilePrefab: {fileID: 5587952641114793675, guid: 503fc02a189ad8848babf43e4ede6b3b, type: 3}
   ownerCreatureSO: {fileID: 0}
   anim: {fileID: 0}
+  audioMixerGroup: {fileID: 8534375872132821558, guid: ac684b10c58e457469e301304fee87ee, type: 2}
   usesAmmo: 1
   isUsedByPlayer: 0
   isMeleeWeapon: 0
-  shootSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
 --- !u!1001 &2981208683531940910
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -112,7 +112,9 @@ public class Shotgun : Weapon
         {
             muzzleFlash.Play();
         }
-        AudioSource.PlayClipAtPoint(shootSound, transform.position);
+        bool value = audioMixerGroup.audioMixer.GetFloat("SFXVolume", out float volume);
+        volume = Mathf.Pow(10, volume / 20);
+        AudioSource.PlayClipAtPoint(shootSound, transform.position, volume);
     }
 
     protected override IEnumerator ReloadCoroutine()
