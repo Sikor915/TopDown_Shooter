@@ -19,6 +19,7 @@ public class UIController : Singleton<UIController>
     [SerializeField] GameObject reloadProgressBar;
     [SerializeField] GameObject playerInteractProgressBar;
     [SerializeField] GameObject healthBar, lostHealthBar;
+    [SerializeField] GameObject settingsMenu;
 
     [Header("References")]
     [SerializeField] PlayerSO playerSO;
@@ -149,6 +150,19 @@ public class UIController : Singleton<UIController>
     {
         healthText.text = null;
         ammoText.text = null;
+    }
+
+    public void ToggleSettingsMenu()
+    {
+        settingsMenu.SetActive(!settingsMenu.activeSelf);
+        if (settingsMenu.activeSelf)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     void UpdateHealthBar(float currentHealth, float maxHealth)

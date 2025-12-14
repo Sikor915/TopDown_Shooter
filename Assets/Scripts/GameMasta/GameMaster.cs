@@ -42,4 +42,9 @@ public class GameMaster : Singleton<GameMaster>
         );
         playerController.transform.position = new Vector3(spawnPosition.x, spawnPosition.y, 0);
     }
+
+    public void ReturnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+    }
 }

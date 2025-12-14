@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
@@ -18,6 +19,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     Vector2 m_GoalVel;
     Vector2 m_UnitGoal;
 
+    AudioMixerGroup audioMixerGroup;
+
 
     bool isRolling = false;
     bool rollingCooldown = false;
@@ -31,6 +34,12 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     void Awake()
     {
+        if (Instance != this && Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        audioMixerGroup = GetComponent<AudioSource>().outputAudioMixerGroup;
         DontDestroyOnLoad(gameObject);
         currentHealth = playerSO.creatureSO.MaxHealth;
         rb2d = GetComponent<Rigidbody2D>();
@@ -43,6 +52,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
                 weaponC.ownerCreatureSO = playerSO.creatureSO;
             }
         }
+        playerInventory.EquipWeapon(1);
         playerInventory.EquipWeapon(0);
     }
 
@@ -81,6 +91,10 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         if (Input.GetKeyUp(KeyCode.E))
         {
             UIController.Instance.StopPlayerInteractProgressBar();
+        }
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            UIController.Instance.ToggleSettingsMenu();
         }
     }
 
@@ -174,6 +188,11 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         PlayerAnimationController.Instance.SetIsSliding(true);
     }
 
+    public void OnMenu(InputAction.CallbackContext context)
+    {
+        Debug.Log("Menu button pressed");
+    }
+
     void OnTriggerStay2D(Collider2D coll)
     {
         if (coll.gameObject.CompareTag("Weapon"))
@@ -196,7 +215,9 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         currentHealth -= damage;
         playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
-        AudioSource.PlayClipAtPoint(playerHurtSound, transform.position);
+        bool value = audioMixerGroup.audioMixer.GetFloat("SFXVolume", out float volume);
+        volume = Mathf.Pow(10, volume / 20);
+        AudioSource.PlayClipAtPoint(playerHurtSound, transform.position, volume);
     }
 
     void MoveCharacter()
