@@ -10,7 +10,7 @@ public class PerkShop : Singleton<PerkShop>, IShop
 
     public void OpenShop()
     {
-        if(MoneyManager.Instance.GetMoney() < 5)
+        if(MoneyManager.Instance.GetMoney() < 25)
         {
             Debug.Log("Not enough money to open Perk Shop");
             return;
