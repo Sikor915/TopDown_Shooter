@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -16,6 +17,7 @@ public abstract class Weapon : MonoBehaviour
     public GameObject projectilePrefab;
     public CreatureSO ownerCreatureSO;
     [SerializeField] protected Animator anim;
+    [SerializeField] protected AudioMixerGroup audioMixerGroup;
 
     [Header("Weapon Info")]
     public bool usesAmmo = true;

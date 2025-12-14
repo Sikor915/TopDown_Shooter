@@ -142,8 +142,9 @@ MonoBehaviour:
   gunBaseStats: {fileID: 11400000, guid: 4a2a3a3624050ed4da7b1e7cd259f498, type: 2}
   shootSound: {fileID: 8300000, guid: 0dbe91efb8ee94e6695ef0f552d202ce, type: 3}
   projectilePrefab: {fileID: 5587952641114793675, guid: 503fc02a189ad8848babf43e4ede6b3b, type: 3}
-  ownerCreatureSO: {fileID: 0}
+  ownerCreatureSO: {fileID: 11400000, guid: b57c30698b639a34280e8aefcbdf3214, type: 2}
   anim: {fileID: 0}
+  audioMixerGroup: {fileID: 8534375872132821558, guid: ac684b10c58e457469e301304fee87ee, type: 2}
   usesAmmo: 1
   isUsedByPlayer: 0
   isMeleeWeapon: 0

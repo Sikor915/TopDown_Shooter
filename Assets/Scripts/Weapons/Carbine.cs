@@ -101,6 +101,8 @@ public class Carbine : Weapon
         {
             muzzleFlash.Play();
         }
-        AudioSource.PlayClipAtPoint(shootSound, transform.position, 0.2f);
+        bool value = audioMixerGroup.audioMixer.GetFloat("SFXVolume", out float volume);
+        volume = Mathf.Pow(10, volume / 20);
+        AudioSource.PlayClipAtPoint(shootSound, transform.position, 0.2f * volume);
     }
 }
