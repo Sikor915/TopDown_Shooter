@@ -11,7 +11,11 @@ public class GameMaster : Singleton<GameMaster>
 
     public PlayerController PlayerController => playerController;
 
-    const string statsPath = "Assets/ScriptableObjects/Player";
+#if UNITY_EDITOR
+    const string statsPath = "Assets/Resources/Player";
+#else
+    const string statsPath = "Player";
+#endif
 
     void Start()
     {
@@ -22,6 +26,16 @@ public class GameMaster : Singleton<GameMaster>
     {
         playerController = PlayerController.Instance;
         playerController.GetComponent<PlayerInput>().enabled = true;
+    }
+
+    void OnEnable()
+    {
+        playerController.onPlayerDeath.AddListener(PlayerDied);
+    }
+
+    void OnDisable()
+    {
+        playerController.onPlayerDeath.RemoveListener(PlayerDied);
     }
 
     void OnApplicationQuit()
@@ -46,5 +60,34 @@ public class GameMaster : Singleton<GameMaster>
     public void ReturnToMainMenu()
     {
         Settings.Instance.ReturnToMainMenu();
+    }
+
+    public void Restart()
+    {
+        
+    }
+
+    void PlayerDied()
+    {
+        MusicManager.Instance.StopMusic();
+        DeactivateAllEnemiesInScene();
+        int score = MoneyManager.Instance.GetScore();
+        int money = MoneyManager.Instance.GetMoney();
+        int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        if (score > highScore)
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+            highScore = score;
+        }
+        GameOverScreen.Instance.SetupGameOverScreen(score, money, highScore);
+    }
+
+    void DeactivateAllEnemiesInScene()
+    {
+        EnemyController[] enemiesInScene = FindObjectsByType<EnemyController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (EnemyController enemy in enemiesInScene)
+        {
+            ObjectPooling.Instance.ReturnEnemyToPool(enemy);
+        }
     }
 }

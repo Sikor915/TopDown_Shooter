@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
@@ -21,11 +22,18 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     AudioMixerGroup audioMixerGroup;
 
+    public UnityEvent onPlayerDeath = new();
 
     bool isRolling = false;
     bool rollingCooldown = false;
     bool isSliding = false;
     bool slidingCooldown = false;
+    bool isDead = false;
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    } 
 
     Coroutine iFrameCoroutine;
     Coroutine manouverIFrameCoroutine;
@@ -65,10 +73,12 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
         if (currentHealth <= 0)
         {
-            gameObject.SetActive(false);
-            UIController.Instance.PlayerDead();
+            onPlayerDeath.Invoke();
+            isDead = true;
+            return;
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {

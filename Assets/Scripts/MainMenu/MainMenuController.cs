@@ -19,7 +19,8 @@ public class MainMenuController : Singleton<MainMenuController>
         {
             Time.timeScale = 1f;
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
+        PlayerController.Instance.IsDead = false;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Level");
     }
     
     public void OnQuitButtonPressed()

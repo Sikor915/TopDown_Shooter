@@ -128,7 +128,7 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual bool TryShoot()
     {
-        if (isReloading || Time.time < nextAttackTime || currentAmmo <= 0) return false;
+        if (isReloading || Time.time < nextAttackTime || currentAmmo <= 0 || PlayerController.Instance.IsDead) return false;
         if ((PerkShop.Instance != null && PerkShop.Instance.isOpen) || (GunShop.Instance != null && GunShop.Instance.isOpen) || (MainMenuController.Instance != null)) return false;
 
         // Shoot

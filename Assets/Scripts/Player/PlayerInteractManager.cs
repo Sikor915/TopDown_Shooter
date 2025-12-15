@@ -90,8 +90,8 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
     {
         if (IsNearPoint(ShopMaster.Instance.ExitPoint.transform.position, 5.0f))
         {
-            Debug.Log("Player interacted at shop exit point. Loading Main Menu.");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("DemoScene");
+            Debug.Log("Player interacted at shop exit point. Loading level.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Level");
             return true;
         }
 

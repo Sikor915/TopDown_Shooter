@@ -9,17 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: ac84f6f058a5ea94da3414b3611315b8
   - enabled: 1
-    path: Assets/Scenes/DemoScene.unity
-    guid: ec892a56650f8ff478375deab063c8c5
-  - enabled: 1
     path: Assets/Scenes/Level.unity
-    guid: 0934b008510ac7b46b54b4600cbfe5af
+    guid: ec892a56650f8ff478375deab063c8c5
   - enabled: 1
     path: Assets/Scenes/Shop.unity
     guid: 41f4458cf7f14d4449b1c2f4426e743e
-  - enabled: 1
-    path: Assets/Scenes/Boss Fight.unity
-    guid: 959a5067cc8763844bc33079302ba266
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 92b759b10d6c09c4ebc53879e283550d, type: 2}

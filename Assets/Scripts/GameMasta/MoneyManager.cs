@@ -28,11 +28,13 @@ public class MoneyManager : Singleton<MoneyManager>
     void OnEnable()
     {
         EnemyController.OnEnemyKilled += AddScore;
+        PlayerController.Instance.onPlayerDeath.AddListener(PlayerDied);
     }
 
     void OnDisable()
     {
         EnemyController.OnEnemyKilled -= AddScore;
+        PlayerController.Instance.onPlayerDeath.RemoveListener(PlayerDied);
     }
 
     void Start()
@@ -72,11 +74,16 @@ public class MoneyManager : Singleton<MoneyManager>
         return scoreSO.Score;
     }
 
+    void PlayerDied()
+    {
+        StopAllCoroutines();
+    }
+
     IEnumerator ScoreTimePenaltyCoroutine()
     {
         while (true)
         {
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "DemoScene")
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Level")
             {
                 yield break;
             }

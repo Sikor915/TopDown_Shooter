@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 using System.Collections;
 
 public class UIController : Singleton<UIController>
@@ -20,6 +19,7 @@ public class UIController : Singleton<UIController>
     [SerializeField] GameObject playerInteractProgressBar;
     [SerializeField] GameObject healthBar, lostHealthBar;
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] GameObject gameOverScreen;
 
     [Header("References")]
     [SerializeField] PlayerSO playerSO;
@@ -57,6 +57,7 @@ public class UIController : Singleton<UIController>
             weaponBase.onShootEvent.AddListener(() => UpdateAmmoText(weaponBase.CurrentAmmo, weaponBase.gunStats.magazineSize, weaponBase.gunStats.ammoReserve));
             weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         }
+        PlayerController.Instance.onPlayerDeath.AddListener(PlayerDead);
         playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
         MoneyManager.Instance.ScoreSO.onScoreChangedEvent.AddListener(SetScore);
@@ -70,6 +71,7 @@ public class UIController : Singleton<UIController>
             weaponBase.onShootEvent.RemoveAllListeners();
             weaponBase.onReloadEvent.RemoveAllListeners();
         }
+        PlayerController.Instance.onPlayerDeath.RemoveListener(PlayerDead);
         playerSO.creatureSO.onHealthChangedEvent.RemoveListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.RemoveListener(UpdateCurrentWeaponEvents);
         MoneyManager.Instance.ScoreSO.onScoreChangedEvent.RemoveListener(SetScore);
@@ -150,6 +152,11 @@ public class UIController : Singleton<UIController>
     {
         healthText.text = null;
         ammoText.text = null;
+        ammoReserveText.text = null;
+        weaponNameText.text = null;
+        previousWeaponNameText.text = null;
+        nextWeaponNameText.text = null;
+        gameOverScreen.SetActive(true);
     }
 
     public void ToggleSettingsMenu()
