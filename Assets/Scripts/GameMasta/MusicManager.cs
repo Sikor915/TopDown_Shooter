@@ -59,6 +59,14 @@ public class MusicManager : Singleton<MusicManager>
         fadeCoroutine = StartCoroutine(FadeToNewClip(clip));
     }
 
+    public void StopMusic()
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        fadeCoroutine = StartCoroutine(FadeToNewClip(null));
+    }
     void StartBattleMusic()
     {
         PlayRandomBattleMusic();

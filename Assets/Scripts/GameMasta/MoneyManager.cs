@@ -28,11 +28,13 @@ public class MoneyManager : Singleton<MoneyManager>
     void OnEnable()
     {
         EnemyController.OnEnemyKilled += AddScore;
+        PlayerController.Instance.onPlayerDeath.AddListener(PlayerDied);
     }
 
     void OnDisable()
     {
         EnemyController.OnEnemyKilled -= AddScore;
+        PlayerController.Instance.onPlayerDeath.RemoveListener(PlayerDied);
     }
 
     void Start()
@@ -70,6 +72,11 @@ public class MoneyManager : Singleton<MoneyManager>
     public int GetScore()
     {
         return scoreSO.Score;
+    }
+
+    void PlayerDied()
+    {
+        StopAllCoroutines();
     }
 
     IEnumerator ScoreTimePenaltyCoroutine()

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
@@ -21,6 +22,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
 
     AudioMixerGroup audioMixerGroup;
 
+    public UnityEvent onPlayerDeath = new();
 
     bool isRolling = false;
     bool rollingCooldown = false;
@@ -67,8 +69,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     {
         if (currentHealth <= 0)
         {
+            onPlayerDeath.Invoke();
             gameObject.SetActive(false);
-            UIController.Instance.PlayerDead();
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {

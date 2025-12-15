@@ -75,6 +75,12 @@ class PlayerInventory : Singleton<PlayerInventory>
         }
     }
 
+    public void ClearInventory()
+    {
+        weapons.Clear();
+        currentWeapon = null;
+    }
+
     public void DropWeapon(GameObject weaponToDrop, Vector3 dropPosition)
     {
         if (weapons.Contains(weaponToDrop))
