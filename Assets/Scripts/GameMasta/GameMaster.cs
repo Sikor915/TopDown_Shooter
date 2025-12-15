@@ -69,7 +69,6 @@ public class GameMaster : Singleton<GameMaster>
 
     void PlayerDied()
     {
-        Time.timeScale = 0f;
         MusicManager.Instance.StopMusic();
         DeactivateAllEnemiesInScene();
         int score = MoneyManager.Instance.GetScore();
