@@ -11,7 +11,11 @@ public class GameMaster : Singleton<GameMaster>
 
     public PlayerController PlayerController => playerController;
 
-    const string statsPath = "Assets/ScriptableObjects/Player";
+#if UNITY_EDITOR
+    const string statsPath = "Assets/Resources/Player";
+#else
+    const string statsPath = "Player";
+#endif
 
     void Start()
     {

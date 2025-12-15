@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GunShop : Singleton<GunShop>, IShop
@@ -7,7 +8,11 @@ public class GunShop : Singleton<GunShop>, IShop
     public bool isOpen = false;
 
 
-    const string GunsPath = "Assets/ScriptableObjects/GunData";
+#if UNITY_EDITOR
+    const string GunsPath = "Assets/Resources/GunData";
+#else
+    const string GunsPath = "GunData";
+#endif
     List<GunSO> gunsRandomized = new();
     public List<GunSO> GunsRandomized => gunsRandomized;
 
@@ -60,6 +65,16 @@ public class GunShop : Singleton<GunShop>, IShop
     void RandomizeGunsToShow()
     {
         List<GunSO> allGuns = HelperFunctions.GetScriptableObjectsOfType<GunSO>(GunsPath);
+        if (allGuns.Count == 0)
+        {
+            Debug.LogError("No guns found in the specified path: " + GunsPath);
+            string path = Application.dataPath + "/Resources/GunData";
+            using (StreamWriter sw = File.CreateText(path + "/NewTextFile.txt"))
+            {
+                sw.WriteLine("This is a new text file!");
+            }
+            return;
+        }
         gunsRandomized = new();
 
         while (gunsRandomized.Count < gunsToShow)

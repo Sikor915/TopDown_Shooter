@@ -4,13 +4,16 @@ using UnityEngine;
 public class PerkShop : Singleton<PerkShop>, IShop
 {
     [SerializeField] int perksToShow = 3;
-    const string upgradesPath = "Assets/ScriptableObjects/Upgrades";
-
+#if UNITY_EDITOR
+    const string upgradesPath = "Assets/Resources/Upgrades";
+#else
+    const string upgradesPath = "Upgrades";
+#endif
     public bool isOpen = false;
 
     public void OpenShop()
     {
-        if(MoneyManager.Instance.GetMoney() < 25)
+        if (MoneyManager.Instance.GetMoney() < 25)
         {
             Debug.Log("Not enough money to open Perk Shop");
             return;
@@ -25,7 +28,7 @@ public class PerkShop : Singleton<PerkShop>, IShop
         Debug.Log("Perk Shop closed");
         isOpen = false;
     }
-    
+
     void RandomizeUpgradesToShow()
     {
         List<StatUpgradeSO> allUpgrades = HelperFunctions.GetScriptableObjectsOfType<StatUpgradeSO>(upgradesPath);

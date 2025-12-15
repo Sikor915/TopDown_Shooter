@@ -83,7 +83,7 @@ public class MoneyManager : Singleton<MoneyManager>
     {
         while (true)
         {
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "DemoScene")
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Level")
             {
                 yield break;
             }

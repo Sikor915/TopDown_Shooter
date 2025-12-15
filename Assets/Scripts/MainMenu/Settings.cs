@@ -101,12 +101,6 @@ public class Settings : Singleton<Settings>
         brightnessSlider.value = Brightness;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void OnBrightnessChanged()
     {
         Brightness = brightnessSlider.value;
@@ -120,6 +114,12 @@ public class Settings : Singleton<Settings>
     public void OnSFXVolumeChanged()
     {
         SFXVolume = sfxSlider.value;
+    }
+
+    public void OnFullscreenToggleChanged()
+    {
+        IsFullscreen = fullscreenToggle.isOn;
+        Screen.fullScreen = IsFullscreen;
     }
 
     public void ReturnToMainMenu()

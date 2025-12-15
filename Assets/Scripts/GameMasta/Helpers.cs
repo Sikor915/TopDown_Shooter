@@ -19,7 +19,7 @@ public class HelperFunctions
         }
         return scriptableObjects;
 #else
-        return null;
+        return new List<T>(Resources.LoadAll<T>(path));
 #endif
     }
 }
