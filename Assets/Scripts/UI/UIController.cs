@@ -58,7 +58,7 @@ public class UIController : Singleton<UIController>
             weaponBase.onReloadEvent.AddListener(UpdateAmmoText);
         }
         PlayerController.Instance.onPlayerDeath.AddListener(PlayerDead);
-        playerSO.creatureSO.onHealthChangedEvent.AddListener(UpdateHealthText);
+        playerSO.onHealthChangedEvent.AddListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.AddListener(UpdateCurrentWeaponEvents);
         MoneyManager.Instance.ScoreSO.onScoreChangedEvent.AddListener(SetScore);
         MoneyManager.Instance.ScoreSO.onMoneyChangedEvent.AddListener(UpdateMoneyText);
@@ -72,7 +72,7 @@ public class UIController : Singleton<UIController>
             weaponBase.onReloadEvent.RemoveAllListeners();
         }
         PlayerController.Instance.onPlayerDeath.RemoveListener(PlayerDead);
-        playerSO.creatureSO.onHealthChangedEvent.RemoveListener(UpdateHealthText);
+        playerSO.onHealthChangedEvent.RemoveListener(UpdateHealthText);
         playerInventory.onWeaponChangedEvent.RemoveListener(UpdateCurrentWeaponEvents);
         MoneyManager.Instance.ScoreSO.onScoreChangedEvent.RemoveListener(SetScore);
         MoneyManager.Instance.ScoreSO.onMoneyChangedEvent.RemoveListener(UpdateMoneyText);

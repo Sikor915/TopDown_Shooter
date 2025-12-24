@@ -21,7 +21,7 @@ class ShopMaster : Singleton<ShopMaster>
 
     void Start()
     {
-        pc.PlayerSO.creatureSO.onHealthChangedEvent?.Invoke(pc.CurrentHealth, pc.PlayerSO.creatureSO.MaxHealth);
+        pc.PlayerSO.onHealthChangedEvent?.Invoke(pc.CurrentHealth, pc.PlayerSO.MaxHealth);
     }
 
     

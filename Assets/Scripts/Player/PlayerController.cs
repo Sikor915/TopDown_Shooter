@@ -49,7 +49,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         }
         audioMixerGroup = GetComponent<AudioSource>().outputAudioMixerGroup;
         DontDestroyOnLoad(gameObject);
-        currentHealth = playerSO.creatureSO.MaxHealth;
+        currentHealth = playerSO.MaxHealth;
         rb2d = GetComponent<Rigidbody2D>();
         foreach (Transform child in transform.GetChild(0))
         {
@@ -57,17 +57,18 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
             {
                 playerInventory.AddWeapon(child.gameObject);
                 child.gameObject.SetActive(false);
-                weaponC.ownerCreatureSO = playerSO.creatureSO;
+                weaponC.ownerCreatureSO = playerSO;
             }
         }
         playerInventory.EquipWeapon(1);
         playerInventory.EquipWeapon(0);
+        playerSO.Reset();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
+        playerSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.MaxHealth);
     }
 
     // Update is called once per frame
@@ -206,8 +207,8 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     public void RestoreHealth(float amount)
     {
         Debug.Log("Restoring Health: " + amount);
-        currentHealth = Mathf.Min(currentHealth + amount, playerSO.creatureSO.MaxHealth);
-        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
+        currentHealth = Mathf.Min(currentHealth + amount, playerSO.MaxHealth);
+        playerSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.MaxHealth);
     }
 
     void OnTriggerStay2D(Collider2D coll)
@@ -231,7 +232,7 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
     void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        playerSO.creatureSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.creatureSO.MaxHealth);
+        playerSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.MaxHealth);
         bool value = audioMixerGroup.audioMixer.GetFloat("SFXVolume", out float volume);
         volume = Mathf.Pow(10, volume / 20);
         AudioSource.PlayClipAtPoint(playerHurtSound, transform.position, volume);

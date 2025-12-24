@@ -28,7 +28,7 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         if (canPickUp)
         {
             playerInventory.PickUpWeapon(nearestWeapon, transform.GetChild(0));
-            playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO.creatureSO;
+            playerInventory.currentWeapon.GetComponent<Weapon>().ownerCreatureSO = playerSO;
             playerInventory.currentWeapon.GetComponent<Weapon>().CalculateUpgradableStats();
             return;
         }
@@ -98,6 +98,11 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         if (IsNearPoint(ShopMaster.Instance.PerkShopPoint.transform.position, 4.0f))
         {
             Debug.Log("Player interacted at perk shop point. Opening Perk Shop.");
+            if (ShopMaster.Instance.PerkShopPoint.isOpen)
+            {
+                Debug.Log("Perk Shop is already open.");
+                return true;
+            }
             ShopMaster.Instance.PerkShopPoint.OpenShop();
             return true;
         }
@@ -105,6 +110,11 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         if (IsNearPoint(ShopMaster.Instance.GunShopPoint.transform.position, 4.0f))
         {
             Debug.Log("Player interacted at gun shop point. Opening Gun Shop.");
+            if (ShopMaster.Instance.GunShopPoint.isOpen)
+            {
+                Debug.Log("Gun Shop is already open.");
+                return true;
+            }
             ShopMaster.Instance.GunShopPoint.OpenShop();
             return true;
         }

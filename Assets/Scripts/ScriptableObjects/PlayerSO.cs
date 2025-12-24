@@ -2,10 +2,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "PlayerSO", menuName = "Scriptable Objects/PlayerSO")]
-public class PlayerSO : ScriptableObject
+public class PlayerSO : CreatureSO
 {
-    [Header("References")]
-    public CreatureSO creatureSO;
 
     [Header("Events")]
     public UnityEvent onHitEvent;

@@ -19,7 +19,7 @@ public class GameMaster : Singleton<GameMaster>
 
     void Start()
     {
-        playerController.PlayerSO.creatureSO.onHealthChangedEvent?.Invoke(playerController.CurrentHealth, playerController.PlayerSO.creatureSO.MaxHealth);
+        playerController.PlayerSO.onHealthChangedEvent?.Invoke(playerController.CurrentHealth, playerController.PlayerSO.MaxHealth);
     }
 
     void Awake()

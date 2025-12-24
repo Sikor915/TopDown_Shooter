@@ -102,3 +102,5 @@ InitTestScene*.unity*
 # Ignore temporaries from GameCI
 /[Aa]rtifacts/
 /[Cc]odeCoverage/
+
+.VSCodeCounter/
