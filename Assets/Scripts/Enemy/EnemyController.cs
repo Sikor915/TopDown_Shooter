@@ -99,6 +99,8 @@ public class EnemyController : MonoBehaviour, IEnemy
         {
             health -= damage;
             StartCoroutine(FlashRed());
+            BasicEnemyAI ai = GetComponent<BasicEnemyAI>();
+            ai.ChangeState(ai.followState);
             if (health <= 0)
             {
                 Died();
