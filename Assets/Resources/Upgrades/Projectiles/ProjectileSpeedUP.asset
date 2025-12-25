@@ -20,4 +20,4 @@ MonoBehaviour:
       Value: 0.2
   upgradeType: 1
   affectedCreatures:
-  - {fileID: 11400000, guid: 315a5a6624e39c049b3a8614b7b5cd91, type: 2}
+  - {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
 [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(PlayerInventory))]
-public class PlayerController : Singleton<PlayerController>, IPlayer
+public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] PlayerSO playerSO;
     public PlayerSO PlayerSO => playerSO;
@@ -120,6 +120,24 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         MoveCharacter();
     }
 
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Weapon"))
+        {
+            PlayerInteractManager.Instance.NearestWeapon = coll.gameObject;
+            PlayerInteractManager.Instance.CanPickUp = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        if (coll.gameObject.CompareTag("Weapon"))
+        {
+            PlayerInteractManager.Instance.NearestWeapon = null;
+            PlayerInteractManager.Instance.CanPickUp = false;
+        }
+    }
+
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
@@ -211,24 +229,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         playerSO.onHealthChangedEvent?.Invoke(currentHealth, playerSO.MaxHealth);
     }
 
-    void OnTriggerStay2D(Collider2D coll)
-    {
-        if (coll.gameObject.CompareTag("Weapon"))
-        {
-            PlayerInteractManager.Instance.NearestWeapon = coll.gameObject;
-            PlayerInteractManager.Instance.CanPickUp = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D coll)
-    {
-        if (coll.gameObject.CompareTag("Weapon"))
-        {
-            PlayerInteractManager.Instance.NearestWeapon = null;
-            PlayerInteractManager.Instance.CanPickUp = false;
-        }
-    }
-
     void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -275,6 +275,14 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
         manouverIFrameCoroutine = StartCoroutine(ManouverIFrames());
     }
 
+    IEnumerator IFrames()
+    {
+        PlayerAnimationController.Instance.FlashRed();
+        yield return new WaitForSeconds(playerSO.iFrameDuration);
+        playerSO.CanBeHit = true;
+
+    }
+
     IEnumerator ManouverIFrames()
     {
         yield return new WaitForSeconds(playerSO.manouverIFrameDuration);
@@ -288,14 +296,6 @@ public class PlayerController : Singleton<PlayerController>, IPlayer
             isSliding = false;
             PlayerAnimationController.Instance.SetIsSliding(false);
         }
-    }
-
-    IEnumerator IFrames()
-    {
-        PlayerAnimationController.Instance.FlashRed();
-        yield return new WaitForSeconds(playerSO.iFrameDuration);
-        playerSO.CanBeHit = true;
-
     }
 
     IEnumerator RollCooldown()

@@ -101,6 +101,7 @@ class PlayerAnimationController : Singleton<PlayerAnimationController>
                 break;
         }
     }
+
     public void FlashRed()
     {
         StopAllCoroutines();

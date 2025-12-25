@@ -12,7 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc7678a5ded3b848a6d9197ff587b92, type: 3}
   m_Name: PlayerSO
   m_EditorClassIdentifier: 
-  creatureSO: {fileID: 11400000, guid: 315a5a6624e39c049b3a8614b7b5cd91, type: 2}
+  onHealthChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onStatsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  maxHealth: 100
+  instanceStats:
+  - statType: 0
+    statValue: 0
+  - statType: 1
+    statValue: 0
+  - statType: 2
+    statValue: 0.2
+  - statType: 3
+    statValue: 1
+  - statType: 4
+    statValue: 0
+  - statType: 5
+    statValue: 0
+  - statType: 6
+    statValue: 0
+  - statType: 7
+    statValue: 0
+  statInfo:
+  - statType: 0
+    statValue: 0
+  - statType: 1
+    statValue: 0
+  - statType: 2
+    statValue: 0.2
+  - statType: 3
+    statValue: 1
+  - statType: 4
+    statValue: 0
+  - statType: 5
+    statValue: 0
+  - statType: 6
+    statValue: 0
+  - statType: 7
+    statValue: 0
+  appliedUpgrades: []
   onHitEvent:
     m_PersistentCalls:
       m_Calls: []
