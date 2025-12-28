@@ -27,7 +27,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7584520477556014481
 Transform:
   m_ObjectHideFlags: 0
@@ -189,6 +189,9 @@ MonoBehaviour:
   playerSO: {fileID: 11400000, guid: f6177c28683d4c948acba40c81db50ba, type: 2}
   playerInventory: {fileID: 4794989366925398996}
   playerHurtSound: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
+  onPlayerDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &852080918831246162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,7 +378,19 @@ MonoBehaviour:
     m_ActionId: 3d350fd0-3c7c-48d3-9b7b-d298c7ea9546
     m_ActionName: 'Player/Drop[/Keyboard/q]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 807950919921759101}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 4beab668-bfa0-49a2-a45f-1038ffb4ed3b
     m_ActionName: 'Player/Menu[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
@@ -832,7 +847,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -125.3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4745587548041286541, guid: 19c5e540a8670114fbfc174e9821bcb0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

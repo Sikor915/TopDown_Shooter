@@ -20,6 +20,7 @@ public class GameMaster : Singleton<GameMaster>
     void Start()
     {
         playerController.PlayerSO.onHealthChangedEvent?.Invoke(playerController.CurrentHealth, playerController.PlayerSO.MaxHealth);
+        Debug.unityLogger.logEnabled = false;
     }
 
     void Awake()
@@ -80,6 +81,7 @@ public class GameMaster : Singleton<GameMaster>
             highScore = score;
         }
         GameOverScreen.Instance.SetupGameOverScreen(score, money, highScore);
+        playerController.GetComponent<PlayerInput>().enabled = false;
     }
 
     void DeactivateAllEnemiesInScene()

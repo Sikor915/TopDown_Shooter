@@ -231,6 +231,7 @@ public abstract class Weapon : MonoBehaviour
 
     protected virtual void CorrectSpriteGraphics(PlayerAim.FacingDirection facingDir)
     {
+        if (spriteRenderer == null) return;
         if (facingDir == PlayerAim.FacingDirection.NW || facingDir == PlayerAim.FacingDirection.W || facingDir == PlayerAim.FacingDirection.SW)
         {
             spriteRenderer.flipY = true;

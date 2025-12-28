@@ -31,7 +31,6 @@ public class PathfinderManager : Singleton<PathfinderManager>
     }
     public Node NodeFromWorld(Vector3 worldPos)
     {
-        //Here it returns null
         Vector3Int cell = floorTilemap.WorldToCell(worldPos);
         int x = cell.x - floorTilemap.cellBounds.xMin;
         int y = cell.y - floorTilemap.cellBounds.yMin;

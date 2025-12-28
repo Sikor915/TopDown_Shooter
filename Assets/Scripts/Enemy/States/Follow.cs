@@ -11,7 +11,6 @@ public class Follow : AiState
         player = GameMaster.Instance.PlayerController;
     }
     
-    // TODO: Implement following algorithm
     protected override void OnUpdate()
     {
         if (player != null)
@@ -21,7 +20,6 @@ public class Follow : AiState
                 controller.ChangeState(controller.attackState);
                 return;
             }
-            //Doesn't work
             path = PathfinderManager.Instance.FindPath(
                 controller.EnemyController.transform.position,
                 player.transform.position

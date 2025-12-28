@@ -42,10 +42,12 @@ public class UIController : Singleton<UIController>
     {
         if (PlayerInteractManager.Instance.IsPlayerNearInteractable())
         {
+            if (!interactionPromptText.gameObject.activeSelf)
             interactionPromptText.gameObject.SetActive(true);
         }
         else
         {
+            if (interactionPromptText.gameObject.activeSelf)
             interactionPromptText.gameObject.SetActive(false);
         }
     }
