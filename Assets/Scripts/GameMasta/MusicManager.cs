@@ -15,8 +15,9 @@ public class MusicManager : Singleton<MusicManager>
 
     Coroutine fadeCoroutine;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (Instance != this && Instance != null)
         {
             Destroy(gameObject);

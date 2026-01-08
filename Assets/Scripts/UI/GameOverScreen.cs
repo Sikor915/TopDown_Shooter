@@ -9,6 +9,11 @@ public class GameOverScreen : Singleton<GameOverScreen>
 
     int score, money, highScore;
 
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void SetupGameOverScreen(int finalScore, int finalMoney, int bestScore)
     {
         score = finalScore;
@@ -18,6 +23,8 @@ public class GameOverScreen : Singleton<GameOverScreen>
         finalScoreText.text = "Score: " + score.ToString();
         finalMoneyText.text = "Money: " + money.ToString();
         highScoreText.text = "High Score: " + highScore.ToString();
+
+        Debug.Log("Game Over Screen Setup Complete");
     }
 
     public void ReturnToMenu()

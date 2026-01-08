@@ -13,8 +13,9 @@ class ShopMaster : Singleton<ShopMaster>
 
     
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         pc = PlayerController.Instance;
         pc.gameObject.transform.position = exitPoint.transform.position;
     }

@@ -7,6 +7,7 @@ public class GameMaster : Singleton<GameMaster>
 {
 
     [SerializeField] PlayerSO playerSO;
+
     [SerializeField] PlayerController playerController;
 
     public PlayerController PlayerController => playerController;
@@ -20,11 +21,12 @@ public class GameMaster : Singleton<GameMaster>
     void Start()
     {
         playerController.PlayerSO.onHealthChangedEvent?.Invoke(playerController.CurrentHealth, playerController.PlayerSO.MaxHealth);
-        Debug.unityLogger.logEnabled = false;
+        //Debug.unityLogger.logEnabled = false;
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerController = PlayerController.Instance;
         playerController.GetComponent<PlayerInput>().enabled = true;
     }
@@ -70,6 +72,7 @@ public class GameMaster : Singleton<GameMaster>
 
     void PlayerDied()
     {
+        playerController.GetComponent<PlayerInput>().enabled = false;
         MusicManager.Instance.StopMusic();
         DeactivateAllEnemiesInScene();
         int score = MoneyManager.Instance.GetScore();
@@ -81,7 +84,6 @@ public class GameMaster : Singleton<GameMaster>
             highScore = score;
         }
         GameOverScreen.Instance.SetupGameOverScreen(score, money, highScore);
-        playerController.GetComponent<PlayerInput>().enabled = false;
     }
 
     void DeactivateAllEnemiesInScene()

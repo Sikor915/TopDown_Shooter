@@ -17,8 +17,9 @@ class PlayerInteractManager : Singleton<PlayerInteractManager>
         get => canPickUp;
         set => canPickUp = value;
     }
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerInventory = PlayerController.Instance.GetComponent<PlayerInventory>();
         playerSO = PlayerController.Instance.PlayerSO;
     }

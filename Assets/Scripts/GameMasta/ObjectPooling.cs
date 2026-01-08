@@ -16,8 +16,9 @@ public class ObjectPooling : Singleton<ObjectPooling>
     public EnemyController enemyToPool;
     public int amountToPoolEnemies;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         pooledProjectiles = new List<GameObject>();
         GameObject tmp;
         for (int i = 0; i < amountToPoolProjectiles; i++)

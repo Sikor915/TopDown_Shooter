@@ -40,8 +40,9 @@ public class PlayerController : Singleton<PlayerController>
     Coroutine rollCooldownCoroutine;
     Coroutine slideCooldownCoroutine;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (Instance != this && Instance != null)
         {
             Destroy(gameObject);
@@ -77,6 +78,7 @@ public class PlayerController : Singleton<PlayerController>
         if (isDead) return;
         if (currentHealth <= 0)
         {
+            Debug.Log("Player Died - invoking onPlayerDeath event");
             onPlayerDeath.Invoke();
             isDead = true;
             return;
@@ -140,13 +142,13 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
+        if (!context.performed || isDead) return;
         PlayerInteractManager.Instance.ProcessInteraction();
     }
 
     public void OnDrop(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
+        if (!context.performed || isDead) return;
         if (playerInventory.currentWeapon != null)
         {
             Vector3 dropPosition = transform.position + transform.up * 1.0f; // Drop in front of the player
@@ -156,12 +158,13 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (isDead) return;
         m_UnitGoal = context.ReadValue<Vector2>();
     }
 
     public void OnRoll(InputAction.CallbackContext context)
     {
-        if (!context.performed || isRolling || rollingCooldown)
+        if (!context.performed || isRolling || rollingCooldown || isDead)
         {
             return;
         }
@@ -236,6 +239,7 @@ public class PlayerController : Singleton<PlayerController>
         bool value = audioMixerGroup.audioMixer.GetFloat("SFXVolume", out float volume);
         volume = Mathf.Pow(10, volume / 20);
         AudioSource.PlayClipAtPoint(playerHurtSound, transform.position, volume);
+        Debug.Log("Player Took Damage: " + damage + ", Current Health: " + currentHealth);
     }
 
     void MoveCharacter()

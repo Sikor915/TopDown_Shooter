@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour, IEnemy
         try
         {
             health -= damage;
-            StartCoroutine(FlashRed());
+            if (gameObject.activeInHierarchy) StartCoroutine(FlashRed());
             BasicEnemyAI ai = GetComponent<BasicEnemyAI>();
             ai.ChangeState(ai.followState);
             if (health <= 0)

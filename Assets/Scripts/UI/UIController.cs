@@ -26,8 +26,9 @@ public class UIController : Singleton<UIController>
     [SerializeField] PlayerInventory playerInventory;
     [SerializeField] Weapon weaponBase;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerInventory = PlayerController.Instance.GetComponent<PlayerInventory>();
     }
 
@@ -152,13 +153,14 @@ public class UIController : Singleton<UIController>
 
     public void PlayerDead()
     {
-        healthText.text = null;
-        ammoText.text = null;
-        ammoReserveText.text = null;
-        weaponNameText.text = null;
-        previousWeaponNameText.text = null;
-        nextWeaponNameText.text = null;
+        if (healthText.text != null) healthText.text = "";
+        if (ammoText.text != null) ammoText.text = "";
+        if (ammoReserveText.text != null) ammoReserveText.text = "";
+        if (weaponNameText.text != null) weaponNameText.text = "";
+        if (previousWeaponNameText.text != null) previousWeaponNameText.text = "";
+        if (nextWeaponNameText.text != null) nextWeaponNameText.text = "";
         gameOverScreen.SetActive(true);
+        Debug.Log("Player Dead - Game Over Screen Activated");
     }
 
     public void ToggleSettingsMenu()

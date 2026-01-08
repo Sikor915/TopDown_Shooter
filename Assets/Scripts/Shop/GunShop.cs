@@ -16,8 +16,9 @@ public class GunShop : Singleton<GunShop>, IShop
     List<GunSO> gunsRandomized = new();
     public List<GunSO> GunsRandomized => gunsRandomized;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         RandomizeGunsToShow();
     }
 

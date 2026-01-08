@@ -10,8 +10,9 @@ public class MoneyManager : Singleton<MoneyManager>
     [SerializeField] GameObject moneyPrefab;
     public GameObject MoneyPrefab => moneyPrefab;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         RemoveMoney(GetMoney());
         AddMoney(50);
         RemoveScore(GetScore());
